@@ -68,3 +68,13 @@ Thumbs.db
 build/
 bin/
 out/
+
+# Test and coverage outputs
+coverage/
+*.gcda
+*.gcno
+*.gcov
+
+# Project-local generated files
+filtered_feedback.csv
+*.log
