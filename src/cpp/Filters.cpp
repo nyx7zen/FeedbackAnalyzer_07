@@ -1,21 +1,50 @@
 #include "Filters.h"
 
-std::map<std::string, std::vector<std::string>> Filters::S_KEYWORDS;
+#include "Constants.h"
+#include "TextAnalyzer.h"
+#include "TextUtils.h"
 
-void Filters::initFilterKeywords() {
-    S_KEYWORDS[u8"긍정"] = {
-        u8"좋아요", u8"만족", u8"감사", u8"친절", u8"좋다", u8"좋았", u8"좋은", u8"우수",
-        u8"빠르", u8"정확", u8"신속", u8"안전", u8"괜찮", u8"인상적", u8"추천", u8"기대 이상",
-        u8"합리", u8"꼼꼼", u8"뛰어납니다", u8"만족스럽", u8"좋았습니다", u8"좋습니다",
-        u8"만족합니다", u8"굿", u8"최고", u8"최고입니다", u8"감사합니다"
-    };
-    S_KEYWORDS[u8"부정"] = {
-        u8"나쁘", u8"불만", u8"실망", u8"최악", u8"별로", u8"불편", u8"불만족", u8"문제",
-        u8"불량", u8"불량품", u8"환불", u8"교환", u8"불만족스럽", u8"실망스럽",
-        u8"비싸", u8"불친절", u8"늦다"
-    };
-    S_KEYWORDS[u8"중립"] = {
-        u8"괜찮", u8"보통", u8"평범", u8"무난", u8"그냥", u8"전반적", u8"완료",
-        u8"적당", u8"나쁘지 않", u8"특별", u8"없"
-    };
+namespace {
+bool matchesCategory(const std::string& text, const std::string& category) {
+    const auto categoryIt = Constants::CATEGORY_KEYWORDS.find(category);
+    if (categoryIt == Constants::CATEGORY_KEYWORDS.end()) {
+        return false;
+    }
+
+    for (const auto& [groupName, keywords] : categoryIt->second) {
+        if (groupName == "main") {
+            continue;
+        }
+        if (TextUtils::containsAny(text, keywords)) {
+            return true;
+        }
+    }
+
+    const auto mainIt = categoryIt->second.find("main");
+    return mainIt != categoryIt->second.end() && TextUtils::containsAny(text, mainIt->second);
+}
+}
+
+std::vector<Feedback> Filters::applyFilter(
+    const std::vector<Feedback>& dataList,
+    const std::string& sentimentFilter,
+    const std::string& keywordFilter) const {
+    TextAnalyzer analyzer;
+    std::vector<Feedback> filtered;
+
+    for (const auto& feedback : dataList) {
+        const bool matchesSentiment =
+            sentimentFilter == Constants::kFilterAll ||
+            analyzer.detectSentiment(feedback.getText()) == sentimentFilter;
+
+        const bool matchesKeyword =
+            keywordFilter == Constants::kFilterAll ||
+            matchesCategory(feedback.getText(), keywordFilter);
+
+        if (matchesSentiment && matchesKeyword) {
+            filtered.push_back(feedback);
+        }
+    }
+
+    return filtered;
 }

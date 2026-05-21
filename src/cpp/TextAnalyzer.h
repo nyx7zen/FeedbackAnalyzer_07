@@ -1,64 +1,31 @@
 #pragma once
+
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
+
 #include "Feedback.h"
-#include "Constants.h"
 
 class TextAnalyzer {
-private:
-    static std::map<std::string, int> globalSent;
-    static std::map<std::string, int> globalKw;
-
-    static bool containsAny(const std::string& text, const std::vector<std::string>& keywords) {
-        for (const auto& kw : keywords) {
-            if (text.find(kw) != std::string::npos) return true;
-        }
-        return false;
-    }
-
 public:
-    std::map<std::string, int> sent(const std::vector<Feedback>& feedbacks) {
-        std::map<std::string, int> res;
-        res[u8"긍정"] = 0;
-        res[u8"중립"] = 0;
-        res[u8"부정"] = 0;
+    /**
+     * @brief 피드백 목록을 감성별로 분류합니다.
+     * @param feedbacks 분석할 피드백 목록
+     * @return 감성 라벨별 개수
+     */
+    std::map<std::string, int> analyzeSentiment(const std::vector<Feedback>& feedbacks) const;
 
-        for (const auto& f : feedbacks) {
-            std::string txt = f.getText();
-            std::string s = u8"중립";
-            if (containsAny(txt, Constants::SENTIMENT_KEYWORDS[u8"긍정"])) {
-                s = u8"긍정";
-            } else if (containsAny(txt, Constants::SENTIMENT_KEYWORDS[u8"부정"])) {
-                s = u8"부정";
-            }
-            res[s]++;
-        }
+    /**
+     * @brief 피드백 목록을 카테고리 키워드 기준으로 집계합니다.
+     * @param feedbacks 분석할 피드백 목록
+     * @return 카테고리별 개수
+     */
+    std::map<std::string, int> analyzeKeywords(const std::vector<Feedback>& feedbacks) const;
 
-        globalSent = res;
-        return res;
-    }
-
-    std::map<std::string, int> kw(const std::vector<Feedback>& feedbacks) {
-        std::map<std::string, int> res2;
-        for (const auto& entry : Constants::CATEGORY_KEYWORDS) {
-            res2[entry.first] = 0;
-        }
-
-        for (const auto& f : feedbacks) {
-            std::string txt = f.getText();
-            for (const auto& entry : Constants::CATEGORY_KEYWORDS) {
-                const std::string& cat = entry.first;
-                if (entry.second.count("main")) {
-                    const auto& kws = entry.second.at("main");
-                    if (containsAny(txt, kws)) {
-                        res2[cat]++;
-                    }
-                }
-            }
-        }
-
-        globalKw = res2;
-        return res2;
-    }
+    /**
+     * @brief 단일 피드백의 감성을 판별합니다.
+     * @param text 분석할 텍스트
+     * @return 긍정, 중립, 부정 중 하나의 감성 라벨
+     */
+    std::string detectSentiment(const std::string& text) const;
 };

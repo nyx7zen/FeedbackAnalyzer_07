@@ -1,5 +1,38 @@
 #include "Session.h"
 
-std::vector<Feedback> Session::currentFeedbacks;
-std::map<std::string, std::string> Session::internalData;
-std::map<std::string, std::string> Session::filterOptions;
+std::unordered_map<std::string, Session::SessionState> Session::sessions_;
+
+Session::SessionState& Session::state(const std::string& sessionId) {
+    return sessions_[sessionId];
+}
+
+void Session::clear(const std::string& sessionId) {
+    sessions_[sessionId] = SessionState{};
+}
+
+std::vector<Feedback>& Session::currentFeedbacks(const std::string& sessionId) {
+    return state(sessionId).currentFeedbacks;
+}
+
+std::vector<Feedback>& Session::filteredFeedbacks(const std::string& sessionId) {
+    return state(sessionId).filteredFeedbacks;
+}
+
+void Session::setCurrentFeedbacks(const std::vector<Feedback>& feedbacks, const std::string& sessionId) {
+    state(sessionId).currentFeedbacks = feedbacks;
+}
+
+void Session::setFilteredFeedbacks(const std::vector<Feedback>& feedbacks, const std::string& sessionId) {
+    state(sessionId).filteredFeedbacks = feedbacks;
+}
+
+void Session::setFilterState(
+    const std::string& sentiment,
+    const std::string& keyword,
+    const std::string& sessionId) {
+    state(sessionId).filterState = FilterState{sentiment, keyword};
+}
+
+Session::FilterState Session::getFilterState(const std::string& sessionId) {
+    return state(sessionId).filterState;
+}

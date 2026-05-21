@@ -1,4 +1,4 @@
-# Feedback Analyzer
+﻿# Feedback Analyzer
 ![feedback_analyzer](./feedback_analyzer.png)
 
 고객 피드백 분석 시스템은 자연어 기반 고객 피드백 데이터를 수집, 분류, 시각화하는 기능을 제공하는 C++ (cpp-httplib) 기반 웹 애플리케이션입니다.
