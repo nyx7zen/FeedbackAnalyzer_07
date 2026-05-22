@@ -151,9 +151,10 @@
 - [x] REFACTOR-03-01 `refactor: remove global filter state`
   - `Filters.cpp`의 전역 static 상태(`fil_data` 등)를 식별한다.
   - 새 전역 상태를 추가하지 않고 명시적 상태 관리 구조로 이동한다.
-- [ ] REFACTOR-03-02 `refactor: remove global analyzer state`
-  - `TextAnalyzer.cpp`의 전역 static 상태(`globalSent` 등)를 식별한다.
-  - 분석 결과 상태를 명시적으로 전달하거나 세션 API로 캡슐화한다.
+- [x] REFACTOR-03-02 `refactor: remove global analyzer state`
+  - `main.cpp`의 전역 `fil_data` 변수를 식별하고 제거했다.
+  - 구식 Session 메서드(`initSessionStateUgly`, `getOldDataFromSession`)를 제거하고 명시적 API로 대체했다.
+  - 분석 결과를 Session API로 캡슐화했다.
 - [ ] REFACTOR-03-03 `refactor: implement session storage map`
   - `Session.cpp/.h`에 `std::unordered_map` 구조를 도입한다.
   - `Session`을 키를 무시하는 더미 API가 아니라 실제 조회 가능한 상태 저장소로 개편한다.

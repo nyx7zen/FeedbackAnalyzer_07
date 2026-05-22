@@ -21,6 +21,25 @@
 
 ## Session Log
 
+### 2026-05-22 17:00 - REFACTOR-03-02 분석기 전역 상태 제거 완료
+- Goal: `main.cpp`의 전역 상태 및 구식 Session API 호출 제거, 분석 결과를 명시적 Session API로 캡슐화
+- Changes:
+  - `static std::vector<Feedback> fil_data;` 전역 변수 제거
+  - `Session::initSessionStateUgly()` 호출 → `Session::clear("default")` 로 대체
+  - `Session::getOldDataFromSession()` 호출 → `Session::currentFeedbacks()` 로 대체
+  - `fil_data = filtered;` → `Session::setFilteredFeedbacks(filtered, "default");` 로 변경
+  - `/download` 엔드포인트에서 `fil_data` → `Session::filteredFeedbacks("default")` 사용
+- Analysis:
+  - TextAnalyzer.cpp는 이미 stateless 설계 (전역 상태 없음)
+  - 문제는 main.cpp의 전역 `fil_data` 변수와 구식 Session API 호출
+  - 필터링 결과를 Session에 명시적으로 저장/조회하도록 개선
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 1/1 passed (smoke_test) ✓
+  - 전역 상태 제거: 완전함 ✓
+  - Session API 일관성: 향상됨 ✓
+- Next: REFACTOR-03-03 (implement session storage map)
+
 ### 2026-05-22 16:50 - REFACTOR-03-01 필터 전역 상태 검증 완료
 - Goal: Filters.cpp 전역 상태 제거 및 명시적 상태 관리로 전환
 - Status: 이미 완료됨 (추가 작업 불필요)

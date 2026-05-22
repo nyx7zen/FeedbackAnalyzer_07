@@ -13,7 +13,6 @@
 #include <ctime>
 #include <iomanip>
 
-static std::vector<Feedback> fil_data;
 static TextAnalyzer textAnalyzer;
 static Filters filters;
 static FileHandler fileHandler;
@@ -238,8 +237,8 @@ int main() {
 
     // GET /
     svr.Get("/", [](const httplib::Request&, httplib::Response& res) {
-        Session::initSessionStateUgly();
-        auto& feedbacks = Session::getOldDataFromSession("current_feedbacks");
+        Session::clear("default");
+        auto& feedbacks = Session::currentFeedbacks("default");
         std::string html = renderPage(u8"피드백 분석기 시작", "", "", {}, {}, feedbacks);
         res.set_content(html, "text/html; charset=UTF-8");
     });
@@ -329,7 +328,7 @@ int main() {
             if (!feedbacks.empty()) {
                 auto filtered = filters.applyFilter(feedbacks, sentiment, keyword);
                 if (!filtered.empty()) {
-                    fil_data = filtered;
+                    Session::setFilteredFeedbacks(filtered, "default");
                     auto sentimentResults = textAnalyzer.analyzeSentiment(filtered);
                     auto keywordResults = textAnalyzer.analyzeKeywords(filtered);
                     Logger::logInfo(u8"필터링 결과: " + std::to_string(filtered.size()) + u8"개의 피드백");
@@ -358,7 +357,8 @@ int main() {
         // UTF-8 BOM
         csv << "\xEF\xBB\xBF";
         csv << "text\n";
-        for (const auto& iter : fil_data) {
+        auto& filtered = Session::filteredFeedbacks("default");
+        for (const auto& iter : filtered) {
             csv << iter.getText() << "\n";
         }
         res.set_header("Content-Disposition", "attachment; filename=\"filtered_feedback.csv\"");
