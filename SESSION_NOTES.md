@@ -21,6 +21,22 @@
 
 ## Session Log
 
+### 2026-05-22 15:05 - GREEN-01-01 중립 필터 조건 검증 완료
+- Goal: RED-02-04 중립 필터 테스트가 통과하도록 `src/Filters.cpp`의 중립 필터 판정 로직 검증 및 필요시 수정
+- Changes:
+  - `reports/phase-2_green/green-01-01_correct_neutral_filter_condition-report.md` 생성
+  - 기존 구현 상태 검증: TextAnalyzer::detectSentiment(), Filters::applyFilter() 로직 검토
+  - `TODO.md`: GREEN-01-01 체크박스 완료 표시 (미확정)
+- Decisions:
+  - RED-02-04 테스트가 이미 통과하고 있음 (should_return_neutral_when_positive_and_negative_are_balanced PASS)
+  - 현재 구현이 테스트 기대값과 완벽하게 일치 (균형 감정 → score=0 → neutral)
+  - 추가 수정 불필요 (GREEN 최소 구현 완료)
+- Verification:
+  - 빌드 성공 ✓
+  - ctest 실행 성공 (9/9 tests passed) ✓
+  - RED-02-04 중립 필터 테스트 통과 확인 ✓
+- Next: GREEN-01-02 (support multiline feedback input)
+
 ### 2026-05-22 15:00 - RED Phase 완료: RED-02-04/06 최종 테스트 추가
 - Goal: RED 단계 모든 항목(RED-01-01 ~ RED-02-06) 완료
 - Changes:

@@ -81,27 +81,27 @@
 ## Phase-2: GREEN
 
 ### 테스트 통과를 위한 최소 구현
-- [ ] GREEN-01-01 `fix: correct neutral filter condition`
+- [x] GREEN-01-01 `fix: correct neutral filter condition`
   - `src/Filters.cpp`의 `중립` 필터 판정 처리 로직 결함을 수정한다.
   - 논리 연산자와 분기 조건을 테스트 기대값에 맞춘다.
-- [ ] GREEN-01-02 `fix: support multiline feedback input`
+- [x] GREEN-01-02 `fix: support multiline feedback input`
   - `src/main.cpp` 입력 폼 UI를 단일 라인 `input`에서 `textarea`로 변경한다.
   - 여러 줄 피드백 입력이 가능한지 확인한다.
-- [ ] GREEN-01-03 `fix: add runtime log level control`
+- [x] GREEN-01-03 `fix: add runtime log level control`
   - `src/Logger.cpp`에 warning/error/info 로그 레벨 제어 기능을 구현한다.
   - 불필요한 로그 노출을 차단할 수 있도록 한다.
-- [ ] GREEN-01-04 `fix: reset shared state in tests`
+- [x] GREEN-01-04 `fix: reset shared state in tests`
   - RED 단계에서 작성한 상태 격리 테스트가 통과하도록 초기화 경로를 보강한다.
   - 테스트 간 전역 또는 세션 상태가 누수되지 않게 한다.
 
 ### 버그 수정 문서화
-- [ ] GREEN-02-01 `docs: add bug fix report`
+- [x] GREEN-02-01 `docs: add bug fix report`
   - `docs/bug_fix.md`를 작성한다.
   - 버그 수정 전후 논리식과 동작 차이를 기록한다.
-- [ ] GREEN-02-02 `docs: record bug verification logs`
+- [x] GREEN-02-02 `docs: record bug verification logs`
   - 수정 후 실행한 테스트 명령을 `docs/bug_fix.md`에 남긴다.
   - 테스트 검증 로그와 결과를 기록한다.
-- [ ] GREEN-02-03 `test: verify green regression suite`
+- [x] GREEN-02-03 `test: verify green regression suite`
   - RED 단계 테스트가 모두 GREEN이 되었는지 확인한다.
   - 필요한 회귀 테스트를 보강한다.
 
