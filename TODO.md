@@ -95,10 +95,10 @@
   - 테스트 간 전역 또는 세션 상태가 누수되지 않게 한다.
 
 ### 버그 수정 문서화
-- [ ] GREEN-02-01 `docs: add bug fix report`
+- [x] GREEN-02-01 `docs: add bug fix report`
   - `docs/bug_fix.md`를 작성한다.
   - 버그 수정 전후 논리식과 동작 차이를 기록한다.
-- [ ] GREEN-02-02 `docs: record bug verification logs`
+- [x] GREEN-02-02 `docs: record bug verification logs`
   - 수정 후 실행한 테스트 명령을 `docs/bug_fix.md`에 남긴다.
   - 테스트 검증 로그와 결과를 기록한다.
 - [ ] GREEN-02-03 `test: verify green regression suite`
