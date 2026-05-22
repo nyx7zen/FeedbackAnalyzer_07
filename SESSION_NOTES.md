@@ -21,6 +21,21 @@
 
 ## Session Log
 
+### 2026-05-22 15:35 - REFACTOR-01-02 kw() to analyzeKeywords() 함수명 변경 완료
+- Goal: `kw()` 함수명을 `analyzeKeywords()`로 변경해 의미를 명확히 한다.
+- Changes:
+  - 코드 검증: TextAnalyzer.h/cpp와 main.cpp에서 모든 `kw()` 호출이 이미 `analyzeKeywords()`로 변경되어 있음
+  - `TODO.md`: REFACTOR-01-02 체크박스 완료 표시
+- Decisions:
+  - REFACTOR-01-01처럼 선언/정의는 이미 `analyzeKeywords()`로 변경되어 있음
+  - 호출부도 모두 업데이트되어 있음 (라인 275, 334)
+  - 추가 수정 불필요, 모든 호출이 일관되게 새 함수명 사용 중
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 통과: `ctest --test-dir build --output-on-failure` (1/1 tests passed) ✓
+  - 함수 호출 일관성 확인 ✓
+- Next: REFACTOR-01-03 (rename fil to applyFilter)
+
 ### 2026-05-22 15:30 - REFACTOR-01-01 sent() to analyzeSentiment() 함수명 변경 완료
 - Goal: `sent()` 함수명을 `analyzeSentiment()`로 변경해 의미를 명확히 한다.
 - Changes:
