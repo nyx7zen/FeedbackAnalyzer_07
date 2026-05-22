@@ -12,7 +12,12 @@
       "Bash(GIT_SEQUENCE_EDITOR=\"sed -i '1s/^pick/edit/'\" git rebase -i a40f5bb^)",
       "Bash(git filter-branch *)",
       "Bash(git reflog *)",
-      "Bash(git gc *)"
+      "Bash(git gc *)",
+      "Bash(cmake -S . -B build -G \"MinGW Makefiles\" -DCMAKE_CXX_COMPILER=C:/mingw64/bin/g++.exe)",
+      "Bash(cmake --build build)",
+      "Bash(./build/feedback_analyzer_test.exe)",
+      "Bash(gh pr create --base B_07 --head green --title '[Phase-2: GREEN] fix: correct neutral filter condition \\(GREEN-01-01\\)' --body ' *)",
+      "Bash(ctest --test-dir build --output-on-failure)"
     ]
   }
 }

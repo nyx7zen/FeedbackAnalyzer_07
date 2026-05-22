@@ -6,6 +6,7 @@
 #include <sstream>
 
 bool Logger::debugMode_ = true;
+LogLevel Logger::currentLogLevel_ = LogLevel::Info;
 
 std::string Logger::getTimestamp() {
     const auto now = std::time(nullptr);
@@ -21,15 +22,21 @@ void Logger::write(const std::string& level, const std::string& message, const b
 }
 
 void Logger::logInfo(const std::string& message) {
-    write("INFO", message, false);
+    if (currentLogLevel_ <= LogLevel::Info) {
+        write("INFO", message, false);
+    }
 }
 
 void Logger::logWarning(const std::string& message) {
-    write("WARNING", message, false);
+    if (currentLogLevel_ <= LogLevel::Warning) {
+        write("WARNING", message, false);
+    }
 }
 
 void Logger::logError(const std::string& message) {
-    write("ERROR", message, true);
+    if (currentLogLevel_ <= LogLevel::Error) {
+        write("ERROR", message, true);
+    }
 }
 
 void Logger::logDebug(const std::string& message) {
@@ -44,4 +51,12 @@ void Logger::setDebugMode(const bool mode) {
 
 bool Logger::isDebugMode() {
     return debugMode_;
+}
+
+void Logger::setLogLevel(LogLevel level) {
+    currentLogLevel_ = level;
+}
+
+LogLevel Logger::getLogLevel() {
+    return currentLogLevel_;
 }

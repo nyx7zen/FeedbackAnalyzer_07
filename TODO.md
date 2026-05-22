@@ -84,10 +84,10 @@
 - [x] GREEN-01-01 `fix: correct neutral filter condition`
   - `src/Filters.cpp`의 `중립` 필터 판정 처리 로직 결함을 수정한다.
   - 논리 연산자와 분기 조건을 테스트 기대값에 맞춘다.
-- [ ] GREEN-01-02 `fix: support multiline feedback input`
+- [x] GREEN-01-02 `fix: support multiline feedback input`
   - `src/main.cpp` 입력 폼 UI를 단일 라인 `input`에서 `textarea`로 변경한다.
   - 여러 줄 피드백 입력이 가능한지 확인한다.
-- [ ] GREEN-01-03 `fix: add runtime log level control`
+- [x] GREEN-01-03 `fix: add runtime log level control`
   - `src/Logger.cpp`에 warning/error/info 로그 레벨 제어 기능을 구현한다.
   - 불필요한 로그 노출을 차단할 수 있도록 한다.
 - [ ] GREEN-01-04 `fix: reset shared state in tests`
