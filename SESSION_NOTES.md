@@ -21,6 +21,13 @@
 
 ## Session Log
 
+### 2026-05-22 14:05 - SPEC-01-01 B_07 브랜치 워크플로우 정의 완료
+- Goal: B_07 실습 통합 브랜치를 기준으로 단계별 작업 흐름과 병합 순서를 문서로 정리한다.
+- Changes: `docs/b07-branch-workflow.md` 파일을 생성했고 B_07 브랜치 계층, 단계별 목적, 병합 흐름, 작업 사이클, 항목 식별자 규칙, 상태 추적, 산출물 위치 등을 상세히 기록했다. `TODO.md`의 SPEC-01-01 항목을 완료 상태로 체크했다.
+- Decisions: B_07은 실습 통합 브랜치이며 모든 단계별 작업(spec, red, green, refactor, feature, final)이 B_07에 순차 병합되고, B_07이 main에 최종 병합된다. 문서는 한국어 + 표/코드블록 조합으로 구성해 직관적 이해를 돕는다.
+- Verification: 문서 생성 및 TODO 체크박스 업데이트만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: SPEC-01-02 (빌드/테스트 명령 문서화)로 진행.
+
 ### 2026-05-22 13:50 - 상태 호출 명령어 분리 표현
 - Goal: 자연어 호출 명령어를 따로 따로 나열하되, "갱신"이 "상태갱신"의 축약형임을 명시한다.
 - Changes: .agents/skills/status/SKILL.md의 호출 예시에 "상태갱신"과 "갱신"을 별도 라인으로 표기했다. .claude/skills/status/SKILL.md의 Refreshed Mode에서 "갱신"의 설명에 "shorthand for 상태갱신"을 명시했다.

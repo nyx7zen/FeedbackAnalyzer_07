@@ -18,7 +18,7 @@
 ## Phase-0: SPEC
 
 ### 환경 및 지침 설정
-- [ ] SPEC-01-01 `docs: define B_07 branch workflow`
+- [x] SPEC-01-01 `docs: define B_07 branch workflow`
   - `B_07` 통합 브랜치를 기준으로 실습 브랜치 전략을 정리한다.
   - `spec -> red -> green -> refactor -> feature -> final` 단계 흐름과 병합 순서를 문서화한다.
 - [ ] SPEC-01-02 `docs: document build and test commands`
