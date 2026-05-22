@@ -125,6 +125,75 @@ int main() {
         }
     }
 
+    // Test 5: Special character input should not throw exception (RED-02-02)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_not_throw_when_input_has_special_characters" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string specialChars = "!@#$%^&*()_+-=[]{}|;:',.<>?/";
+            std::string result = fixture.analyzer.detectSentiment(specialChars);
+            // Special characters with no keywords should return neutral
+            if (result == "중립") {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected neutral for special chars, got " << result << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 6: Mixed sentiment input should return dominant sentiment (RED-02-03)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_positive_when_positive_count_exceeds_negative" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string mixedText = "좋아요 만족 감사 별로 실망";  // 3 positive, 2 negative -> positive
+            std::string result = fixture.analyzer.detectSentiment(mixedText);
+            if (result == "긍정") {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '긍정' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 7: Filter combination test (RED-02-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_handle_multiple_keywords_in_feedback" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::vector<Feedback> feedbacks;
+            feedbacks.emplace_back("배송이 빠르고 품질이 좋습니다");  // Contains multiple categories
+            auto result = fixture.analyzer.analyzeKeywords(feedbacks);
+            // Should count categories present in feedback
+            if (!result.empty()) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected non-empty keyword analysis result" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;

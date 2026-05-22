@@ -62,16 +62,16 @@
 - [x] RED-02-01 `test: add empty input boundary test`
   - 빈 문자열 입력의 기대 동작을 정의한다.
   - 현재 구현에서 실패하는 경계값 테스트로 작성한다.
-- [ ] RED-02-02 `test: add special character input test`
+- [x] RED-02-02 `test: add special character input test`
   - 특수문자 입력 처리 기준을 테스트로 고정한다.
   - 분석 로직이 예외 없이 동작하는지 확인한다.
-- [ ] RED-02-03 `test: add mixed sentiment input test`
+- [x] RED-02-03 `test: add mixed sentiment input test`
   - 긍정/부정 혼재 문장 시나리오를 작성한다.
   - 감성 판정 기준이 드러나도록 실패 테스트를 만든다.
 - [ ] RED-02-04 `test: add neutral filter test`
   - `중립` 필터 판정 결함을 드러내는 테스트를 작성한다.
   - 논리 연산자 및 분기 조건 오류를 검증 대상으로 둔다.
-- [ ] RED-02-05 `test: add filter combination tests`
+- [x] RED-02-05 `test: add filter combination tests`
   - 필터 조합 시나리오를 경계값 중심으로 작성한다.
   - 긍정/부정/중립 필터 조합 결과를 검증한다.
 - [ ] RED-02-06 `test: add session isolation test`

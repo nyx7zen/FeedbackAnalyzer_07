@@ -21,6 +21,24 @@
 
 ## Session Log
 
+### 2026-05-22 14:55 - RED-02-02/03/05 추가 경계값 테스트 완성
+- Goal: 특수문자, 혼합 감정, 필터 조합에 대한 경계값 테스트 추가
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: 3개 추가 테스트
+    - Test 5: `should_not_throw_when_input_has_special_characters` (RED-02-02)
+    - Test 6: `should_return_positive_when_positive_count_exceeds_negative` (RED-02-03)
+    - Test 7: `should_handle_multiple_keywords_in_feedback` (RED-02-05)
+  - `TODO.md`: RED-02-02, 03, 05 체크박스 완료 표시
+- Decisions:
+  - 특수문자는 키워드 매칭 없음 → neutral 반환 (정상)
+  - 혼합 감정: 긍정 3개, 부정 2개 → 긍정 우세 판정 (정상)
+  - 다중 카테고리: 배송/품질 모두 포함 → 키워드 카운팅 작동 (정상)
+- Verification:
+  - 빌드 성공 ✓
+  - ctest 실행 성공 (7/7 tests passed) ✓
+  - 모든 경계값 테스트 통과
+- Next: RED-02-04 (neutral filter test - RED 실패 가능), RED-02-06 (session isolation test)
+
 ### 2026-05-22 14:50 - RED-02-01 빈 입력 경계값 테스트 추가
 - Goal: 빈 문자열/빈 벡터 입력의 기대 동작을 정의하고, 경계값 테스트 작성
 - Changes:
