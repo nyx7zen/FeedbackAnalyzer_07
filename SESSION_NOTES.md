@@ -21,6 +21,21 @@
 
 ## Session Log
 
+### 2026-05-22 15:40 - REFACTOR-01-03 fil() to applyFilter() 함수명 변경 완료
+- Goal: `fil()` 함수명을 `applyFilter()`로 변경해 필터 적용 책임을 명확히 한다.
+- Changes:
+  - `src/cpp/main.cpp` (라인 330): POST `/filter` 핸들러에서 `filters.fil()` → `filters.applyFilter()`
+  - `TODO.md`: REFACTOR-01-03 체크박스 완료 표시
+- Decisions:
+  - Filters.h/cpp에서 이미 `applyFilter()` 선언/정의되어 있음
+  - 호출부만 업데이트 필요
+  - 필터 로직 변경 없음, 함수명만 변경
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 통과: `ctest --test-dir build --output-on-failure` (1/1 tests passed) ✓
+  - 함수 호출 일관성 확인 ✓
+- Next: REFACTOR-01-04 (extract sentiment labels)
+
 ### 2026-05-22 15:35 - REFACTOR-01-02 kw() to analyzeKeywords() 함수명 변경 완료
 - Goal: `kw()` 함수명을 `analyzeKeywords()`로 변경해 의미를 명확히 한다.
 - Changes:

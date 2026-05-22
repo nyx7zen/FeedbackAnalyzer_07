@@ -327,7 +327,7 @@ int main() {
             std::string keyword = params["keyword"];
 
             if (!feedbacks.empty()) {
-                auto filtered = filters.fil(feedbacks, sentiment, keyword);
+                auto filtered = filters.applyFilter(feedbacks, sentiment, keyword);
                 if (!filtered.empty()) {
                     fil_data = filtered;
                     auto sentimentResults = textAnalyzer.analyzeSentiment(filtered);

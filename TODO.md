@@ -114,7 +114,7 @@
 - [x] REFACTOR-01-02 `refactor: rename kw to analyzeKeywords`
   - `kw()` 선언부와 호출부를 찾는다.
   - 의미가 분명한 `analyzeKeywords()` 이름으로 변경한다.
-- [ ] REFACTOR-01-03 `refactor: rename fil to applyFilter`
+- [x] REFACTOR-01-03 `refactor: rename fil to applyFilter`
   - `fil()` 선언부와 호출부를 찾는다.
   - 의미가 분명한 `applyFilter()` 이름으로 변경한다.
 - [ ] REFACTOR-01-04 `refactor: extract sentiment labels`
