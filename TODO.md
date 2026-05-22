@@ -123,7 +123,7 @@
 - [x] REFACTOR-01-05 `refactor: extract score constants`
   - `0.0f`, `1.0f` 등 감성 점수 관련 매직 넘버를 식별한다.
   - 점수 기준값을 `static constexpr` 상수로 정리한다.
-- [ ] REFACTOR-01-06 `refactor: clean duplicated sentiment keywords`
+- [x] REFACTOR-01-06 `refactor: clean duplicated sentiment keywords`
   - `src/Constants.cpp`의 `SENTIMENT_KEYWORDS` 맵을 검토한다.
   - 긍정/부정 사전 중복 키워드(예: "만족", "좋다")를 검출하고 정제한다.
 - [ ] REFACTOR-01-07 `docs: add public api doxygen comments`
