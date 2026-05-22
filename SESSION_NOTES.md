@@ -21,6 +21,19 @@
 
 ## Session Log
 
+### 2026-05-22 16:45 - REFACTOR-02-05 Filters 함수 분해 완료
+- Goal: 필터 적용 함수의 긴 조건 분기 분해 및 단일 책임 원칙 강화
+- Changes:
+  - `matchesSentimentFilter()` helper 추가 (감성 필터 판단)
+  - `matchesKeywordFilter()` helper 추가 (키워드 필터 판단)
+  - `applyFilter()` 리팩토링: 23줄 → 18줄 (조건식 명확화)
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 9/9 passed ✓
+  - public API 변경 없음 ✓
+  - 필터 결과 동일 ✓
+- Next: REFACTOR-03-01 (remove global filter state)
+
 ### 2026-05-22 16:40 - REFACTOR-02-04 TextAnalyzer 함수 분해 완료
 - Goal: 20줄을 크게 넘는 분석 함수 식별 및 단일 책임 원칙 강화
 - Changes:

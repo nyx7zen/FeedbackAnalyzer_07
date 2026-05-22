@@ -143,7 +143,7 @@
 - [x] REFACTOR-02-04 `refactor: split long text analyzer routines`
   - 20줄을 크게 넘는 분석 함수를 식별한다.
   - 서브루틴으로 추출해 단일 책임 원칙(SRP)을 강화한다.
-- [ ] REFACTOR-02-05 `refactor: split long filter routines`
+- [x] REFACTOR-02-05 `refactor: split long filter routines`
   - 필터 적용 함수의 긴 조건 분기와 판정 책임을 식별한다.
   - 작은 함수로 분리해 테스트와 유지보수가 쉬운 구조로 만든다.
 
