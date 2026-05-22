@@ -1,9 +1,9 @@
 # STATUS SNAPSHOT
-- UpdatedAt: 2026-05-22 16:30
+- UpdatedAt: 2026-05-22 16:35
 - Branch: refactor
 - Phase: Phase-3: REFACTOR
-- Status: GREEN Phase 완료, REFACTOR Phase 진행 중 (7/19 완료)
-- LastVerification: REFACTOR-01-07 완료, 검증 완료
+- Status: GREEN Phase 완료, REFACTOR Phase 진행 중 (10/19 완료)
+- LastVerification: REFACTOR-02-03 완료, 검증 완료
 
 ## Branch Progress Tree
 ```
@@ -49,7 +49,7 @@ main
 - 목표: RED 단계 모든 테스트 통과를 위한 기능 구현
 
 ### ⏳ Phase-3: REFACTOR (진행 중)
-- 완료: 7/19 항목
+- 완료: 10/19 항목
 - REFACTOR-01: 명명 규칙 개선 및 상수화 (7/7) ✅ 완료
   - REFACTOR-01-01: sent() → analyzeSentiment() ✅
   - REFACTOR-01-02: kw() → analyzeKeywords() ✅
@@ -58,6 +58,10 @@ main
   - REFACTOR-01-05: extract score constants ✅
   - REFACTOR-01-06: clean duplicated sentiment keywords ✅
   - REFACTOR-01-07: add public api doxygen comments ✅
+- REFACTOR-02: 중복 코드 제거 및 단일 책임 함수화 (3/5)
+  - REFACTOR-02-01: add text utils containsAny ✅
+  - REFACTOR-02-02: reuse containsAny in text analyzer ✅
+  - REFACTOR-02-03: reuse containsAny in filters ✅
 
 ### ⏳ Phase-4: FEATURE (예정)
 - 완료: 0/13 항목

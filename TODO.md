@@ -131,13 +131,13 @@
   - 필요한 곳에 Doxygen 표준 규칙(`@brief`, `@param`, `@return`) 기반 주석을 추가한다.
 
 ### 중복 코드 제거 및 단일 책임 함수화
-- [ ] REFACTOR-02-01 `refactor: add text utils containsAny`
+- [x] REFACTOR-02-01 `refactor: add text utils containsAny`
   - `src/TextUtils.h` 헤더 파일을 생성한다.
   - `std::any_of`와 `std::string::find`를 활용한 `containsAny` 인라인 유틸리티 함수를 구현한다.
-- [ ] REFACTOR-02-02 `refactor: reuse containsAny in text analyzer`
+- [x] REFACTOR-02-02 `refactor: reuse containsAny in text analyzer`
   - `src/TextAnalyzer.cpp`의 문자열 검색 중복 로직을 찾는다.
   - 해당 로직을 `TextUtils::containsAny` 호출로 대체한다.
-- [ ] REFACTOR-02-03 `refactor: reuse containsAny in filters`
+- [x] REFACTOR-02-03 `refactor: reuse containsAny in filters`
   - `src/Filters.cpp`의 문자열 검색 중복 로직을 찾는다.
   - 해당 로직을 공용 유틸리티 호출로 통합한다.
 - [ ] REFACTOR-02-04 `refactor: split long text analyzer routines`
