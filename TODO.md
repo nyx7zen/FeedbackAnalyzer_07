@@ -126,7 +126,7 @@
 - [x] REFACTOR-01-06 `refactor: clean duplicated sentiment keywords`
   - `src/Constants.cpp`의 `SENTIMENT_KEYWORDS` 맵을 검토한다.
   - 긍정/부정 사전 중복 키워드(예: "만족", "좋다")를 검출하고 정제한다.
-- [ ] REFACTOR-01-07 `docs: add public api doxygen comments`
+- [x] REFACTOR-01-07 `docs: add public api doxygen comments`
   - 모든 public 클래스와 메서드를 검토한다.
   - 필요한 곳에 Doxygen 표준 규칙(`@brief`, `@param`, `@return`) 기반 주석을 추가한다.
 
