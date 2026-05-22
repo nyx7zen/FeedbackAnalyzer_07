@@ -21,6 +21,24 @@
 
 ## Session Log
 
+### 2026-05-22 14:40 - RED-01-03 Constants/Session 상태 초기화 완성
+- Goal: 각 테스트가 독립적인 상태에서 실행되도록 SetUp/TearDown에 Constants 초기화 및 Session 초기화 로직 반영
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: TextAnalyzerFixture에 상태 초기화 로직 추가
+    - SetUp(): `Constants::init()` 호출 (감정/카테고리 키워드 딕셔너리 초기화)
+    - SetUp(): `Session::clear("default")` 호출 (세션 상태 초기화)
+    - TearDown(): `Session::clear("default")` 호출 (다음 테스트 격리 보장)
+  - `TODO.md`: RED-01-03 체크박스 완료 표시
+- Decisions:
+  - Constants::init() 확인: 기존 sentiment/category 딕셔너리를 clear 후 재초기화하는 정상 동작
+  - Session::clear() 확인: session ID별 상태(currentFeedbacks, filteredFeedbacks, filterState) 초기화
+  - 상태 초기화 API 모두 존재하므로 RED-01-03 목표 달성 가능
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 실행 성공: `ctest --test-dir build --output-on-failure` (모든 테스트 통과) ✓
+  - 상태 격리: SetUp/TearDown에서 일관되게 Constants/Session 초기화
+- Next: RED-01-04 (test: enforce descriptive test names) - 테스트 명명 규칙 검증
+
 ### 2026-05-22 14:35 - RED-01-02 TextAnalyzer GTest Fixture 작성 완료
 - Goal: `TextAnalyzer` 도메인 로직을 독립적으로 검증하기 위한 GTest fixture를 설계하고, `tests/TextAnalyzerTest.cpp` 파일 작성 및 `SetUp`/`TearDown` 기본 구조 완성
 - Changes:

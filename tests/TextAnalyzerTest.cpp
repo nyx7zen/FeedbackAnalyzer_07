@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
 
+#include "Constants.h"
 #include "Feedback.h"
+#include "Session.h"
 #include "TextAnalyzer.h"
 
 // TextAnalyzerTest Fixture implementation
@@ -13,13 +15,17 @@ public:
     TextAnalyzer analyzer;
 
     void SetUp() {
-        // Initialize TextAnalyzer for each test
-        // Additional state reset logic will be added in RED-01-03
+        // Initialize Constants for each test (sentiment/keyword dictionaries)
+        Constants::init();
+
+        // Reset session state to ensure test isolation
+        Session::clear("default");
     }
 
     void TearDown() {
         // Cleanup after each test
-        // Session and Constants reset logic will be added in RED-01-03
+        // Clear session to prevent state leakage to next test
+        Session::clear("default");
     }
 };
 

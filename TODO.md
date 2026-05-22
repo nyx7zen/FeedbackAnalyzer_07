@@ -51,7 +51,7 @@
 - [x] RED-01-02 `test: add text analyzer fixture`
   - `tests/TextAnalyzerTest.cpp` 파일을 작성한다.
   - Fixture(`SetUp`, `TearDown`) 기본 구조를 만든다.
-- [ ] RED-01-03 `test: reset constants and session per test`
+- [x] RED-01-03 `test: reset constants and session per test`
   - `Constants` 초기화 경로를 테스트 준비 단계에 반영한다.
   - `Session` 상태 격리 또는 Reset 로직을 테스트별로 적용한다.
 - [ ] RED-01-04 `test: enforce descriptive test names`
