@@ -36,3 +36,28 @@ void Session::setFilterState(
 Session::FilterState Session::getFilterState(const std::string& sessionId) {
     return state(sessionId).filterState;
 }
+
+void Session::setAnalysisResults(
+    const std::map<std::string, int>& sentiment,
+    const std::map<std::string, int>& keyword,
+    const std::string& sessionId) {
+    state(sessionId).analysisResults.sentimentCounts = sentiment;
+    state(sessionId).analysisResults.keywordCounts = keyword;
+}
+
+Session::AnalysisResults Session::getAnalysisResults(const std::string& sessionId) {
+    return state(sessionId).analysisResults;
+}
+
+void Session::clearFilterState(const std::string& sessionId) {
+    state(sessionId).filterState = FilterState{};
+}
+
+void Session::clearAnalysisResults(const std::string& sessionId) {
+    state(sessionId).analysisResults = AnalysisResults{};
+}
+
+void Session::clearFeedbacks(const std::string& sessionId) {
+    state(sessionId).currentFeedbacks.clear();
+    state(sessionId).filteredFeedbacks.clear();
+}

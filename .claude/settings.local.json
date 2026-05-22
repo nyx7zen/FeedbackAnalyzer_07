@@ -19,7 +19,9 @@
       "Bash(gh pr create --base B_07 --head green --title '[Phase-2: GREEN] fix: correct neutral filter condition \\(GREEN-01-01\\)' --body ' *)",
       "Bash(ctest --test-dir build --output-on-failure)",
       "Bash(git commit *)",
-      "Bash(./feedback_analyzer_test.exe)"
+      "Bash(./feedback_analyzer_test.exe)",
+      "Bash(cmake --build build --config Debug)",
+      "Bash(ctest --output-on-failure)"
     ]
   }
 }

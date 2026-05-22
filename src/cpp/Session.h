@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -8,6 +9,11 @@
 
 class Session {
 public:
+    struct AnalysisResults {
+        std::map<std::string, int> sentimentCounts;
+        std::map<std::string, int> keywordCounts;
+    };
+
     struct FilterState {
         std::string sentiment = "";
         std::string keyword = "";
@@ -69,11 +75,48 @@ public:
      */
     static FilterState getFilterState(const std::string& sessionId = "default");
 
+    /**
+     * @brief 분석 결과를 저장합니다.
+     * @param sentiment 감성 분석 결과
+     * @param keyword 키워드 분석 결과
+     * @param sessionId 대상 세션 ID
+     */
+    static void setAnalysisResults(
+        const std::map<std::string, int>& sentiment,
+        const std::map<std::string, int>& keyword,
+        const std::string& sessionId = "default");
+
+    /**
+     * @brief 저장된 분석 결과를 조회합니다.
+     * @param sessionId 조회할 세션 ID
+     * @return 분석 결과
+     */
+    static AnalysisResults getAnalysisResults(const std::string& sessionId = "default");
+
+    /**
+     * @brief 필터 상태를 초기화합니다.
+     * @param sessionId 대상 세션 ID
+     */
+    static void clearFilterState(const std::string& sessionId = "default");
+
+    /**
+     * @brief 분석 결과를 초기화합니다.
+     * @param sessionId 대상 세션 ID
+     */
+    static void clearAnalysisResults(const std::string& sessionId = "default");
+
+    /**
+     * @brief 피드백 목록을 초기화합니다.
+     * @param sessionId 대상 세션 ID
+     */
+    static void clearFeedbacks(const std::string& sessionId = "default");
+
 private:
     struct SessionState {
         std::vector<Feedback> currentFeedbacks;
         std::vector<Feedback> filteredFeedbacks;
         FilterState filterState;
+        AnalysisResults analysisResults;
     };
 
     static std::unordered_map<std::string, SessionState> sessions_;

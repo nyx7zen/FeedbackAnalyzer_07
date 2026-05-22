@@ -252,6 +252,317 @@ int main() {
         }
     }
 
+    // Test 10: Session storage map - store and retrieve analysis results (REFACTOR-03-03)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_store_and_retrieve_analysis_results_in_session" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Create test analysis results
+            std::map<std::string, int> sentimentResults = {{"긍정", 2}, {"부정", 1}, {"중립", 1}};
+            std::map<std::string, int> keywordResults = {{"만족", 2}, {"품질", 1}};
+
+            // Store results in session
+            Session::setAnalysisResults(sentimentResults, keywordResults, "default");
+
+            // Retrieve and verify
+            auto stored = Session::getAnalysisResults("default");
+            bool sentimentMatch = (stored.sentimentCounts.size() == 3 &&
+                                   stored.sentimentCounts["긍정"] == 2 &&
+                                   stored.sentimentCounts["부정"] == 1 &&
+                                   stored.sentimentCounts["중립"] == 1);
+            bool keywordMatch = (stored.keywordCounts.size() == 2 &&
+                                 stored.keywordCounts["만족"] == 2 &&
+                                 stored.keywordCounts["품질"] == 1);
+
+            if (sentimentMatch && keywordMatch) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Analysis results not stored/retrieved correctly" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 11: Session clear filter state (REFACTOR-03-04)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_clear_filter_state_when_clearFilterState_called" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Set filter state
+            Session::setFilterState("긍정", "품질", "default");
+
+            // Verify it was set
+            auto before = Session::getFilterState("default");
+            if (before.sentiment != "긍정" || before.keyword != "품질") {
+                std::cout << "[FAIL] - Filter state not set correctly" << std::endl;
+                failed++;
+            } else {
+                // Clear filter state
+                Session::clearFilterState("default");
+
+                // Verify it was cleared
+                auto after = Session::getFilterState("default");
+                if (after.sentiment == "" && after.keyword == "") {
+                    std::cout << "[PASS]" << std::endl;
+                    passed++;
+                } else {
+                    std::cout << "[FAIL] - Filter state not cleared" << std::endl;
+                    failed++;
+                }
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 12: Session clear analysis results (REFACTOR-03-04)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_clear_analysis_results_when_clearAnalysisResults_called" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Set analysis results
+            std::map<std::string, int> sentimentResults = {{"긍정", 5}, {"부정", 3}};
+            std::map<std::string, int> keywordResults = {{"만족", 4}};
+            Session::setAnalysisResults(sentimentResults, keywordResults, "default");
+
+            // Verify it was set
+            auto before = Session::getAnalysisResults("default");
+            if (before.sentimentCounts.size() == 0) {
+                std::cout << "[FAIL] - Analysis results not set correctly" << std::endl;
+                failed++;
+            } else {
+                // Clear analysis results
+                Session::clearAnalysisResults("default");
+
+                // Verify it was cleared
+                auto after = Session::getAnalysisResults("default");
+                if (after.sentimentCounts.size() == 0 && after.keywordCounts.size() == 0) {
+                    std::cout << "[PASS]" << std::endl;
+                    passed++;
+                } else {
+                    std::cout << "[FAIL] - Analysis results not cleared" << std::endl;
+                    failed++;
+                }
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 13: Session clear feedbacks (REFACTOR-03-04)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_clear_feedbacks_when_clearFeedbacks_called" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Set feedbacks
+            std::vector<Feedback> feedbacks;
+            feedbacks.emplace_back("좋아요");
+            feedbacks.emplace_back("별로");
+            Session::setCurrentFeedbacks(feedbacks, "default");
+
+            // Verify it was set
+            auto before = Session::currentFeedbacks("default");
+            if (before.size() != 2) {
+                std::cout << "[FAIL] - Feedbacks not set correctly" << std::endl;
+                failed++;
+            } else {
+                // Clear feedbacks
+                Session::clearFeedbacks("default");
+
+                // Verify both current and filtered feedbacks were cleared
+                auto afterCurrent = Session::currentFeedbacks("default");
+                auto afterFiltered = Session::filteredFeedbacks("default");
+                if (afterCurrent.size() == 0 && afterFiltered.size() == 0) {
+                    std::cout << "[PASS]" << std::endl;
+                    passed++;
+                } else {
+                    std::cout << "[FAIL] - Feedbacks not cleared" << std::endl;
+                    failed++;
+                }
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 14: Session lifecycle - set, get, clear, get (REFACTOR-03-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_saved_value_when_key_exists" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::vector<Feedback> feedbacks;
+            feedbacks.emplace_back("좋은 경험");
+
+            // Set
+            Session::setCurrentFeedbacks(feedbacks, "default");
+
+            // Get and verify
+            auto retrieved = Session::currentFeedbacks("default");
+            if (retrieved.size() == 1 && retrieved[0].getText() == "좋은 경험") {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Retrieved value doesn't match saved value" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 15: Session lifecycle - return empty when key doesn't exist (REFACTOR-03-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_empty_value_when_key_does_not_exist" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Don't set anything, just get
+            auto retrieved = Session::currentFeedbacks("nonexistent_session");
+            if (retrieved.size() == 0) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected empty result for nonexistent key" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 16: Session lifecycle - clear removes all values (REFACTOR-03-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_remove_all_values_when_session_is_cleared" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Setup: set multiple state values
+            std::vector<Feedback> feedbacks;
+            feedbacks.emplace_back("테스트");
+            Session::setCurrentFeedbacks(feedbacks, "default");
+
+            std::map<std::string, int> sentiment = {{"긍정", 5}};
+            std::map<std::string, int> keyword = {{"좋음", 3}};
+            Session::setAnalysisResults(sentiment, keyword, "default");
+            Session::setFilterState("긍정", "피드백", "default");
+
+            // Clear all
+            Session::clear("default");
+
+            // Verify all are cleared
+            auto currentFB = Session::currentFeedbacks("default");
+            auto filteredFB = Session::filteredFeedbacks("default");
+            auto filterState = Session::getFilterState("default");
+            auto analysisRes = Session::getAnalysisResults("default");
+
+            bool allCleared = (currentFB.size() == 0 &&
+                               filteredFB.size() == 0 &&
+                               filterState.sentiment == "" &&
+                               filterState.keyword == "" &&
+                               analysisRes.sentimentCounts.size() == 0 &&
+                               analysisRes.keywordCounts.size() == 0);
+
+            if (allCleared) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Not all values were cleared" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 17: Session isolation - different sessions don't share values (REFACTOR-03-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_not_share_values_when_sessionids_are_different" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::vector<Feedback> feedbacks1;
+            feedbacks1.emplace_back("세션 1");
+            Session::setCurrentFeedbacks(feedbacks1, "session1");
+
+            std::vector<Feedback> feedbacks2;
+            feedbacks2.emplace_back("세션 2");
+            Session::setCurrentFeedbacks(feedbacks2, "session2");
+
+            // Verify isolation
+            auto session1 = Session::currentFeedbacks("session1");
+            auto session2 = Session::currentFeedbacks("session2");
+
+            if (session1.size() == 1 && session1[0].getText() == "세션 1" &&
+                session2.size() == 1 && session2[0].getText() == "세션 2") {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Sessions shared values" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 18: Session lifecycle - selective clear maintains isolation (REFACTOR-03-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_clear_only_filter_state_when_clearFilterState_called" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Setup: set both feedbacks and filter state
+            std::vector<Feedback> feedbacks;
+            feedbacks.emplace_back("유지되어야 함");
+            Session::setCurrentFeedbacks(feedbacks, "default");
+            Session::setFilterState("긍정", "품질", "default");
+
+            // Clear only filter state
+            Session::clearFilterState("default");
+
+            // Verify feedbacks still exist but filter state cleared
+            auto currentFB = Session::currentFeedbacks("default");
+            auto filterState = Session::getFilterState("default");
+
+            if (currentFB.size() == 1 && currentFB[0].getText() == "유지되어야 함" &&
+                filterState.sentiment == "" && filterState.keyword == "") {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Selective clear didn't work correctly" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;

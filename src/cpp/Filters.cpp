@@ -23,6 +23,14 @@ bool matchesCategory(const std::string& text, const std::string& category) {
     const auto mainIt = categoryIt->second.find("main");
     return mainIt != categoryIt->second.end() && TextUtils::containsAny(text, mainIt->second);
 }
+
+bool matchesSentimentFilter(const std::string& sentiment, const std::string& sentimentFilter) {
+    return sentimentFilter == Constants::kFilterAll || sentiment == sentimentFilter;
+}
+
+bool matchesKeywordFilter(const std::string& text, const std::string& keywordFilter) {
+    return keywordFilter == Constants::kFilterAll || matchesCategory(text, keywordFilter);
+}
 }
 
 std::vector<Feedback> Filters::applyFilter(
@@ -33,13 +41,9 @@ std::vector<Feedback> Filters::applyFilter(
     std::vector<Feedback> filtered;
 
     for (const auto& feedback : dataList) {
-        const bool matchesSentiment =
-            sentimentFilter == Constants::kFilterAll ||
-            analyzer.detectSentiment(feedback.getText()) == sentimentFilter;
-
-        const bool matchesKeyword =
-            keywordFilter == Constants::kFilterAll ||
-            matchesCategory(feedback.getText(), keywordFilter);
+        const std::string sentiment = analyzer.detectSentiment(feedback.getText());
+        const bool matchesSentiment = matchesSentimentFilter(sentiment, sentimentFilter);
+        const bool matchesKeyword = matchesKeywordFilter(feedback.getText(), keywordFilter);
 
         if (matchesSentiment && matchesKeyword) {
             filtered.push_back(feedback);

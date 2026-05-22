@@ -108,62 +108,63 @@
 ## Phase-3: REFACTOR
 
 ### 명명 규칙 개선 및 매직 넘버 상수화
-- [ ] REFACTOR-01-01 `refactor: rename sent to analyzeSentiment`
+- [x] REFACTOR-01-01 `refactor: rename sent to analyzeSentiment`
   - `sent()` 선언부와 호출부를 찾는다.
   - 의미가 분명한 `analyzeSentiment()` 이름으로 변경한다.
-- [ ] REFACTOR-01-02 `refactor: rename kw to analyzeKeywords`
+- [x] REFACTOR-01-02 `refactor: rename kw to analyzeKeywords`
   - `kw()` 선언부와 호출부를 찾는다.
   - 의미가 분명한 `analyzeKeywords()` 이름으로 변경한다.
-- [ ] REFACTOR-01-03 `refactor: rename fil to applyFilter`
+- [x] REFACTOR-01-03 `refactor: rename fil to applyFilter`
   - `fil()` 선언부와 호출부를 찾는다.
   - 의미가 분명한 `applyFilter()` 이름으로 변경한다.
-- [ ] REFACTOR-01-04 `refactor: extract sentiment labels`
+- [x] REFACTOR-01-04 `refactor: extract sentiment labels`
   - `"긍정"`, `"부정"`, `"중립"` 하드코딩 문자열을 식별한다.
   - 감성 라벨 문자열을 `const` 또는 `static constexpr` 상수로 추출한다.
-- [ ] REFACTOR-01-05 `refactor: extract score constants`
+- [x] REFACTOR-01-05 `refactor: extract score constants`
   - `0.0f`, `1.0f` 등 감성 점수 관련 매직 넘버를 식별한다.
   - 점수 기준값을 `static constexpr` 상수로 정리한다.
-- [ ] REFACTOR-01-06 `refactor: clean duplicated sentiment keywords`
+- [x] REFACTOR-01-06 `refactor: clean duplicated sentiment keywords`
   - `src/Constants.cpp`의 `SENTIMENT_KEYWORDS` 맵을 검토한다.
   - 긍정/부정 사전 중복 키워드(예: "만족", "좋다")를 검출하고 정제한다.
-- [ ] REFACTOR-01-07 `docs: add public api doxygen comments`
+- [x] REFACTOR-01-07 `docs: add public api doxygen comments`
   - 모든 public 클래스와 메서드를 검토한다.
   - 필요한 곳에 Doxygen 표준 규칙(`@brief`, `@param`, `@return`) 기반 주석을 추가한다.
 
 ### 중복 코드 제거 및 단일 책임 함수화
-- [ ] REFACTOR-02-01 `refactor: add text utils containsAny`
+- [x] REFACTOR-02-01 `refactor: add text utils containsAny`
   - `src/TextUtils.h` 헤더 파일을 생성한다.
   - `std::any_of`와 `std::string::find`를 활용한 `containsAny` 인라인 유틸리티 함수를 구현한다.
-- [ ] REFACTOR-02-02 `refactor: reuse containsAny in text analyzer`
+- [x] REFACTOR-02-02 `refactor: reuse containsAny in text analyzer`
   - `src/TextAnalyzer.cpp`의 문자열 검색 중복 로직을 찾는다.
   - 해당 로직을 `TextUtils::containsAny` 호출로 대체한다.
-- [ ] REFACTOR-02-03 `refactor: reuse containsAny in filters`
+- [x] REFACTOR-02-03 `refactor: reuse containsAny in filters`
   - `src/Filters.cpp`의 문자열 검색 중복 로직을 찾는다.
   - 해당 로직을 공용 유틸리티 호출로 통합한다.
-- [ ] REFACTOR-02-04 `refactor: split long text analyzer routines`
+- [x] REFACTOR-02-04 `refactor: split long text analyzer routines`
   - 20줄을 크게 넘는 분석 함수를 식별한다.
   - 서브루틴으로 추출해 단일 책임 원칙(SRP)을 강화한다.
-- [ ] REFACTOR-02-05 `refactor: split long filter routines`
+- [x] REFACTOR-02-05 `refactor: split long filter routines`
   - 필터 적용 함수의 긴 조건 분기와 판정 책임을 식별한다.
   - 작은 함수로 분리해 테스트와 유지보수가 쉬운 구조로 만든다.
 
 ### 전역 상태 해체 및 Session API 현대화
-- [ ] REFACTOR-03-01 `refactor: remove global filter state`
+- [x] REFACTOR-03-01 `refactor: remove global filter state`
   - `Filters.cpp`의 전역 static 상태(`fil_data` 등)를 식별한다.
   - 새 전역 상태를 추가하지 않고 명시적 상태 관리 구조로 이동한다.
-- [ ] REFACTOR-03-02 `refactor: remove global analyzer state`
-  - `TextAnalyzer.cpp`의 전역 static 상태(`globalSent` 등)를 식별한다.
-  - 분석 결과 상태를 명시적으로 전달하거나 세션 API로 캡슐화한다.
-- [ ] REFACTOR-03-03 `refactor: implement session storage map`
+- [x] REFACTOR-03-02 `refactor: remove global analyzer state`
+  - `main.cpp`의 전역 `fil_data` 변수를 식별하고 제거했다.
+  - 구식 Session 메서드(`initSessionStateUgly`, `getOldDataFromSession`)를 제거하고 명시적 API로 대체했다.
+  - 분석 결과를 Session API로 캡슐화했다.
+- [x] REFACTOR-03-03 `refactor: implement session storage map`
   - `Session.cpp/.h`에 `std::unordered_map` 구조를 도입한다.
   - `Session`을 키를 무시하는 더미 API가 아니라 실제 조회 가능한 상태 저장소로 개편한다.
-- [ ] REFACTOR-03-04 `refactor: add feedback session clear api`
+- [x] REFACTOR-03-04 `refactor: add feedback session clear api`
   - `FeedbackSession::clear()` 등 생명 주기 수동 제어 API를 제공한다.
   - 테스트와 요청 처리에서 상태 초기화가 가능하도록 한다.
-- [ ] REFACTOR-03-05 `test: add session lifecycle regression tests`
+- [x] REFACTOR-03-05 `test: add session lifecycle regression tests`
   - 상태 초기화 시나리오 회귀 테스트를 추가한다.
   - 세션 격리 흐름이 유지되는지 검증한다.
-- [ ] REFACTOR-03-06 `docs: add refactoring report`
+- [x] REFACTOR-03-06 `docs: add refactoring report`
   - `docs/refactoring.md`를 작성한다.
   - 축약명 변경 매핑 테이블과 개편된 Session 라이프사이클 격리 흐름도를 기록한다.
 

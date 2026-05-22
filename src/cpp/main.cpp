@@ -13,7 +13,6 @@
 #include <ctime>
 #include <iomanip>
 
-static std::vector<Feedback> fil_data;
 static TextAnalyzer textAnalyzer;
 static Filters filters;
 static FileHandler fileHandler;
@@ -156,10 +155,10 @@ static std::string renderPage(const std::string& success,
             <div class="form-group">
                 <label for="sentiment">)" << u8"감정 필터:" << R"(</label>
                 <select id="sentiment" name="sentiment">
-                    <option value=")" << u8"전체" << R"(">)" << u8"전체" << R"(</option>
-                    <option value=")" << u8"긍정" << R"(">)" << u8"긍정" << R"(</option>
-                    <option value=")" << u8"중립" << R"(">)" << u8"중립" << R"(</option>
-                    <option value=")" << u8"부정" << R"(">)" << u8"부정" << R"(</option>
+                    <option value=")" << Constants::kFilterAll << R"(">)" << Constants::kFilterAll << R"(</option>
+                    <option value=")" << Constants::kSentimentPositive << R"(">)" << Constants::kSentimentPositive << R"(</option>
+                    <option value=")" << Constants::kSentimentNeutral << R"(">)" << Constants::kSentimentNeutral << R"(</option>
+                    <option value=")" << Constants::kSentimentNegative << R"(">)" << Constants::kSentimentNegative << R"(</option>
                 </select>
             </div>
             <div class="form-group">
@@ -238,8 +237,8 @@ int main() {
 
     // GET /
     svr.Get("/", [](const httplib::Request&, httplib::Response& res) {
-        Session::initSessionStateUgly();
-        auto& feedbacks = Session::getOldDataFromSession("current_feedbacks");
+        Session::clear("default");
+        auto& feedbacks = Session::currentFeedbacks("default");
         std::string html = renderPage(u8"피드백 분석기 시작", "", "", {}, {}, feedbacks);
         res.set_content(html, "text/html; charset=UTF-8");
     });
@@ -271,8 +270,8 @@ int main() {
             std::map<std::string, int> sentimentResults, keywordResults;
 
             if (!feedbacks.empty()) {
-                sentimentResults = textAnalyzer.sent(feedbacks);
-                keywordResults = textAnalyzer.kw(feedbacks);
+                sentimentResults = textAnalyzer.analyzeSentiment(feedbacks);
+                keywordResults = textAnalyzer.analyzeKeywords(feedbacks);
                 Logger::logInfo(u8"감성 분석 완료");
                 Logger::logInfo(u8"키워드 분석 완료");
             }
@@ -327,11 +326,11 @@ int main() {
             std::string keyword = params["keyword"];
 
             if (!feedbacks.empty()) {
-                auto filtered = filters.fil(feedbacks, sentiment, keyword);
+                auto filtered = filters.applyFilter(feedbacks, sentiment, keyword);
                 if (!filtered.empty()) {
-                    fil_data = filtered;
-                    auto sentimentResults = textAnalyzer.sent(filtered);
-                    auto keywordResults = textAnalyzer.kw(filtered);
+                    Session::setFilteredFeedbacks(filtered, "default");
+                    auto sentimentResults = textAnalyzer.analyzeSentiment(filtered);
+                    auto keywordResults = textAnalyzer.analyzeKeywords(filtered);
                     Logger::logInfo(u8"필터링 결과: " + std::to_string(filtered.size()) + u8"개의 피드백");
                     std::string html = renderPage("", "", "", sentimentResults, keywordResults, filtered);
                     res.set_content(html, "text/html; charset=UTF-8");
@@ -358,7 +357,8 @@ int main() {
         // UTF-8 BOM
         csv << "\xEF\xBB\xBF";
         csv << "text\n";
-        for (const auto& iter : fil_data) {
+        auto& filtered = Session::filteredFeedbacks("default");
+        for (const auto& iter : filtered) {
             csv << iter.getText() << "\n";
         }
         res.set_header("Content-Disposition", "attachment; filename=\"filtered_feedback.csv\"");

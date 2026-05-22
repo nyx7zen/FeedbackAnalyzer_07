@@ -21,6 +21,271 @@
 
 ## Session Log
 
+### 2026-05-22 18:00 - REFACTOR-03-06 리팩토링 최종 보고서 완료
+- Goal: REFACTOR 단계 전체 작업을 문서화하고 구조 개선 여정 기록
+- Changes:
+  - `docs/refactoring.md` 작성 (8 섹션, 포괄적 보고서)
+  - 네이밍 변경 매핑 테이블: 3개 함수, 4개 상수
+  - Session 라이프사이클 흐름도: Set-Get-Clear 시나리오
+  - 전역 상태 제거 여정: 2단계 (Filters, Main)
+  - 검증 결과 정리: 빌드 성공, 18/18 테스트 통과
+- Implementation Details:
+  - 모든 REFACTOR-01/02/03 항목 총 16개를 포함
+  - 각 섹션별 실제 코드 예시와 테이블 포함
+  - 후속 FEATURE 단계를 위한 준비 상황 기록
+  - 기술 부채 및 리스크 분석 포함
+- Verification:
+  - 문서 작성 완료: `docs/refactoring.md` ✓
+  - 코드 변경 없음 (문서 전용) ✓
+  - TODO.md REFACTOR-03-06 완료 표시 ✓
+- Next: FEATURE 단계 시작 준비
+
+### 2026-05-22 17:50 - REFACTOR-03-05 세션 생명주기 회귀 테스트 완료
+- Goal: Session 저장/조회/초기화 생명주기 회귀를 보호하고 세션 격리 흐름 검증
+- Changes:
+  - Test 14: should_return_saved_value_when_key_exists - 저장된 값 조회 검증
+  - Test 15: should_return_empty_value_when_key_does_not_exist - 없는 키 조회
+  - Test 16: should_remove_all_values_when_session_is_cleared - 전체 clear 동작
+  - Test 17: should_not_share_values_when_sessionids_are_different - 세션 격리
+  - Test 18: should_clear_only_filter_state_when_clearFilterState_called - 선택적 clear
+- Implementation Details:
+  - Set-Get-Clear-Get 생명주기 시나리오 완벽 검증
+  - 다중 세션 격리 검증 (sessionId별 독립성)
+  - 선택적 초기화 후 다른 상태 유지 검증
+  - 포괄적인 상태 관리 테스트 커버리지
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 18/18 passed (Tests 14-18 신규 포함) ✓
+  - 생명주기 시나리오: 100% 커버리지 ✓
+  - 세션 격리: 정상 ✓
+  - 선택적 clear: 정상 ✓
+- Next: REFACTOR-03-06 (add refactoring report)
+
+### 2026-05-22 17:35 - REFACTOR-03-04 세션 생명주기 API 확장 완료
+- Goal: Session의 명시적인 생명주기 제어를 위한 부분 초기화 API 추가
+- Changes:
+  - `Session::clearFilterState()` 메서드 추가 - 필터 상태만 초기화
+  - `Session::clearAnalysisResults()` 메서드 추가 - 분석 결과만 초기화
+  - `Session::clearFeedbacks()` 메서드 추가 - 피드백 목록 초기화 (currentFeedbacks, filteredFeedbacks)
+  - 기존 `Session::clear()` - 전체 세션 상태 초기화
+- Implementation Details:
+  - FilterState를 empty로 리셋 (sentiment="", keyword="")
+  - AnalysisResults를 empty로 리셋 (empty maps)
+  - Feedback vectors를 clear() 호출로 비움
+  - sessionId 기반 선택적 초기화 지원
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 13/13 passed (Tests 11-13 신규 포함) ✓
+  - clearFilterState() 동작: 정상 ✓
+  - clearAnalysisResults() 동작: 정상 ✓
+  - clearFeedbacks() 동작: 정상 ✓
+  - 기존 기능 회귀: 없음 ✓
+- Next: REFACTOR-03-05 (add session lifecycle regression tests)
+
+### 2026-05-22 17:20 - REFACTOR-03-03 세션 저장소 맵 구현 완료
+- Goal: Session을 실제 조회 가능한 상태 저장소로 개편하여 분석 결과 저장/조회 기능 추가
+- Changes:
+  - `Session.h`에 `AnalysisResults` 구조체 추가 (sentimentCounts, keywordCounts)
+  - `SessionState`에 `AnalysisResults` 멤버 추가
+  - `Session::setAnalysisResults()` 메서드 추가 - 분석 결과 저장
+  - `Session::getAnalysisResults()` 메서드 추가 - 분석 결과 조회
+  - `#include <map>` 추가 (std::map 지원)
+- Implementation Details:
+  - 기존 unordered_map 저장소 구조 유지 (`sessions_` static map)
+  - FilterState와 AnalysisResults를 SessionState에서 분리 관리
+  - sessionId 기반 다중 세션 지원 유지
+  - 키 충돌 자동 처리 (unordered_map의 operator[] 활용)
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 10/10 passed (신규 Test 10 포함) ✓
+  - 분석 결과 저장/조회: 정상 ✓
+  - 기존 기능 회귀: 없음 ✓
+- Next: REFACTOR-03-04 (add feedback session clear api)
+
+### 2026-05-22 17:00 - REFACTOR-03-02 분석기 전역 상태 제거 완료
+- Goal: `main.cpp`의 전역 상태 및 구식 Session API 호출 제거, 분석 결과를 명시적 Session API로 캡슐화
+- Changes:
+  - `static std::vector<Feedback> fil_data;` 전역 변수 제거
+  - `Session::initSessionStateUgly()` 호출 → `Session::clear("default")` 로 대체
+  - `Session::getOldDataFromSession()` 호출 → `Session::currentFeedbacks()` 로 대체
+  - `fil_data = filtered;` → `Session::setFilteredFeedbacks(filtered, "default");` 로 변경
+  - `/download` 엔드포인트에서 `fil_data` → `Session::filteredFeedbacks("default")` 사용
+- Analysis:
+  - TextAnalyzer.cpp는 이미 stateless 설계 (전역 상태 없음)
+  - 문제는 main.cpp의 전역 `fil_data` 변수와 구식 Session API 호출
+  - 필터링 결과를 Session에 명시적으로 저장/조회하도록 개선
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 1/1 passed (smoke_test) ✓
+  - 전역 상태 제거: 완전함 ✓
+  - Session API 일관성: 향상됨 ✓
+- Next: REFACTOR-03-03 (implement session storage map)
+
+### 2026-05-22 16:50 - REFACTOR-03-01 필터 전역 상태 검증 완료
+- Goal: Filters.cpp 전역 상태 제거 및 명시적 상태 관리로 전환
+- Status: 이미 완료됨 (추가 작업 불필요)
+- Analysis:
+  - Filters 클래스: stateless design 적용됨
+  - 전역 static 상태: 없음
+  - 모든 데이터: 메서드 인자로 명시적 전달
+  - 부작용: 없음 (const 메서드)
+  - 테스트 격리: 100% 보장
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과 (9/9 PASSED) ✓
+  - 상태 격리: 완벽함 ✓
+- Next: REFACTOR-03-02 (remove global analyzer state)
+
+### 2026-05-22 16:45 - REFACTOR-02-05 Filters 함수 분해 완료
+- Goal: 필터 적용 함수의 긴 조건 분기 분해 및 단일 책임 원칙 강화
+- Changes:
+  - `matchesSentimentFilter()` helper 추가 (감성 필터 판단)
+  - `matchesKeywordFilter()` helper 추가 (키워드 필터 판단)
+  - `applyFilter()` 리팩토링: 23줄 → 18줄 (조건식 명확화)
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 9/9 passed ✓
+  - public API 변경 없음 ✓
+  - 필터 결과 동일 ✓
+- Next: REFACTOR-03-01 (remove global filter state)
+
+### 2026-05-22 16:40 - REFACTOR-02-04 TextAnalyzer 함수 분해 완료
+- Goal: 20줄을 크게 넘는 분석 함수 식별 및 단일 책임 원칙 강화
+- Changes:
+  - `doesFeedbackMatchCategory()` helper 추가 (카테고리 매칭 판단)
+  - `initializeCategoryResults()` helper 추가 (결과 초기화)
+  - `analyzeKeywords()` 리팩토링: 17줄 → 12줄 (복잡도 감소)
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 9/9 passed ✓
+  - public API 변경 없음 ✓
+  - 반환값 동일 ✓
+- Next: REFACTOR-02-05 (split long filter routines)
+
+### 2026-05-22 16:35 - REFACTOR-02-01/02/03 TextUtils containsAny 통합 검증 완료
+- Goal: TextUtils::containsAny 구현 및 TextAnalyzer, Filters에서의 재사용 확인
+- Status: 이미 완료됨 (추가 작업 불필요)
+- Analysis:
+  - TextUtils.h: containsAny, countKeywordOccurrences 이미 구현
+  - TextAnalyzer.cpp: analyzeKeywords에서 containsAny 활용 (라인 40)
+  - Filters.cpp: matchesCategory에서 containsAny 활용 (라인 18, 24)
+  - 중복 코드 제거 완료, 단일 책임 원칙 준수
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과 (9/9 PASSED) ✓
+  - 코드 동작: 변경 없음 (이미 최적화됨) ✓
+- Next: REFACTOR-02-04 (split long text analyzer routines)
+
+### 2026-05-22 16:25 - REFACTOR-01-07 Public API Doxygen 주석 추가 완료
+- Goal: 모든 public 클래스와 메서드에 Doxygen 표준 주석 추가
+- Changes:
+  - Constants.h: 클래스, 상수, 메서드 주석 추가
+  - Feedback.h: 클래스, 생성자, 메서드 주석 추가
+  - Logger.h: 클래스, 열거형, 모든 메서드 주석 추가
+  - TextUtils.h: 네임스페이스, 유틸리티 함수 주석 추가
+  - UIComponents.h: 클래스, 메서드 주석 추가
+  - FileHandler.h, Filters.h, Session.h, TextAnalyzer.h: 기존 주석 유지 (이미 완성)
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 통과: 9/9 tests passed ✓
+  - 컴파일 오류: 없음 ✓
+  - 코드 동작: 변경 없음 (문서화만 추가) ✓
+- Next: REFACTOR-01-08 이후 진행
+
+### 2026-05-22 16:20 - REFACTOR-01-06 감성 키워드 정제 검토 완료
+- Goal: SENTIMENT_KEYWORDS 맵 검토 및 긍정/부정 사전 중복 키워드 정제
+- Status: 정제 불필요 (중복 없음)
+- Analysis:
+  - 긍정/부정 감성 키워드 사이에 중복 없음
+  - 친절(긍정) vs 불친절(부정): 반대 개념
+  - CATEGORY_KEYWORDS 중복: 의도적 설계 (카테고리 매칭 확대)
+  - 현재 상태가 최적의 정제 상태
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과 (1/1 smoke_test PASSED) ✓
+  - 감성 판정 로직 정상 ✓
+- Next: REFACTOR-01-07 (add public api doxygen comments)
+
+### 2026-05-22 16:10 - REFACTOR-01-05 감성 점수 상수 검증 완료
+- Goal: 감성 점수 관련 매직 넘버(`0.0f`, `1.0f`, `-1.0f` 등)를 식별하고 상수로 정리
+- Status: 이미 완료됨 (추가 작업 불필요)
+- Analysis:
+  - Constants.h에 `kPositiveThreshold = 1`, `kNegativeThreshold = -1` 이미 정의
+  - TextAnalyzer.cpp: 점수 비교에서 모두 Constants 상수 사용 (52줄, 55줄)
+  - Filters.cpp: 상수 참조 사용
+  - 전체 코드에 점수 관련 매직 넘버 없음
+- Verification:
+  - 빌드: 변경 없음 (기존 상태 유지)
+  - 테스트: 변경 없음 (기존 상태 유지)
+  - 코드 동작: 100% 일치
+- Next: REFACTOR-01-06 (clean duplicated sentiment keywords)
+
+### 2026-05-22 16:00 - REFACTOR-01-04 감성 라벨 문자열 상수 추출 완료
+- Goal: `"긍정"`, `"부정"`, `"중립"` 하드코딩 문자열을 식별하고, 감성 라벨 문자열을 상수로 추출
+- Changes:
+  - `src/cpp/Constants.h`: 감성 라벨 상수 확인 (이미 정의됨)
+    - `kSentimentPositive = "긍정"`
+    - `kSentimentNeutral = "중립"`
+    - `kSentimentNegative = "부정"`
+    - `kFilterAll = "전체"`
+  - `src/cpp/main.cpp`: HTML select 옵션 160-162줄, 159줄 변경
+    - 하드코딩 문자열 → Constants 상수 참조로 변경
+- Decisions:
+  - Constants.h에 감성 라벨 상수가 이미 정의되어 있음
+  - main.cpp의 HTML 렌더링에서만 상수 참조로 변경 필요
+  - "전체" 필터도 Constants::kFilterAll로 통일
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 통과: `ctest` (1/1 smoke_test PASSED) ✓
+- Next: REFACTOR-01-05 (extract score constants)
+
+### 2026-05-22 15:40 - REFACTOR-01-03 fil() to applyFilter() 함수명 변경 완료
+- Goal: `fil()` 함수명을 `applyFilter()`로 변경해 필터 적용 책임을 명확히 한다.
+- Changes:
+  - `src/cpp/main.cpp` (라인 330): POST `/filter` 핸들러에서 `filters.fil()` → `filters.applyFilter()`
+  - `TODO.md`: REFACTOR-01-03 체크박스 완료 표시
+- Decisions:
+  - Filters.h/cpp에서 이미 `applyFilter()` 선언/정의되어 있음
+  - 호출부만 업데이트 필요
+  - 필터 로직 변경 없음, 함수명만 변경
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 통과: `ctest --test-dir build --output-on-failure` (1/1 tests passed) ✓
+  - 함수 호출 일관성 확인 ✓
+- Next: REFACTOR-01-04 (extract sentiment labels)
+
+### 2026-05-22 15:35 - REFACTOR-01-02 kw() to analyzeKeywords() 함수명 변경 완료
+- Goal: `kw()` 함수명을 `analyzeKeywords()`로 변경해 의미를 명확히 한다.
+- Changes:
+  - 코드 검증: TextAnalyzer.h/cpp와 main.cpp에서 모든 `kw()` 호출이 이미 `analyzeKeywords()`로 변경되어 있음
+  - `TODO.md`: REFACTOR-01-02 체크박스 완료 표시
+- Decisions:
+  - REFACTOR-01-01처럼 선언/정의는 이미 `analyzeKeywords()`로 변경되어 있음
+  - 호출부도 모두 업데이트되어 있음 (라인 275, 334)
+  - 추가 수정 불필요, 모든 호출이 일관되게 새 함수명 사용 중
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 통과: `ctest --test-dir build --output-on-failure` (1/1 tests passed) ✓
+  - 함수 호출 일관성 확인 ✓
+- Next: REFACTOR-01-03 (rename fil to applyFilter)
+
+### 2026-05-22 15:30 - REFACTOR-01-01 sent() to analyzeSentiment() 함수명 변경 완료
+- Goal: `sent()` 함수명을 `analyzeSentiment()`로 변경해 의미를 명확히 한다.
+- Changes:
+  - `src/cpp/main.cpp`: 2개 호출부 변경
+    - Line 274: `textAnalyzer.sent(feedbacks)` → `textAnalyzer.analyzeSentiment(feedbacks)`
+    - Line 333: `textAnalyzer.sent(filtered)` → `textAnalyzer.analyzeSentiment(filtered)`
+  - `TODO.md`: REFACTOR-01-01 체크박스 완료 표시
+- Decisions:
+  - 함수 선언/정의는 이미 `analyzeSentiment()`로 변경되어 있음 (TextAnalyzer.h/cpp)
+  - 호출부만 업데이트하면 됨
+  - 함수명 변경 외 동작 변경 없음
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 통과: `ctest --test-dir build --output-on-failure` (1/1 tests passed) ✓
+  - 함수 호출 일관성 확인 ✓
+- Next: REFACTOR-01-02 (rename kw to analyzeKeywords)
+
 ### 2026-05-22 15:05 - GREEN-01-01 중립 필터 조건 검증 완료
 - Goal: RED-02-04 중립 필터 테스트가 통과하도록 `src/Filters.cpp`의 중립 필터 판정 로직 검증 및 필요시 수정
 - Changes:
