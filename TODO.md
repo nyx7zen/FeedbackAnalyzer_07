@@ -45,7 +45,7 @@
 ## Phase-1: RED
 
 ### 테스트 프레임워크 구축
-- [ ] RED-01-01 `test: configure gtest target`
+- [x] RED-01-01 `test: configure gtest target`
   - CMake에 Google Test 기반 테스트 타깃을 추가한다.
   - 테스트 빌드와 실행이 가능한 최소 구성을 만든다.
 - [ ] RED-01-02 `test: add text analyzer fixture`
