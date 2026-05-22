@@ -47,7 +47,15 @@ if(GTest_FOUND)
     target_link_libraries(feedback_analyzer_test PRIVATE feedback_analyzer_lib GTest::gtest GTest::gtest_main)
     target_include_directories(feedback_analyzer_test PRIVATE src/cpp)
 
+    add_executable(filehandler_test
+        tests/FileHandlerTest.cpp
+    )
+
+    target_link_libraries(filehandler_test PRIVATE feedback_analyzer_lib GTest::gtest GTest::gtest_main)
+    target_include_directories(filehandler_test PRIVATE src/cpp)
+
     add_test(NAME smoke_test COMMAND feedback_analyzer_test)
+    add_test(NAME filehandler_test COMMAND filehandler_test)
 else()
     # Minimal test framework without GTest for initial setup
     message(STATUS "GTest not found. Using minimal test framework.")
@@ -61,8 +69,17 @@ else()
     target_link_libraries(feedback_analyzer_test PRIVATE feedback_analyzer_lib)
     target_include_directories(feedback_analyzer_test PRIVATE src/cpp)
 
+    # FileHandler test target
+    add_executable(filehandler_test
+        tests/FileHandlerTest.cpp
+    )
+
+    target_link_libraries(filehandler_test PRIVATE feedback_analyzer_lib)
+    target_include_directories(filehandler_test PRIVATE src/cpp)
+
     # Register with CTest
     add_test(NAME smoke_test COMMAND feedback_analyzer_test)
+    add_test(NAME filehandler_test COMMAND filehandler_test)
 
     message(STATUS "")
     message(STATUS "Note: Currently using minimal test framework.")

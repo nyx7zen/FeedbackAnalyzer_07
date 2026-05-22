@@ -21,6 +21,162 @@
 
 ## Session Log
 
+### 2026-05-22 20:45 - FEATURE-02-02~05, FEATURE-03-01~02 완료
+- Goal: CSV 저장 기능과 기능 명세 문서화 완료 (6개 항목)
+- Changes:
+  - `docs/feature.md`: 새로 작성 (7개 섹션)
+    - 개요, 가중치 기반 감성 스코어링, CSV 영구 저장, 오류 처리, 테스트 기준, 남은 제약, 검증 결과
+  - `TODO.md`: FEATURE-02-02 ~ FEATURE-03-02 완료 표시
+  - `SESSION_NOTES.md`: 현재 항목 추가
+- Key Findings:
+  - FileHandler.cpp 기능이 이미 완전히 구현되어 있음 (FEATURE-02-02~05 내용 포함)
+  - UTF-8 BOM, CSV 필드 이스케이프, try-catch 오류 처리 모두 적용됨
+  - 8개 FileHandler 테스트 모두 통과
+  - 가중치 기반 감성 스코어링: Score = Count(긍정) - Count(부정), 임계값 ±1
+- Implementation Details:
+  - FileHandler::saveResult(): std::ofstream 기반 RAII 파일 쓰기
+  - FileHandler::buildCsvContent(): UTF-8 BOM + 헤더 + 이스케이프된 데이터 행
+  - FileHandler::escapeCsvField(): 쌍따옴표 2배 변환, 전체 필드를 "..."로 감쌈
+  - TextAnalyzer::detectSentiment(): 점수 기반 감성 판정 (Score >= 1: 긍정, -1 < Score < 1: 중립, Score <= -1: 부정)
+- Verification:
+  - 빌드 성공 ✓
+  - FileHandler 테스트: 8/8 통과 ✓
+  - 기존 TextAnalyzer 테스트: 42/42 통과 (회귀 없음) ✓
+  - docs/feature.md: 7개 섹션 작성 완료 ✓
+  - TODO 체크박스: FEATURE-02-02 ~ FEATURE-03-02 완료 표시 ✓
+- Outputs:
+  - `docs/feature.md`: 가중치 감성 분석 및 CSV 저장 명세 문서
+  - `TODO.md`: 6개 항목 완료 표시
+- Next: FINAL 단계 진행 (최종 리포트 작성) 또는 branch 병합
+
+### 2026-05-22 19:15 - FEATURE-01-04 가중치 기반 감성 분류 검증 완료
+- Goal: 계산된 점수에 따라 긍정/부정/중립 감성 분류 검증 및 강화
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`에 4개 테스트 추가 (Tests 35-38)
+  - 기존 detectSentiment() 메서드로 점수 기반 분류 이미 구현됨 확인
+  - analyzeSentiment()이 가중치 기반 분류 결과를 반영함 확인
+- Key Findings:
+  - 현재 구현이 완벽하게 가중치 기반 분류를 수행 중
+  - kPositiveThreshold(1)과 kNegativeThreshold(-1) 사용
+  - 점수=0인 경우 정확하게 중립으로 분류
+- Classification Logic:
+  - Score >= 1: Constants::kSentimentPositive ("긍정")
+  - Score <= -1: Constants::kSentimentNegative ("부정")
+  - -1 < Score < 1: Constants::kSentimentNeutral ("중립")
+- Implementation Details:
+  - detectSentiment(): 텍스트를 감성 라벨로 변환 (점수 기반)
+  - analyzeSentiment(): 피드백 목록을 감성별로 집계 (가중치 반영)
+  - 모든 기준값이 Constants 클래스에서 관리됨
+- Test Coverage:
+  - Test 35: 임계값 경계 테스트 (score=1)
+  - Test 36: 임계값 경계 테스트 (score=-1)
+  - Test 37: 다중 피드백 가중치 분류 (4개 피드백, 결과: 긍정=1, 부정=1, 중립=2)
+  - Test 38: 극단적 점수 분류 (score=5, score=-5)
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 38/38 passed (Tests 35-38 신규 포함) ✓
+  - FEATURE-01-01 회귀 테스트: 모두 통과 ✓
+  - FEATURE-01-02 회귀 테스트: 모두 통과 ✓
+  - FEATURE-01-03 회귀 테스트: 모두 통과 ✓
+  - 경계값 처리: 정상 ✓
+  - 다중 피드백 집계: 정상 ✓
+- Outputs:
+  - `tests/TextAnalyzerTest.cpp`: 4개 테스트 추가
+  - `reports/phase-4_feature/feature-01-04_classify_sentiment_from_weighted_score-report.md`: 실행 보고서
+- Next: FEATURE-01-05 (mixed sentiment scoring regression tests)
+
+### 2026-05-22 19:00 - FEATURE-01-03 상대 감성 점수 계산 공개 API 완료
+- Goal: 상대 감성 점수 (긍정 개수 - 부정 개수) 계산 기능 구현
+- Changes:
+  - `TextAnalyzer::getSentimentScore()` 메서드 추가
+  - 공개 API로 상대 점수 계산 노출
+  - `tests/TextAnalyzerTest.cpp`에 6개 테스트 추가 (Tests 29-34)
+- Key Findings:
+  - 기존 calculateSentimentScore()가 이미 수식을 구현하고 있었음
+  - 수식: Score = Count_positive - Count_negative
+  - 점수 범위: 양수(긍정), 0(중립), 음수(부정)
+- Implementation Details:
+  - getSentimentScore()는 calculateSentimentScore() 호출
+  - 점수와 감성 분류의 책임 분리 (SRP)
+  - 반복 출현 키워드도 정확하게 반영
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 34/34 passed (Tests 29-34 신규 포함) ✓
+  - Test 29: 긍정 점수 (3-1=2) ✓
+  - Test 30: 부정 점수 (1-3=-2) ✓
+  - Test 31: 중립 점수 (2-2=0) ✓
+  - Test 32: 빈 입력 (0-0=0) ✓
+  - Test 33: 긍정만 (3-0=3) ✓
+  - Test 34: 부정만 (0-3=-3) ✓
+  - 기존 기능 회귀: 없음 (1-28번 테스트 모두 통과) ✓
+- Outputs:
+  - `src/cpp/TextAnalyzer.h`: 1개 공개 메서드 선언
+  - `src/cpp/TextAnalyzer.cpp`: 1개 메서드 구현
+  - `tests/TextAnalyzerTest.cpp`: 6개 테스트 추가
+  - `reports/phase-4_feature/feature-01-03_calculate_relative_sentiment_score-report.md`: 실행 보고서
+- Next: FEATURE-01-04 (classify sentiment from weighted score)
+
+### 2026-05-22 18:45 - FEATURE-01-02 긍정/부정 키워드 카운트 공개 API 완료
+- Goal: 긍정/부정 단어 빈도 누적 카운트 기능을 공개 API로 노출
+- Changes:
+  - `TextAnalyzer::getPositiveKeywordCount()` 메서드 추가
+  - `TextAnalyzer::getNegativeKeywordCount()` 메서드 추가
+  - 내부 헬퍼 함수 2개 추가 (getPositiveKeywordCountHelper, getNegativeKeywordCountHelper)
+  - `tests/TextAnalyzerTest.cpp`에 4개 테스트 추가 (Tests 25-28)
+- Key Findings:
+  - 기존 구현이 이미 첫 키워드 조기 종료 없이 전체 문장 순회
+  - `TextUtils::countKeywordOccurrences()`가 모든 키워드 누적 카운트 수행
+  - 반복 출현 키워드도 횟수만큼 정확하게 카운트
+- Implementation Details:
+  - 공개 메서드가 내부 헬퍼를 호출하는 구조
+  - Constants::SENTIMENT_KEYWORDS를 활용한 키워드 사전 사용
+  - 빈 문자열 처리: 0 반환
+  - 혼합 텍스트: 긍정/부정 분리 카운트
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 28/28 passed (Tests 25-28 신규 포함) ✓
+  - Test 25: 긍정 키워드 누적 (4개 확인) ✓
+  - Test 26: 부정 키워드 누적 (4개 확인) ✓
+  - Test 27: 긍정/부정 분리 (3 vs 2 확인) ✓
+  - Test 28: 빈 입력 처리 (0, 0 확인) ✓
+  - 기존 기능 회귀: 없음 (1-24번 테스트 모두 통과) ✓
+- Outputs:
+  - `src/cpp/TextAnalyzer.h`: 2개 공개 메서드 선언
+  - `src/cpp/TextAnalyzer.cpp`: 4개 함수 구현
+  - `tests/TextAnalyzerTest.cpp`: 4개 테스트 추가
+  - `reports/phase-4_feature/feature-01-02_count_positive_and_negative_keywords-report.md`: 실행 보고서
+- Next: FEATURE-01-03 (calculate relative sentiment score)
+
+### 2026-05-22 18:30 - FEATURE-01-01 가중치 기반 감성 스코어링 테스트 추가 완료
+- Goal: 긍정/부정 단어 빈도 누적 기준 테스트를 작성하고 기존 첫 키워드 종료 로직의 한계 드러내기
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`에 6개 새로운 테스트 추가 (Tests 19-24)
+  - Test 19: 긍정 키워드 우세 (3 positive vs 1 negative -> 긍정)
+  - Test 20: 부정 키워드 우세 (1 positive vs 3 negative -> 부정)
+  - Test 21: 균형 잡힌 키워드 (2 positive vs 2 negative -> 중립)
+  - Test 22: 같은 키워드 반복 출현 (3x 좋아요 vs 1x 별로 -> 긍정)
+  - Test 23: 극단적 긍정 우세 (5 positive vs 1 negative -> 긍정)
+  - Test 24: 극단적 부정 우세 (1 positive vs 5 negative -> 부정)
+- Key Findings:
+  - 현재 구현이 이미 가중치 기반 감성 스코어링을 지원함
+  - TextUtils::countKeywordOccurrences()가 모든 키워드 누적 카운트
+  - calculateSentimentScore()가 점수 = 긍정 - 부정 계산
+  - 첫 키워드 조기 종료가 아니라 전체 문장 순회
+- Implementation Details:
+  - 모든 테스트가 should_[result]_when_[condition] 네이밍 규칙 준수
+  - Constants::kSentimentPositive/Negative 상수 활용
+  - 다양한 시나리오: 단순 우세, 극단적 비율, 균형, 반복 출현
+  - 점수 기반 판정: >= 1 (긍정), <= -1 (부정), 나머지 (중립)
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 24/24 passed (Tests 19-24 신규 포함) ✓
+  - 모든 가중치 시나리오 커버: 확인 ✓
+  - 기존 기능 회귀: 없음 (기존 18개 테스트 모두 통과) ✓
+- Outputs:
+  - `tests/TextAnalyzerTest.cpp`: 6개 테스트 추가
+  - `reports/phase-4_feature/feature-01-01_add_weighted_sentiment_scoring_tests-report.md`: 실행 보고서
+- Next: FEATURE-01-02 (count positive and negative keywords) 또는 FEATURE 단계 추가 항목
+
 ### 2026-05-22 18:00 - REFACTOR-03-06 리팩토링 최종 보고서 완료
 - Goal: REFACTOR 단계 전체 작업을 문서화하고 구조 개선 여정 기록
 - Changes:

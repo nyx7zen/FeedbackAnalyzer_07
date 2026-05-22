@@ -171,44 +171,44 @@
 ## Phase-4: FEATURE
 
 ### 가중치 기반 감성 스코어링
-- [ ] FEATURE-01-01 `test: add weighted sentiment scoring tests`
+- [x] FEATURE-01-01 `test: add weighted sentiment scoring tests`
   - 긍정/부정 단어 빈도 누적 기준 테스트를 작성한다.
   - 기존처럼 첫 키워드에서 종료되는 로직의 한계를 드러낸다.
-- [ ] FEATURE-01-02 `feat: count positive and negative keywords`
+- [x] FEATURE-01-02 `feat: count positive and negative keywords`
   - 단순히 첫 키워드에서 종료되는 로직을 폐기한다.
   - 문장 전체를 순회하며 긍정/부정 단어 빈도를 누적 카운트한다.
-- [ ] FEATURE-01-03 `feat: calculate relative sentiment score`
+- [x] FEATURE-01-03 `feat: calculate relative sentiment score`
   - `Score_sentiment = Count_positive - Count_negative` 수식을 적용한다.
   - 상대적 감성 평가 반환 로직을 구현한다.
-- [ ] FEATURE-01-04 `feat: classify sentiment from weighted score`
+- [x] FEATURE-01-04 `feat: classify sentiment from weighted score`
   - 계산된 점수에 따라 긍정/부정/중립 결과를 반환한다.
   - 점수 기준값은 상수화된 값을 사용한다.
-- [ ] FEATURE-01-05 `test: add mixed sentiment scoring regression`
+- [x] FEATURE-01-05 `test: add mixed sentiment scoring regression`
   - 긍정/부정 혼재 문장에 대한 회귀 테스트를 추가한다.
   - 경계값과 동률 점수 처리 기준을 검증한다.
 
 ### RAII 기반 CSV 영구 저장
-- [ ] FEATURE-02-01 `test: add csv persistence tests`
+- [x] FEATURE-02-01 `test: add csv persistence tests`
   - CSV 저장 파일 생성 테스트를 작성한다.
   - 기본 행 출력과 저장 결과를 검증한다.
-- [ ] FEATURE-02-02 `feat: persist feedback with ofstream`
+- [x] FEATURE-02-02 `feat: persist feedback with ofstream`
   - `src/FileHandler.cpp`의 콘솔 덤프(Stub) 로직을 제거한다.
   - `std::ofstream` 기반 파일 쓰기 로직을 적용한다.
-- [ ] FEATURE-02-03 `feat: write utf8 bom for csv export`
+- [x] FEATURE-02-03 `feat: write utf8 bom for csv export`
   - CSV 파일 시작 위치에 UTF-8 BOM을 기록한다.
   - BOM 인젝션 코드(`\xEF\xBB\xBF`)를 추가한다.
-- [ ] FEATURE-02-04 `feat: escape csv feedback body`
+- [x] FEATURE-02-04 `feat: escape csv feedback body`
   - 피드백 본문 내 줄바꿈, 쉼표, 쌍따옴표를 처리한다.
   - 이중 래핑(Double Quote Wrapping) 방식으로 CSV 필드를 방어한다.
-- [ ] FEATURE-02-05 `feat: handle csv persistence errors`
+- [x] FEATURE-02-05 `feat: handle csv persistence errors`
   - 파일 쓰기 실패 상황을 `try-catch`로 처리한다.
   - 예외 처리와 로그 경로를 추가한다.
 
 ### 기능 명세 문서화
-- [ ] FEATURE-03-01 `docs: add feature specification`
+- [x] FEATURE-03-01 `docs: add feature specification`
   - `docs/feature.md`를 작성한다.
   - 가중치 감성 분석과 물리적 파일(CSV) 저장 기능의 상세 명세를 기록한다.
-- [ ] FEATURE-03-02 `docs: record feature verification`
+- [x] FEATURE-03-02 `docs: record feature verification`
   - 기능 테스트 명령을 `docs/feature.md`에 기록한다.
   - 검증 결과와 남은 제약 사항을 정리한다.
 

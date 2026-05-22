@@ -4,11 +4,17 @@
 #include "TextUtils.h"
 
 namespace {
+int getPositiveKeywordCountHelper(const std::string& text) {
+    return TextUtils::countKeywordOccurrences(text, Constants::SENTIMENT_KEYWORDS[Constants::kSentimentPositive]);
+}
+
+int getNegativeKeywordCountHelper(const std::string& text) {
+    return TextUtils::countKeywordOccurrences(text, Constants::SENTIMENT_KEYWORDS[Constants::kSentimentNegative]);
+}
+
 int calculateSentimentScore(const std::string& text) {
-    const int positiveCount =
-        TextUtils::countKeywordOccurrences(text, Constants::SENTIMENT_KEYWORDS[Constants::kSentimentPositive]);
-    const int negativeCount =
-        TextUtils::countKeywordOccurrences(text, Constants::SENTIMENT_KEYWORDS[Constants::kSentimentNegative]);
+    const int positiveCount = getPositiveKeywordCountHelper(text);
+    const int negativeCount = getNegativeKeywordCountHelper(text);
     return positiveCount - negativeCount;
 }
 
@@ -69,4 +75,16 @@ std::string TextAnalyzer::detectSentiment(const std::string& text) const {
         return Constants::kSentimentNegative;
     }
     return Constants::kSentimentNeutral;
+}
+
+int TextAnalyzer::getPositiveKeywordCount(const std::string& text) const {
+    return getPositiveKeywordCountHelper(text);
+}
+
+int TextAnalyzer::getNegativeKeywordCount(const std::string& text) const {
+    return getNegativeKeywordCountHelper(text);
+}
+
+int TextAnalyzer::getSentimentScore(const std::string& text) const {
+    return calculateSentimentScore(text);
 }
