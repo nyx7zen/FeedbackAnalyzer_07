@@ -101,7 +101,7 @@
 - [x] GREEN-02-02 `docs: record bug verification logs`
   - 수정 후 실행한 테스트 명령을 `docs/bug_fix.md`에 남긴다.
   - 테스트 검증 로그와 결과를 기록한다.
-- [ ] GREEN-02-03 `test: verify green regression suite`
+- [x] GREEN-02-03 `test: verify green regression suite`
   - RED 단계 테스트가 모두 GREEN이 되었는지 확인한다.
   - 필요한 회귀 테스트를 보강한다.
 
