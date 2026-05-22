@@ -252,6 +252,43 @@ int main() {
         }
     }
 
+    // Test 10: Session storage map - store and retrieve analysis results (REFACTOR-03-03)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_store_and_retrieve_analysis_results_in_session" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Create test analysis results
+            std::map<std::string, int> sentimentResults = {{"긍정", 2}, {"부정", 1}, {"중립", 1}};
+            std::map<std::string, int> keywordResults = {{"만족", 2}, {"품질", 1}};
+
+            // Store results in session
+            Session::setAnalysisResults(sentimentResults, keywordResults, "default");
+
+            // Retrieve and verify
+            auto stored = Session::getAnalysisResults("default");
+            bool sentimentMatch = (stored.sentimentCounts.size() == 3 &&
+                                   stored.sentimentCounts["긍정"] == 2 &&
+                                   stored.sentimentCounts["부정"] == 1 &&
+                                   stored.sentimentCounts["중립"] == 1);
+            bool keywordMatch = (stored.keywordCounts.size() == 2 &&
+                                 stored.keywordCounts["만족"] == 2 &&
+                                 stored.keywordCounts["품질"] == 1);
+
+            if (sentimentMatch && keywordMatch) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Analysis results not stored/retrieved correctly" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;

@@ -21,6 +21,26 @@
 
 ## Session Log
 
+### 2026-05-22 17:20 - REFACTOR-03-03 세션 저장소 맵 구현 완료
+- Goal: Session을 실제 조회 가능한 상태 저장소로 개편하여 분석 결과 저장/조회 기능 추가
+- Changes:
+  - `Session.h`에 `AnalysisResults` 구조체 추가 (sentimentCounts, keywordCounts)
+  - `SessionState`에 `AnalysisResults` 멤버 추가
+  - `Session::setAnalysisResults()` 메서드 추가 - 분석 결과 저장
+  - `Session::getAnalysisResults()` 메서드 추가 - 분석 결과 조회
+  - `#include <map>` 추가 (std::map 지원)
+- Implementation Details:
+  - 기존 unordered_map 저장소 구조 유지 (`sessions_` static map)
+  - FilterState와 AnalysisResults를 SessionState에서 분리 관리
+  - sessionId 기반 다중 세션 지원 유지
+  - 키 충돌 자동 처리 (unordered_map의 operator[] 활용)
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 10/10 passed (신규 Test 10 포함) ✓
+  - 분석 결과 저장/조회: 정상 ✓
+  - 기존 기능 회귀: 없음 ✓
+- Next: REFACTOR-03-04 (add feedback session clear api)
+
 ### 2026-05-22 17:00 - REFACTOR-03-02 분석기 전역 상태 제거 완료
 - Goal: `main.cpp`의 전역 상태 및 구식 Session API 호출 제거, 분석 결과를 명시적 Session API로 캡슐화
 - Changes:
