@@ -21,6 +21,100 @@
 
 ## Session Log
 
+### 2026-05-22 16:25 - SPEC-01-03 프로젝트 지침 정합성 검토 완료
+- Goal: AGENTS.md, TODO.md와 refs/legacy/ 레거시 문서 간 작업 기준 충돌을 찾아 정렬하고, 현재 운영 기준을 명확히 한다.
+- Changes:
+  - `docs/alignment.md` 파일을 생성했고 다음을 포함했다:
+    - 검토 대상 문서 및 우선순위 테이블
+    - 브랜치 전략, 빌드/테스트, 산출물, Phase 구조, 상태 관리 영역별 충돌 분석
+    - 주요 정정사항: 브랜치 전략(maintdd→refactoring→feature → main→B_07→6단계), 빌드 명령(MinGW 명시), 산출물 경로(docs/ 통일), 커밋 메시지([TODO_ID] 추가)
+    - TODO 항목 실행 기준 정정(AGENTS.md & TODO.md 우선)
+    - 남은 주의사항 및 결론
+  - `TODO.md`의 SPEC-01-03 체크박스를 완료 상태로 표시했다.
+- Decisions:
+  - 현재 기준(AGENTS.md, TODO.md)이 우선이며, 레거시 문서는 히스토리와 컨텍스트 이해용으로만 참고한다.
+  - 브랜치 전략의 가장 큰 차이는 6단계 Phase 도입과 B_07 통합 브랜치 추가다.
+  - 빌드 명령과 코드 품질 기준(매직 넘버, Doxygen, 20줄 제한)은 모든 문서가 일치한다.
+- Verification: 문서 생성 및 TODO 업데이트만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: SPEC-01-03 실행 보고서 생성 및 커밋/푸시 진행.
+
+### 2026-05-22 16:20 - SPEC-01-02 커밋/푸시 완료
+- Goal: SPEC-01-02 작업(빌드/테스트 명령 문서화) 결과를 커밋하고 원격 저장소에 푸시한다.
+- Changes:
+  - `docs/build-and-test.md`: 빌드 및 테스트 명령 상세 가이드 파일
+  - `reports/phase-0_spec/spec-01-02_document_build_and_test_commands-report.md`: SPEC-01-02 실행 보고서
+  - `TODO.md`: SPEC-01-02 체크박스 완료 표시
+  - `SESSION_NOTES.md`: SPEC-01-02 관련 세션 로그 기록
+- Decisions:
+  - 커밋 해시: `173009f` (4c4664a → 173009f)
+  - 커밋 메시지: `[SPEC-01-02] docs: document build and test commands`
+  - 푸시 대상: `origin spec`
+- Verification:
+  - 커밋 성공: 4 파일 변경, 399 insertions
+  - 푸시 성공: spec 브랜치 정상 업로드
+- Next: SPEC-01-03 (프로젝트 지침 정렬) 또는 추가 지침 커밋 진행
+
+### 2026-05-22 16:15 - 프롬프트 실행 후 커밋/푸시 자동화 지침 추가
+- Goal: 각 TODO 항목 완료 후 자동으로 커밋 및 푸시가 수행되도록 지침을 명시하되, 각 단계에서 사용자의 명시적 승인을 받도록 한다.
+- Changes:
+  - `.agents/skills/run/SKILL.md`의 Workflow에 커밋(Step 13) 및 푸시(Step 14) 단계 추가, 사용자 확인 프로세스 명시
+  - `AGENTS.md`의 Workflow 섹션에 자동 커밋/푸시 지침 추가
+  - `AGENTS.md`의 Git And Collaboration > 협업 흐름에 상세한 자동 워크플로우 추가 (승인 단계, 상태 갱신)
+  - `.claude/skills/run/SKILL.md`의 Workflow에 Step 8(커밋), Step 9(푸시) 추가
+- Decisions:
+  - 커밋 메시지 형식: `[{TODO_ID}] {type}: {description}` (AGENTS.md 규칙 준수)
+  - 각 단계(커밋, 푸시)에서 변경 파일/명령을 사전 표시하고 사용자 확인 요청
+  - 커밋/푸시 완료 후 STATUS_SNAPSHOT.md를 갱신해 다음 세션이 최신 상태를 반영하도록 함
+- Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 지침이 실제로 적용되는지 다음 TODO 항목 실행 시 검증한다.
+
+### 2026-05-22 16:10 - 프롬프트 실행 후 자동 보고서 생성 지침 추가
+- Goal: 각 TODO 항목 완료 후 자동으로 해당 프롬프트에 대응하는 실행 보고서가 생성되도록 지침을 명시한다.
+- Changes:
+  - `.agents/skills/run/SKILL.md`의 Workflow에 보고서 자동 생성 단계(Step 12) 추가
+  - `AGENTS.md`의 Workflow 섹션에 보고서 자동 생성에 대한 명시적 지침 추가
+  - `AGENTS.md`의 Documentation Outputs 섹션에 보고서 생성 규칙 상세화 (실행 날짜, 목표, 수행 작업, 산출물, 검증, 다음 단계, 요약)
+  - `.claude/skills/run/SKILL.md`의 Workflow에 보고서 생성 항목 추가 (Step 7)
+- Decisions:
+  - 보고서 생성은 모든 `/run` 실행 후 자동으로 수행되어야 한다.
+  - 파일명 규칙: 프롬프트와 동일하되 `-prompt.md` → `-report.md` 변경
+  - 보고서에는 목표, 변경사항, 산출물, 검증, 다음 단계를 필수로 포함한다.
+- Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 지침이 정확히 적용되었는지 다음 TODO 항목 실행 시 검증한다.
+
+### 2026-05-22 16:00 - SPEC-01-02 빌드/테스트 명령 문서화
+- Goal: MinGW/CMake 기본 빌드 명령과 ctest를 활용한 테스트 실행 방식을 문서로 정리한다.
+- Changes: `docs/build-and-test.md` 파일을 생성했고 빌드 환경 요구사항, CMake 초기/증분/clean 빌드 명령, 테스트 프레임워크 설정, ctest 명령 옵션, 개발 사이클 워크플로우, 자주 사용하는 명령 요약표, 문제 해결 가이드를 포함했다. `TODO.md`의 SPEC-01-02 항목을 완료 상태로 체크했다.
+- Decisions: Windows MinGW 환경과 CMake 3.14+, Google Test를 기본 전제로 하며, `-G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/mingw64/bin/g++.exe` 플래그를 필수로 명시했다. ctest 실행 시 `--output-on-failure` 옵션을 기본으로 권장했다.
+- Verification: 문서 생성 및 TODO 체크박스 업데이트만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: SPEC-01-03 (프로젝트 지침 정렬)로 진행.
+
+### 2026-05-22 15:30 - PR/커밋 메시지 규칙 정규화 및 AGENTS.md 반영
+- Goal: B_07 브랜치 통합을 위한 PR과 커밋 메시지 형식을 표준화하고 지침에 반영한다.
+- Changes:
+  - B_07 브랜치를 origin에 push했다. (git push origin B_07)
+  - spec → B_07 PR을 생성했다. (PR 제목: `[Phase-0: SPEC] define B_07 branch workflow (SPEC-01-01)`)
+  - PR 제목을 `[Phase-{n}: {PHASE}] {type}: {description} ({TODO_ID})` 형식으로 정규화했다.
+  - git filter-branch를 사용하여 spec 브랜치의 모든 커밋 메시지에 [SPEC-01-01] 접두사를 추가했다.
+  - 3개 커밋 메시지 수정 후 origin/spec에 force push했다.
+  - AGENTS.md의 "Git And Collaboration" 섹션을 확장하여 커밋 메시지 규칙과 PR 제목 규칙을 명시했다.
+- Decisions:
+  - 커밋 메시지 형식: `[{TODO_ID}] {type}: {description}`
+  - PR 제목 형식: `[Phase-{n}: {PHASE}] {type}: {description} ({TODO_ID})`
+  - Phase와 TODO_ID는 모든 git 기록에 함께 기록되어 추적 가능성을 높인다.
+- Verification:
+  - PR이 자동으로 갱신되어 최신 커밋 메시지가 반영되었음을 확인했다.
+  - AGENTS.md에 규칙이 명확하게 기록되었다.
+  - 빌드/테스트는 실행하지 않았다 (문서 변경만 수행).
+- Next: SPEC-01-02 (빌드/테스트 명령 문서화)로 진행.
+
+### 2026-05-22 14:05 - SPEC-01-01 B_07 브랜치 워크플로우 정의 완료
+- Goal: B_07 실습 통합 브랜치를 기준으로 단계별 작업 흐름과 병합 순서를 문서로 정리한다.
+- Changes: `docs/b07-branch-workflow.md` 파일을 생성했고 B_07 브랜치 계층, 단계별 목적, 병합 흐름, 작업 사이클, 항목 식별자 규칙, 상태 추적, 산출물 위치 등을 상세히 기록했다. `TODO.md`의 SPEC-01-01 항목을 완료 상태로 체크했다.
+- Decisions: B_07은 실습 통합 브랜치이며 모든 단계별 작업(spec, red, green, refactor, feature, final)이 B_07에 순차 병합되고, B_07이 main에 최종 병합된다. 문서는 한국어 + 표/코드블록 조합으로 구성해 직관적 이해를 돕는다.
+- Verification: 문서 생성 및 TODO 체크박스 업데이트만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: SPEC-01-02 (빌드/테스트 명령 문서화)로 진행.
+
 ### 2026-05-22 13:50 - 상태 호출 명령어 분리 표현
 - Goal: 자연어 호출 명령어를 따로 따로 나열하되, "갱신"이 "상태갱신"의 축약형임을 명시한다.
 - Changes: .agents/skills/status/SKILL.md의 호출 예시에 "상태갱신"과 "갱신"을 별도 라인으로 표기했다. .claude/skills/status/SKILL.md의 Refreshed Mode에서 "갱신"의 설명에 "shorthand for 상태갱신"을 명시했다.

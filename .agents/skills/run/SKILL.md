@@ -41,7 +41,17 @@ FEATURE-02-02 항목을 진행해 주세요
 9. Run relevant build/tests when the task changes code or tests. If only documents changed, state that build/tests were not run.
 10. Update the requested checkbox in `TODO.md` only when the item is genuinely complete.
 11. Update `SESSION_NOTES.md` for meaningful code, document, config, or structure changes.
-12. Final response must summarize changed files, verification, and any remaining risk.
+12. **Generate execution report automatically:** After completing the TODO item, create a corresponding report file in `reports/` folder following the naming rule `{todo_id_lower}_{slug_lower}-report.md`. The report must summarize the goal, changes, decisions, verification, and next steps in markdown format.
+13. **Stage and commit automatically (with user approval):**
+    - Show changed files list and commit message (format: `[{TODO_ID}] {type}: {description}`)
+    - Request user confirmation: "Proceed with commit?"
+    - If approved, run: `git add <changed_files> && git commit -m "[{TODO_ID}] {type}: {description}"`
+    - Update STATUS_SNAPSHOT.md after commit
+14. **Push to remote automatically (with user approval):**
+    - Request user confirmation: "Push to origin {current_branch}?"
+    - If approved, run: `git push origin {current_branch}`
+    - Verify push success
+15. Final response must summarize changed files, verification, commit hash, and push status.
 
 ## Guardrails
 

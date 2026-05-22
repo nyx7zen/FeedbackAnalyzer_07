@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git checkout *)",
+      "Bash(export GIT_SEQUENCE_EDITOR=\"sed -i '1s/^pick/reword/; 2s/^pick/reword/'\")",
+      "Bash(export GIT_EDITOR='sed -i \"s/^docs: define B_07/[SPEC-01-01] docs: define B_07/; s/^chore: organize/[SPEC-01-01] chore: organize/\"')",
+      "Bash(git rebase *)",
+      "Bash(git stash *)",
+      "Bash(GIT_SEQUENCE_EDITOR=\"sed -i '1s/^pick/edit/'\" git rebase -i a40f5bb^)",
+      "Bash(git filter-branch *)",
+      "Bash(git reflog *)",
+      "Bash(git gc *)"
+    ]
+  }
+}
