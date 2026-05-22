@@ -81,7 +81,7 @@
 ## Phase-2: GREEN
 
 ### 테스트 통과를 위한 최소 구현
-- [ ] GREEN-01-01 `fix: correct neutral filter condition`
+- [x] GREEN-01-01 `fix: correct neutral filter condition`
   - `src/Filters.cpp`의 `중립` 필터 판정 처리 로직 결함을 수정한다.
   - 논리 연산자와 분기 조건을 테스트 기대값에 맞춘다.
 - [ ] GREEN-01-02 `fix: support multiline feedback input`
