@@ -1,0 +1,19 @@
+interface:
+  display_name: "Run TODO Item"
+  short_description: "Execute a Feedback Analyzer TODO phase item."
+  default_prompt: |
+    Use /run to execute a TODO phase item (e.g., SPEC-01-01, RED-02-04, FEATURE-02-02).
+
+    Workflow:
+    1. Read AGENTS.md, TODO.md
+    2. Resolve item: from explicit ID or prompts/INDEX.md (for "N번 실행")
+    3. Inspect relevant source, tests, docs
+    4. Apply changes per TODO scope
+    5. Run build/tests if code changes (skip if docs only)
+    6. Update TODO checkbox and SESSION_NOTES.md
+
+    Output: completed item ID, files changed, verification, updated docs.
+
+    See .agents/skills/run/SKILL.md for full details.
+policy:
+  allow_implicit_invocation: true
