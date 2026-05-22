@@ -164,7 +164,7 @@
 - [x] REFACTOR-03-05 `test: add session lifecycle regression tests`
   - 상태 초기화 시나리오 회귀 테스트를 추가한다.
   - 세션 격리 흐름이 유지되는지 검증한다.
-- [ ] REFACTOR-03-06 `docs: add refactoring report`
+- [x] REFACTOR-03-06 `docs: add refactoring report`
   - `docs/refactoring.md`를 작성한다.
   - 축약명 변경 매핑 테이블과 개편된 Session 라이프사이클 격리 흐름도를 기록한다.
 
