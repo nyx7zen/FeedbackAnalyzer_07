@@ -21,6 +21,27 @@
 
 ## Session Log
 
+### 2026-05-22 17:50 - REFACTOR-03-05 세션 생명주기 회귀 테스트 완료
+- Goal: Session 저장/조회/초기화 생명주기 회귀를 보호하고 세션 격리 흐름 검증
+- Changes:
+  - Test 14: should_return_saved_value_when_key_exists - 저장된 값 조회 검증
+  - Test 15: should_return_empty_value_when_key_does_not_exist - 없는 키 조회
+  - Test 16: should_remove_all_values_when_session_is_cleared - 전체 clear 동작
+  - Test 17: should_not_share_values_when_sessionids_are_different - 세션 격리
+  - Test 18: should_clear_only_filter_state_when_clearFilterState_called - 선택적 clear
+- Implementation Details:
+  - Set-Get-Clear-Get 생명주기 시나리오 완벽 검증
+  - 다중 세션 격리 검증 (sessionId별 독립성)
+  - 선택적 초기화 후 다른 상태 유지 검증
+  - 포괄적인 상태 관리 테스트 커버리지
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 18/18 passed (Tests 14-18 신규 포함) ✓
+  - 생명주기 시나리오: 100% 커버리지 ✓
+  - 세션 격리: 정상 ✓
+  - 선택적 clear: 정상 ✓
+- Next: REFACTOR-03-06 (add refactoring report)
+
 ### 2026-05-22 17:35 - REFACTOR-03-04 세션 생명주기 API 확장 완료
 - Goal: Session의 명시적인 생명주기 제어를 위한 부분 초기화 API 추가
 - Changes:

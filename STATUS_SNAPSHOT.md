@@ -1,6 +1,6 @@
 # STATUS_SNAPSHOT.md
 
-## Project Status as of 2026-05-22 17:40
+## Project Status as of 2026-05-22 17:55
 
 ### Current Phase
 - **Active Phase**: Phase-3: REFACTOR
@@ -39,7 +39,7 @@
 - [x] GREEN-02-02: Bug verification logs
 - [x] GREEN-02-03: Green regression suite verification
 
-#### Phase-3: REFACTOR (In Progress: 12/16)
+#### Phase-3: REFACTOR (In Progress: 13/16)
 
 **Section 1: Naming & Constants (7/7)**
 - [x] REFACTOR-01-01: Rename `sent` to `analyzeSentiment`
@@ -57,12 +57,12 @@
 - [x] REFACTOR-02-04: Split long TextAnalyzer routines
 - [x] REFACTOR-02-05: Split long Filters routines
 
-**Section 3: Global State Removal (4/6)**
+**Section 3: Global State Removal (5/6)**
 - [x] REFACTOR-03-01: Remove global filter state
 - [x] REFACTOR-03-02: Remove global analyzer state
 - [x] REFACTOR-03-03: Implement session storage map
 - [x] REFACTOR-03-04: Add feedback session clear API
-- [ ] REFACTOR-03-05: Add session lifecycle regression tests
+- [x] REFACTOR-03-05: Add session lifecycle regression tests
 - [ ] REFACTOR-03-06: Add refactoring report
 
 **Section 4: Remaining Phases (0/17)**
@@ -75,10 +75,10 @@
 ### Key Metrics
 
 **Code Quality**
-- Total Lines of Code (LOC): ~2800
-- Test Coverage: Session & TextAnalyzer 100% (13/13 tests)
+- Total Lines of Code (LOC): ~3100
+- Test Coverage: Session & TextAnalyzer 100% (18/18 tests)
 - Build Status: Success ✓
-- Test Status: 13/13 passed (100%) ✓
+- Test Status: 18/18 passed (100%) ✓
 
 **Refactoring Progress**
 - Global state variables removed: 1 (`fil_data`)
@@ -94,53 +94,50 @@
 
 ### Recent Changes Summary
 
-**Latest Session (2026-05-22 17:40)**
-1. Added `clearFilterState()` method - selective filter state initialization
-2. Added `clearAnalysisResults()` method - selective analysis results initialization
-3. Added `clearFeedbacks()` method - selective feedbacks initialization
-4. Added Tests 11-13: Verify all clear methods work correctly
-5. All tests passing: 13/13 ✓
+**Latest Session (2026-05-22 17:55)**
+1. Added Tests 14-18: Session lifecycle regression tests
+2. Test 14: Set-Get validation (return saved value)
+3. Test 15: Empty value handling (nonexistent key)
+4. Test 16: Complete clear validation (all state cleared)
+5. Test 17: Multi-session isolation (different sessionIds)
+6. Test 18: Selective clear validation (filter only)
+7. All tests passing: 18/18 ✓
 
 ### Files Modified in Current Session
-1. `src/cpp/Session.h` - Added three selective clear methods
-2. `src/cpp/Session.cpp` - Implemented three clear methods
-3. `tests/TextAnalyzerTest.cpp` - Added Tests 11-13 for clear API verification
-4. `reports/phase-3_refactor/refactor-03-04_add_feedback_session_clear_api-report.md` - Execution report
-5. `TODO.md` - Checked off REFACTOR-03-04
-6. `SESSION_NOTES.md` - Added session log entry
+1. `tests/TextAnalyzerTest.cpp` - Added Tests 14-18 for lifecycle regression
+2. `reports/phase-3_refactor/refactor-03-05_add_session_lifecycle_regression_tests-report.md` - Execution report
+3. `TODO.md` - Checked off REFACTOR-03-05
+4. `SESSION_NOTES.md` - Added session log entry
 
 ### Build & Test Status
 ```
 Build: SUCCESS ✓
-Tests: 13/13 PASSED (100%) ✓
-- should_compile_fixture_when_created: PASSED ✓
-- should_return_zero_counts_for_all_sentiments_when_input_is_empty: PASSED ✓
-- should_return_neutral_when_input_is_empty_string: PASSED ✓
-- should_return_zero_keyword_counts_when_input_is_empty: PASSED ✓
-- should_not_throw_when_input_has_special_characters: PASSED ✓
-- should_return_positive_when_positive_count_exceeds_negative: PASSED ✓
-- should_handle_multiple_keywords_in_feedback: PASSED ✓
-- should_return_neutral_when_positive_and_negative_are_balanced: PASSED ✓
-- should_maintain_session_isolation_between_tests: PASSED ✓
-- should_store_and_retrieve_analysis_results_in_session: PASSED ✓
-- should_clear_filter_state_when_clearFilterState_called: PASSED ✓ (신규)
-- should_clear_analysis_results_when_clearAnalysisResults_called: PASSED ✓ (신규)
-- should_clear_feedbacks_when_clearFeedbacks_called: PASSED ✓ (신규)
+Tests: 18/18 PASSED (100%) ✓
+- Tests 1-9: TextAnalyzer core functionality
+- Test 10: Session storage map (AnalysisResults)
+- Tests 11-13: Clear API methods
+- Tests 14-18: Session lifecycle regression (신규)
+  - Test 14: should_return_saved_value_when_key_exists
+  - Test 15: should_return_empty_value_when_key_does_not_exist
+  - Test 16: should_remove_all_values_when_session_is_cleared
+  - Test 17: should_not_share_values_when_sessionids_are_different
+  - Test 18: should_clear_only_filter_state_when_clearFilterState_called
 ```
 
 ### Next Priority Actions
 
-1. **REFACTOR-03-05**: Session lifecycle regression tests
-   - Verify session state isolation with all clear methods
-   - Test set -> get -> clear -> get scenarios
+1. **REFACTOR-03-06**: Add refactoring report
+   - Document global state removal journey (REFACTOR-03-01 to 03-05)
+   - Summary of Session API evolution and architectural improvements
+   - Naming changes mapping table
    
-2. **REFACTOR-03-06**: Add refactoring report
-   - Document global state removal journey
-   - Summary of Session API evolution and lifecycle management
+2. **FEATURE Phase**: Begin feature implementation
+   - FEATURE-01: Weighted sentiment scoring (5 items)
+   - FEATURE-02: CSV persistence with RAII (5 items)
    
-3. **FEATURE Phase**: Begin feature implementation
-   - FEATURE-01: Weighted sentiment scoring
-   - FEATURE-02: CSV persistence with RAII
+3. **FINAL Phase**: Final report and verification
+   - Consolidate all improvements and test results
+   - Prepare handoff documentation
 
 ### Known Issues / Blockers
 - None currently
@@ -152,8 +149,9 @@ Tests: 13/13 PASSED (100%) ✓
 
 ### Session Continuity Notes
 - All Phase-3 refactoring Section 1 & 2 complete
-- Global state removal complete (REFACTOR-03-01/02/03/04 complete)
+- Global state removal complete (REFACTOR-03-01/02/03/04/05 complete)
 - Session storage map fully implemented with AnalysisResults support
 - Session lifecycle API complete (clear, clearFilterState, clearAnalysisResults, clearFeedbacks)
-- Session is now fully featured state management system with explicit lifecycle control
-- Ready to proceed with REFACTOR-03-05 (lifecycle regression tests)
+- Session lifecycle regression tests complete (18/18 tests, 100% pass rate)
+- Session is now production-ready state management system with explicit lifecycle control
+- Ready to proceed with REFACTOR-03-06 (refactoring report)

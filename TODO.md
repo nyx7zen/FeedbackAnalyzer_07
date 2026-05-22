@@ -161,7 +161,7 @@
 - [x] REFACTOR-03-04 `refactor: add feedback session clear api`
   - `FeedbackSession::clear()` 등 생명 주기 수동 제어 API를 제공한다.
   - 테스트와 요청 처리에서 상태 초기화가 가능하도록 한다.
-- [ ] REFACTOR-03-05 `test: add session lifecycle regression tests`
+- [x] REFACTOR-03-05 `test: add session lifecycle regression tests`
   - 상태 초기화 시나리오 회귀 테스트를 추가한다.
   - 세션 격리 흐름이 유지되는지 검증한다.
 - [ ] REFACTOR-03-06 `docs: add refactoring report`
