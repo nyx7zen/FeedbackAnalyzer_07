@@ -41,7 +41,10 @@ FEATURE-02-02 항목을 진행해 주세요
 9. Keep changes limited to the requested item unless a direct prerequisite is required.
 10. Apply code or document changes following existing repository style.
 11. Run relevant build/tests when the task changes code or tests. If only documents changed, state that build/tests were not run.
-12. **Automatically update the requested checkbox in `TODO.md` from `[ ]` to `[x]` when the item work is complete** (commit message from prompt is used for git commit).
+12. **Automatically update the requested checkbox in `TODO.md` from `[ ]` to `[x]` when the item work is complete.**
+    - Use the commit message from the prompt document for git commit.
+    - Example: `[ ] RED-01-01 ...` becomes `[x] RED-01-01 ...`
+    - This ensures the status skill can accurately count completed items.
 13. Update `SESSION_NOTES.md` for meaningful code, document, config, or structure changes.
 14. Final response must summarize changed files, verification, and any remaining risk.
 

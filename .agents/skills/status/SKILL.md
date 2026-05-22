@@ -57,6 +57,8 @@ metadata:
 
 1. `git status --short --branch` 실행한다.
 2. `TODO.md`를 부분 또는 전체 조회한다.
+   - **각 Phase의 체크박스 상태를 기준으로 완료 개수를 계산한다.**
+   - `[x]` 체크박스를 가진 항목만 완료로 카운트한다.
 3. `.agents/skills/status/STATUS_SNAPSHOT.md`와 비교해 변경점(delta)를 파악한다.
 4. 사용자가 phase/prefix를 지정한 경우 해당 범위만 상세 조회한다.
 5. `SESSION_NOTES.md`에서 최신 검증 상태 1개를 확인한다.
