@@ -21,6 +21,29 @@
 
 ## Session Log
 
+### 2026-05-22 19:30 - FEATURE-01-05 혼합 감성 스코어링 회귀 테스트 완료
+- Goal: 긍정/부정 혼재 문장에 대한 회귀 테스트를 추가하고 경계값/동률 처리 기준 검증
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: 4개 회귀 테스트 추가 (Tests 39-42)
+  - Test 39: 세 가지 감성 키워드 혼합 (3개 키워드 모두 포함, 1+1=0)
+  - Test 40: 여러 피드백의 동률 분포 (4개 피드백, 긍정/부정/중립 균형)
+  - Test 41: 모든 피드백 중립 (3개 피드백 모두 score=0)
+  - Test 42: 긴 문장에서 균형 감정 (6개 키워드 3+3 균형)
+- Key Findings:
+  - 경계값 테스트 완벽 커버리지 확보
+  - 동률 분포 처리 정확함
+  - 모든 회귀 시나리오 통과
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 42/42 passed (Tests 39-42 신규 포함) ✓
+  - 기존 기능 회귀: 없음 (Tests 1-38 모두 통과) ✓
+  - 경계값 처리: 정상 ✓
+  - 동률 분포: 정상 ✓
+- Outputs:
+  - `tests/TextAnalyzerTest.cpp`: 4개 테스트 추가
+  - `reports/phase-4_feature/feature-01-05_add_mixed_sentiment_scoring_regression-report.md`: 실행 보고서
+- Next: FEATURE-02-01 (CSV persistence tests) 또는 이후 FEATURE 단계 진행
+
 ### 2026-05-22 19:15 - FEATURE-01-04 가중치 기반 감성 분류 검증 완료
 - Goal: 계산된 점수에 따라 긍정/부정/중립 감성 분류 검증 및 강화
 - Changes:

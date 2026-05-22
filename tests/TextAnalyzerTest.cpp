@@ -1033,6 +1033,109 @@ int main() {
         }
     }
 
+    // Test 39: Mixed sentiment with all three sentiments present (FEATURE-01-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_classify_as_neutral_when_three_sentiments_mixed" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Contains positive, negative, and neutral keywords
+            std::string text = u8"좋아요 별로 일반";  // 1 positive, 1 negative = score 0 -> 중립
+            std::string result = fixture.analyzer.detectSentiment(text);
+            if (result == Constants::kSentimentNeutral) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '중립' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 40: Multiple feedbacks with exact tie in sentiment distribution (FEATURE-01-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_handle_tied_sentiment_counts_in_feedbacks" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::vector<Feedback> feedbacks;
+            feedbacks.emplace_back(u8"좋아요 만족");           // score=2 -> 긍정
+            feedbacks.emplace_back(u8"별로 실망");             // score=-2 -> 부정
+            feedbacks.emplace_back(u8"좋아요 별로");          // score=0 -> 중립
+            feedbacks.emplace_back(u8"만족 실망");            // score=0 -> 중립
+
+            auto result = fixture.analyzer.analyzeSentiment(feedbacks);
+            // Expected: 긍정=1, 부정=1, 중립=2
+            if (result["긍정"] == 1 && result["부정"] == 1 && result["중립"] == 2) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected 긍정=1, 부정=1, 중립=2 but got 긍정=" << result["긍정"]
+                          << ", 부정=" << result["부정"] << ", 중립=" << result["중립"] << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 41: All feedbacks neutral in mixed sentiment context (FEATURE-01-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_classify_all_neutral_when_feedbacks_balanced" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::vector<Feedback> feedbacks;
+            feedbacks.emplace_back(u8"좋아요 별로");              // score=0 -> 중립
+            feedbacks.emplace_back(u8"만족 실망");                // score=0 -> 중립
+            feedbacks.emplace_back(u8"추천 불편");               // score=0 -> 중립
+
+            auto result = fixture.analyzer.analyzeSentiment(feedbacks);
+            // Expected: 긍정=0, 부정=0, 중립=3
+            if (result["긍정"] == 0 && result["부정"] == 0 && result["중립"] == 3) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected 긍정=0, 부정=0, 중립=3 but got 긍정=" << result["긍정"]
+                          << ", 부정=" << result["부정"] << ", 중립=" << result["중립"] << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 42: Long text with evenly distributed mixed sentiment (FEATURE-01-05)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_detect_neutral_in_long_balanced_text" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Balanced: 3 positive, 3 negative keywords = score 0
+            std::string text = u8"좋아요 만족 추천 별로 실망 불편";
+            std::string result = fixture.analyzer.detectSentiment(text);
+            if (result == Constants::kSentimentNeutral) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '중립' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;

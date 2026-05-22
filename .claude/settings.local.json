@@ -21,7 +21,8 @@
       "Bash(git commit *)",
       "Bash(./feedback_analyzer_test.exe)",
       "Bash(cmake --build build --config Debug)",
-      "Bash(ctest --output-on-failure)"
+      "Bash(ctest --output-on-failure)",
+      "Bash(git pull *)"
     ]
   }
 }

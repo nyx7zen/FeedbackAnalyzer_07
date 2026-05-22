@@ -183,7 +183,7 @@
 - [x] FEATURE-01-04 `feat: classify sentiment from weighted score`
   - 계산된 점수에 따라 긍정/부정/중립 결과를 반환한다.
   - 점수 기준값은 상수화된 값을 사용한다.
-- [ ] FEATURE-01-05 `test: add mixed sentiment scoring regression`
+- [x] FEATURE-01-05 `test: add mixed sentiment scoring regression`
   - 긍정/부정 혼재 문장에 대한 회귀 테스트를 추가한다.
   - 경계값과 동률 점수 처리 기준을 검증한다.
 
