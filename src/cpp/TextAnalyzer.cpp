@@ -84,3 +84,7 @@ int TextAnalyzer::getPositiveKeywordCount(const std::string& text) const {
 int TextAnalyzer::getNegativeKeywordCount(const std::string& text) const {
     return getNegativeKeywordCountHelper(text);
 }
+
+int TextAnalyzer::getSentimentScore(const std::string& text) const {
+    return calculateSentimentScore(text);
+}

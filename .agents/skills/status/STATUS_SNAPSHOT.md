@@ -1,9 +1,9 @@
 # STATUS SNAPSHOT
-- UpdatedAt: 2026-05-22 18:45
+- UpdatedAt: 2026-05-22 19:00
 - Branch: feature
 - Phase: Phase-4: FEATURE
-- Status: REFACTOR Phase 완료, FEATURE Phase 진행 중 (2/13 완료)
-- LastVerification: FEATURE-01-02 완료, 모든 테스트 통과 (28/28)
+- Status: REFACTOR Phase 완료, FEATURE Phase 진행 중 (3/13 완료)
+- LastVerification: FEATURE-01-03 완료, 모든 테스트 통과 (34/34)
 
 ## Branch Progress Tree
 ```
@@ -79,8 +79,8 @@ main
   - REFACTOR-03-06: add refactoring report ✅
 
 ### ⏳ Phase-4: FEATURE (진행 중)
-- 완료: 2/13 항목
-- FEATURE-01: 가중치 기반 감성 스코어링 (2/5)
+- 완료: 3/13 항목
+- FEATURE-01: 가중치 기반 감성 스코어링 (3/5)
   - FEATURE-01-01: 가중치 감성 스코어링 테스트 추가 ✅ 완료
     - 6개 새로운 테스트 추가 (Tests 19-24)
     - 긍정/부정 키워드 우세, 균형, 반복, 극단적 비율 시나리오 포함
@@ -90,16 +90,21 @@ main
     - `getNegativeKeywordCount()` 메서드 추가
     - 4개 새로운 테스트 추가 (Tests 25-28)
     - 모든 테스트 통과: 28/28 ✅
+  - FEATURE-01-03: 상대 감성 점수 계산 공개 API ✅ 완료
+    - `getSentimentScore()` 메서드 추가
+    - 수식: Score = Count_positive - Count_negative
+    - 6개 새로운 테스트 추가 (Tests 29-34)
+    - 모든 테스트 통과: 34/34 ✅
 
 ### ⏳ Phase-5: FINAL (예정)
 - 완료: 0/8 항목
 
 ## Test Results
 
-### Current Test Summary (FEATURE-01-02 완료 후)
+### Current Test Summary (FEATURE-01-03 완료 후)
 ```
-Total Tests: 28
-Passed: 28 ✅
+Total Tests: 34
+Passed: 34 ✅
 Failed: 0
 Success Rate: 100%
 ```
@@ -135,6 +140,13 @@ Success Rate: 100%
   - 부정 키워드 누적 카운트 (4개 확인)
   - 긍정/부정 분리 카운트 (3 vs 2 확인)
   - 빈 입력 처리 (0, 0 확인)
+- 상대 감성 점수 계산 테스트: 6개 ✅ (FEATURE-01-03)
+  - 긍정 점수 (3-1=2)
+  - 부정 점수 (1-3=-2)
+  - 중립 점수 (2-2=0)
+  - 빈 입력 점수 (0-0=0)
+  - 긍정만 (3-0=3)
+  - 부정만 (0-3=-3)
 
 ## Recent Git Log
 ```
@@ -156,15 +168,19 @@ b856475 [RED-01-02] test: add text analyzer fixture
 - FEATURE Phase 진행 상황:
   - FEATURE-01-01: 가중치 감성 스코어링 테스트 ✅
   - FEATURE-01-02: 공개 API (getPositiveKeywordCount, getNegativeKeywordCount) ✅
-- 현재 구현의 특징:
-  - calculateSentimentScore()가 모든 키워드의 누적 카운트 지원 (첫 키워드 종료 아님)
-  - TextUtils::countKeywordOccurrences()가 반복 출현 포함 정확하게 카운트
-  - 점수 = 긍정 개수 - 부정 개수 기반 감성 판정
-  - 임계값: >= 1 (긍정), <= -1 (부정), 나머지 (중립)
-- 공개 API의 역할:
-  - getPositiveKeywordCount(): 긍정 키워드 총 개수 반환
-  - getNegativeKeywordCount(): 부정 키워드 총 개수 반환
-  - 후속 FEATURE-01-03에서 상대 점수 계산에 활용 가능
-- 모든 테스트 통과: 28/28 tests passed, 100% success rate ✅
+  - FEATURE-01-03: 상대 감성 점수 계산 API (getSentimentScore) ✅
+- 가중치 기반 감성 분석의 3계층 구조:
+  - 계층 1: 키워드 카운트 (getPositiveKeywordCount, getNegativeKeywordCount)
+  - 계층 2: 상대 점수 계산 (getSentimentScore, 수식: score = positive - negative)
+  - 계층 3: 감성 분류 (detectSentiment, 임계값 기반 분류)
+- 점수 계산의 의미:
+  - Score > 0: 긍정 경향 (getPositiveKeywordCount > getNegativeKeywordCount)
+  - Score = 0: 중립 (getPositiveKeywordCount = getNegativeKeywordCount)
+  - Score < 0: 부정 경향 (getPositiveKeywordCount < getNegativeKeywordCount)
+- 책임 분리 (SRP):
+  - 카운트: 키워드 빈도 수집만 담당
+  - 점수: 상대 값 계산만 담당
+  - 분류: 점수 기반 감성 판정만 담당
+- 모든 테스트 통과: 34/34 tests passed, 100% success rate ✅
 - Session 상태 관리: 저장소 맵 기반 다중 세션 격리 완벽 구현
-- 다음 단계: FEATURE-01-03 (calculate relative sentiment score)
+- 다음 단계: FEATURE-01-04 (classify sentiment from weighted score)

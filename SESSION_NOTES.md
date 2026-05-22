@@ -21,6 +21,37 @@
 
 ## Session Log
 
+### 2026-05-22 19:00 - FEATURE-01-03 상대 감성 점수 계산 공개 API 완료
+- Goal: 상대 감성 점수 (긍정 개수 - 부정 개수) 계산 기능 구현
+- Changes:
+  - `TextAnalyzer::getSentimentScore()` 메서드 추가
+  - 공개 API로 상대 점수 계산 노출
+  - `tests/TextAnalyzerTest.cpp`에 6개 테스트 추가 (Tests 29-34)
+- Key Findings:
+  - 기존 calculateSentimentScore()가 이미 수식을 구현하고 있었음
+  - 수식: Score = Count_positive - Count_negative
+  - 점수 범위: 양수(긍정), 0(중립), 음수(부정)
+- Implementation Details:
+  - getSentimentScore()는 calculateSentimentScore() 호출
+  - 점수와 감성 분류의 책임 분리 (SRP)
+  - 반복 출현 키워드도 정확하게 반영
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 34/34 passed (Tests 29-34 신규 포함) ✓
+  - Test 29: 긍정 점수 (3-1=2) ✓
+  - Test 30: 부정 점수 (1-3=-2) ✓
+  - Test 31: 중립 점수 (2-2=0) ✓
+  - Test 32: 빈 입력 (0-0=0) ✓
+  - Test 33: 긍정만 (3-0=3) ✓
+  - Test 34: 부정만 (0-3=-3) ✓
+  - 기존 기능 회귀: 없음 (1-28번 테스트 모두 통과) ✓
+- Outputs:
+  - `src/cpp/TextAnalyzer.h`: 1개 공개 메서드 선언
+  - `src/cpp/TextAnalyzer.cpp`: 1개 메서드 구현
+  - `tests/TextAnalyzerTest.cpp`: 6개 테스트 추가
+  - `reports/phase-4_feature/feature-01-03_calculate_relative_sentiment_score-report.md`: 실행 보고서
+- Next: FEATURE-01-04 (classify sentiment from weighted score)
+
 ### 2026-05-22 18:45 - FEATURE-01-02 긍정/부정 키워드 카운트 공개 API 완료
 - Goal: 긍정/부정 단어 빈도 누적 카운트 기능을 공개 API로 노출
 - Changes:

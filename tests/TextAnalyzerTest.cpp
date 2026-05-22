@@ -797,6 +797,138 @@ int main() {
         }
     }
 
+    // Test 29: Calculate relative sentiment score - positive (FEATURE-01-03)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_calculate_positive_sentiment_score" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = u8"좋아요 만족 감사 별로";  // 3 positive - 1 negative = 2
+            int score = fixture.analyzer.getSentimentScore(text);
+            if (score == 2) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected score=2 but got " << score << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 30: Calculate relative sentiment score - negative (FEATURE-01-03)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_calculate_negative_sentiment_score" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = u8"좋아요 별로 실망 불만";  // 1 positive - 3 negative = -2
+            int score = fixture.analyzer.getSentimentScore(text);
+            if (score == -2) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected score=-2 but got " << score << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 31: Calculate relative sentiment score - neutral (FEATURE-01-03)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_calculate_neutral_sentiment_score" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = u8"좋아요 만족 별로 실망";  // 2 positive - 2 negative = 0
+            int score = fixture.analyzer.getSentimentScore(text);
+            if (score == 0) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected score=0 but got " << score << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 32: Calculate relative sentiment score - empty text (FEATURE-01-03)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_zero_score_for_empty_text" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = "";
+            int score = fixture.analyzer.getSentimentScore(text);
+            if (score == 0) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected score=0 but got " << score << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 33: Calculate relative sentiment score - only positive keywords (FEATURE-01-03)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_calculate_score_with_only_positive_keywords" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = u8"좋아요 만족 감사";  // 3 positive - 0 negative = 3
+            int score = fixture.analyzer.getSentimentScore(text);
+            if (score == 3) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected score=3 but got " << score << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 34: Calculate relative sentiment score - only negative keywords (FEATURE-01-03)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_calculate_score_with_only_negative_keywords" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = u8"별로 실망 불만";  // 0 positive - 3 negative = -3
+            int score = fixture.analyzer.getSentimentScore(text);
+            if (score == -3) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected score=-3 but got " << score << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;

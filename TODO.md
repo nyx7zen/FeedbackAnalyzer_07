@@ -177,7 +177,7 @@
 - [x] FEATURE-01-02 `feat: count positive and negative keywords`
   - 단순히 첫 키워드에서 종료되는 로직을 폐기한다.
   - 문장 전체를 순회하며 긍정/부정 단어 빈도를 누적 카운트한다.
-- [ ] FEATURE-01-03 `feat: calculate relative sentiment score`
+- [x] FEATURE-01-03 `feat: calculate relative sentiment score`
   - `Score_sentiment = Count_positive - Count_negative` 수식을 적용한다.
   - 상대적 감성 평가 반환 로직을 구현한다.
 - [ ] FEATURE-01-04 `feat: classify sentiment from weighted score`

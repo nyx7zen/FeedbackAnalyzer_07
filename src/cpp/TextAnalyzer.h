@@ -42,4 +42,12 @@ public:
      * @return 부정 키워드 총 출현 횟수
      */
     int getNegativeKeywordCount(const std::string& text) const;
+
+    /**
+     * @brief 텍스트의 상대 감성 점수를 계산합니다.
+     * @param text 분석할 텍스트
+     * @return 상대 감성 점수 (긍정 개수 - 부정 개수)
+     * @note 점수 > 0: 긍정 경향, 점수 = 0: 중립, 점수 < 0: 부정 경향
+     */
+    int getSentimentScore(const std::string& text) const;
 };
