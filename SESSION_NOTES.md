@@ -21,6 +21,36 @@
 
 ## Session Log
 
+### 2026-05-22 18:30 - FEATURE-01-01 가중치 기반 감성 스코어링 테스트 추가 완료
+- Goal: 긍정/부정 단어 빈도 누적 기준 테스트를 작성하고 기존 첫 키워드 종료 로직의 한계 드러내기
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`에 6개 새로운 테스트 추가 (Tests 19-24)
+  - Test 19: 긍정 키워드 우세 (3 positive vs 1 negative -> 긍정)
+  - Test 20: 부정 키워드 우세 (1 positive vs 3 negative -> 부정)
+  - Test 21: 균형 잡힌 키워드 (2 positive vs 2 negative -> 중립)
+  - Test 22: 같은 키워드 반복 출현 (3x 좋아요 vs 1x 별로 -> 긍정)
+  - Test 23: 극단적 긍정 우세 (5 positive vs 1 negative -> 긍정)
+  - Test 24: 극단적 부정 우세 (1 positive vs 5 negative -> 부정)
+- Key Findings:
+  - 현재 구현이 이미 가중치 기반 감성 스코어링을 지원함
+  - TextUtils::countKeywordOccurrences()가 모든 키워드 누적 카운트
+  - calculateSentimentScore()가 점수 = 긍정 - 부정 계산
+  - 첫 키워드 조기 종료가 아니라 전체 문장 순회
+- Implementation Details:
+  - 모든 테스트가 should_[result]_when_[condition] 네이밍 규칙 준수
+  - Constants::kSentimentPositive/Negative 상수 활용
+  - 다양한 시나리오: 단순 우세, 극단적 비율, 균형, 반복 출현
+  - 점수 기반 판정: >= 1 (긍정), <= -1 (부정), 나머지 (중립)
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 24/24 passed (Tests 19-24 신규 포함) ✓
+  - 모든 가중치 시나리오 커버: 확인 ✓
+  - 기존 기능 회귀: 없음 (기존 18개 테스트 모두 통과) ✓
+- Outputs:
+  - `tests/TextAnalyzerTest.cpp`: 6개 테스트 추가
+  - `reports/phase-4_feature/feature-01-01_add_weighted_sentiment_scoring_tests-report.md`: 실행 보고서
+- Next: FEATURE-01-02 (count positive and negative keywords) 또는 FEATURE 단계 추가 항목
+
 ### 2026-05-22 18:00 - REFACTOR-03-06 리팩토링 최종 보고서 완료
 - Goal: REFACTOR 단계 전체 작업을 문서화하고 구조 개선 여정 기록
 - Changes:

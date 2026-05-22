@@ -563,6 +563,150 @@ int main() {
         }
     }
 
+    // Test 19: Weighted sentiment scoring - positive keywords outnumber negative (FEATURE-01-01)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_positive_when_positive_keywords_outnumber_negative_keywords" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // 3 positive keywords (좋아요, 만족, 감사) vs 1 negative keyword (별로)
+            std::string text = u8"좋아요 만족 감사 별로";
+            std::string result = fixture.analyzer.detectSentiment(text);
+            // Score: 3 - 1 = 2, which is >= 1 (positive threshold)
+            if (result == Constants::kSentimentPositive) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '긍정' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 20: Weighted sentiment scoring - negative keywords outnumber positive (FEATURE-01-01)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_negative_when_negative_keywords_outnumber_positive_keywords" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // 1 positive keyword (좋아요) vs 3 negative keywords (별로, 실망, 불만)
+            std::string text = u8"좋아요 별로 실망 불만";
+            std::string result = fixture.analyzer.detectSentiment(text);
+            // Score: 1 - 3 = -2, which is <= -1 (negative threshold)
+            if (result == Constants::kSentimentNegative) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '부정' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 21: Weighted sentiment scoring - equal keyword counts (FEATURE-01-01)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_neutral_when_positive_and_negative_keyword_counts_are_equal" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // 2 positive keywords (좋아요, 만족) vs 2 negative keywords (별로, 실망)
+            std::string text = u8"좋아요 만족 별로 실망";
+            std::string result = fixture.analyzer.detectSentiment(text);
+            // Score: 2 - 2 = 0, which is between -1 and 1 (neutral range)
+            if (result == Constants::kSentimentNeutral) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '중립' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 22: Weighted sentiment scoring - multiple occurrences of same keyword (FEATURE-01-01)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_count_multiple_occurrences_of_same_keyword" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // "좋아요" appears 3 times, "별로" appears 1 time
+            std::string text = u8"좋아요 좋아요 좋아요 별로";
+            std::string result = fixture.analyzer.detectSentiment(text);
+            // Score: 3 - 1 = 2, which is >= 1 (positive threshold)
+            if (result == Constants::kSentimentPositive) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '긍정' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 23: Weighted sentiment scoring - high positive count dominates (FEATURE-01-01)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_positive_when_positive_keywords_significantly_outnumber_negative" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // 5 positive keywords vs 1 negative keyword
+            std::string text = u8"좋아요 만족 감사 친절 추천 별로";
+            std::string result = fixture.analyzer.detectSentiment(text);
+            // Score: 5 - 1 = 4, which is >= 1 (positive threshold)
+            if (result == Constants::kSentimentPositive) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '긍정' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 24: Weighted sentiment scoring - high negative count dominates (FEATURE-01-01)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_negative_when_negative_keywords_significantly_outnumber_positive" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // 1 positive keyword vs 5 negative keywords
+            std::string text = u8"좋아요 별로 실망 불만 불편 최악";
+            std::string result = fixture.analyzer.detectSentiment(text);
+            // Score: 1 - 5 = -4, which is <= -1 (negative threshold)
+            if (result == Constants::kSentimentNegative) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '부정' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;

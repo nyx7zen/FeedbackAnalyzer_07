@@ -1,27 +1,33 @@
 # STATUS SNAPSHOT
-- UpdatedAt: 2026-05-22 16:50
-- Branch: refactor
-- Phase: Phase-3: REFACTOR
-- Status: GREEN Phase 완료, REFACTOR Phase 진행 중 (13/19 완료)
-- LastVerification: REFACTOR-03-01 완료, 검증 완료
+- UpdatedAt: 2026-05-22 18:30
+- Branch: feature
+- Phase: Phase-4: FEATURE
+- Status: REFACTOR Phase 완료, FEATURE Phase 진행 중 (1/13 완료)
+- LastVerification: FEATURE-01-01 완료, 모든 테스트 통과
 
 ## Branch Progress Tree
 ```
 main
- └── B_07 (merged: spec branch)
+ └── B_07 (merged: spec, red, green, refactor branches)
       ├── spec (✅ SPEC Phase 완료 - 7/7)
       ├── red (✅ RED Phase 완료 - 12/12)
       │    ├── RED-01: 테스트 프레임워크 (4/4) ✅
       │    └── RED-02: 경계값 테스트 (6/6) ✅
-      ├── green (⏳ GREEN Phase 예정)
-      ├── refactor (⏳ REFACTOR Phase 예정)
-      ├── feature (⏳ FEATURE Phase 예정)
-      └── final (⏳ FINAL Phase 예정)
+      ├── green (✅ GREEN Phase 완료 - 7/7)
+      │    ├── GREEN-01: 최소 구현 (4/4) ✅
+      │    └── GREEN-02: 문서화 (3/3) ✅
+      ├── refactor (✅ REFACTOR Phase 완료 - 19/19)
+      │    ├── REFACTOR-01: 명명 규칙 개선 (7/7) ✅
+      │    ├── REFACTOR-02: 중복 제거 (5/5) ✅
+      │    └── REFACTOR-03: 전역 상태 해체 (6/6) ✅
+      ├── feature (⏳ FEATURE Phase 진행 중 - 1/13)
+      │    └── FEATURE-01-01: 가중치 감성 스코어링 테스트 ✅
+      └── final (⏳ FINAL Phase 예정 - 0/8)
 ```
 
 ## Working Tree Status
-- Clean (모든 변경사항 커밋됨)
-- 현재 브랜치: red
+- Modified: 1 file (.claude/settings.local.json)
+- 현재 브랜치: feature
 
 ## Phase Summary
 
@@ -48,8 +54,8 @@ main
 - 완료: 7/7 항목
 - 목표: RED 단계 모든 테스트 통과를 위한 기능 구현
 
-### ⏳ Phase-3: REFACTOR (진행 중)
-- 완료: 10/19 항목
+### ✅ Phase-3: REFACTOR (완료)
+- 완료: 19/19 항목
 - REFACTOR-01: 명명 규칙 개선 및 상수화 (7/7) ✅ 완료
   - REFACTOR-01-01: sent() → analyzeSentiment() ✅
   - REFACTOR-01-02: kw() → analyzeKeywords() ✅
@@ -64,36 +70,61 @@ main
   - REFACTOR-02-03: reuse containsAny in filters ✅
   - REFACTOR-02-04: split long text analyzer routines ✅
   - REFACTOR-02-05: split long filter routines ✅
-- REFACTOR-03: 전역 상태 해체 및 Session API 현대화 (1/6)
+- REFACTOR-03: 전역 상태 해체 및 Session API 현대화 (6/6) ✅ 완료
   - REFACTOR-03-01: remove global filter state ✅
+  - REFACTOR-03-02: remove global analyzer state ✅
+  - REFACTOR-03-03: implement session storage map ✅
+  - REFACTOR-03-04: add feedback session clear api ✅
+  - REFACTOR-03-05: add session lifecycle regression tests ✅
+  - REFACTOR-03-06: add refactoring report ✅
 
-### ⏳ Phase-4: FEATURE (예정)
-- 완료: 0/13 항목
+### ⏳ Phase-4: FEATURE (진행 중)
+- 완료: 1/13 항목
+- FEATURE-01: 가중치 기반 감성 스코어링 (1/5)
+  - FEATURE-01-01: 가중치 감성 스코어링 테스트 추가 ✅ 완료
+    - 6개 새로운 테스트 추가 (Tests 19-24)
+    - 긍정/부정 키워드 우세, 균형, 반복, 극단적 비율 시나리오 포함
+    - 모든 테스트 통과: 24/24 ✅
 
 ### ⏳ Phase-5: FINAL (예정)
 - 완료: 0/8 항목
 
 ## Test Results
 
-### RED Phase Test Summary
+### Current Test Summary (FEATURE-01-01 완료 후)
 ```
-Total Tests: 9
-Passed: 9 ✅
+Total Tests: 24
+Passed: 24 ✅
 Failed: 0
 Success Rate: 100%
 ```
 
-### Test Coverage
-- 피드쳐 기본 동작: 2개
+### Test Coverage Breakdown
+- 기본 동작: 2개 ✅
   - Fixture 인스턴스화
   - 빈 입력 처리
-- 경계값 테스트: 7개
+- 경계값 테스트: 7개 ✅
   - 빈 문자열, 빈 벡터
   - 특수문자 입력
   - 혼합 감정 입력
   - 균형 잡힌 감정 입력
   - 다중 카테고리 피드백
   - 세션 격리
+- Session 저장소 테스트: 3개 ✅
+  - 분석 결과 저장/조회
+  - 필터 상태 관리
+  - 피드백 데이터 관리
+- Session 생명주기 테스트: 5개 ✅
+  - Set/Get/Clear 시나리오
+  - 세션 격리 검증
+  - 선택적 초기화
+- 가중치 감성 스코어링 테스트: 6개 ✅ (FEATURE-01-01)
+  - 긍정 우세 (3 vs 1)
+  - 부정 우세 (1 vs 3)
+  - 균형 (2 vs 2)
+  - 반복 출현 (3x positive vs 1x negative)
+  - 극단적 긍정 (5 vs 1)
+  - 극단적 부정 (1 vs 5)
 
 ## Recent Git Log
 ```
@@ -111,7 +142,12 @@ b856475 [RED-01-02] test: add text analyzer fixture
 ```
 
 ## Notes
-- RED Phase 전체 완료: 테스트 프레임워크 구축, 경계값 테스트 작성
-- 모든 테스트 통과: 현재 구현이 경계값 처리 정상
-- 상태 격리: Constants::init(), Session::clear() 호출로 테스트 독립성 보장
-- GREEN Phase 준비 완료: 테스트 모두 통과 (RED 실패 없음)
+- REFACTOR Phase 전체 완료: 명명 규칙 개선, 중복 제거, 상태 관리 현대화
+- 현재 구현의 특징:
+  - calculateSentimentScore()가 모든 키워드의 누적 카운트 지원 (첫 키워드 종료 아님)
+  - 점수 = 긍정 개수 - 부정 개수 기반 감성 판정
+  - 임계값: >= 1 (긍정), <= -1 (부정), 나머지 (중립)
+- FEATURE Phase 시작: 가중치 기반 감성 스코어링 테스트 완료
+- 모든 테스트 통과: 24/24 tests passed, 100% success rate ✅
+- Session 상태 관리: 저장소 맵 기반 다중 세션 격리 완벽 구현
+- 다음 단계: FEATURE-01-02 (count positive and negative keywords) 또는 추가 기능 구현

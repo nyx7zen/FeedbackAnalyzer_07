@@ -171,7 +171,7 @@
 ## Phase-4: FEATURE
 
 ### 가중치 기반 감성 스코어링
-- [ ] FEATURE-01-01 `test: add weighted sentiment scoring tests`
+- [x] FEATURE-01-01 `test: add weighted sentiment scoring tests`
   - 긍정/부정 단어 빈도 누적 기준 테스트를 작성한다.
   - 기존처럼 첫 키워드에서 종료되는 로직의 한계를 드러낸다.
 - [ ] FEATURE-01-02 `feat: count positive and negative keywords`
