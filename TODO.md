@@ -191,24 +191,24 @@
 - [x] FEATURE-02-01 `test: add csv persistence tests`
   - CSV 저장 파일 생성 테스트를 작성한다.
   - 기본 행 출력과 저장 결과를 검증한다.
-- [ ] FEATURE-02-02 `feat: persist feedback with ofstream`
+- [x] FEATURE-02-02 `feat: persist feedback with ofstream`
   - `src/FileHandler.cpp`의 콘솔 덤프(Stub) 로직을 제거한다.
   - `std::ofstream` 기반 파일 쓰기 로직을 적용한다.
-- [ ] FEATURE-02-03 `feat: write utf8 bom for csv export`
+- [x] FEATURE-02-03 `feat: write utf8 bom for csv export`
   - CSV 파일 시작 위치에 UTF-8 BOM을 기록한다.
   - BOM 인젝션 코드(`\xEF\xBB\xBF`)를 추가한다.
-- [ ] FEATURE-02-04 `feat: escape csv feedback body`
+- [x] FEATURE-02-04 `feat: escape csv feedback body`
   - 피드백 본문 내 줄바꿈, 쉼표, 쌍따옴표를 처리한다.
   - 이중 래핑(Double Quote Wrapping) 방식으로 CSV 필드를 방어한다.
-- [ ] FEATURE-02-05 `feat: handle csv persistence errors`
+- [x] FEATURE-02-05 `feat: handle csv persistence errors`
   - 파일 쓰기 실패 상황을 `try-catch`로 처리한다.
   - 예외 처리와 로그 경로를 추가한다.
 
 ### 기능 명세 문서화
-- [ ] FEATURE-03-01 `docs: add feature specification`
+- [x] FEATURE-03-01 `docs: add feature specification`
   - `docs/feature.md`를 작성한다.
   - 가중치 감성 분석과 물리적 파일(CSV) 저장 기능의 상세 명세를 기록한다.
-- [ ] FEATURE-03-02 `docs: record feature verification`
+- [x] FEATURE-03-02 `docs: record feature verification`
   - 기능 테스트 명령을 `docs/feature.md`에 기록한다.
   - 검증 결과와 남은 제약 사항을 정리한다.
 
