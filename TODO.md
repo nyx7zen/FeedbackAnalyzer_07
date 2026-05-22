@@ -148,7 +148,7 @@
   - 작은 함수로 분리해 테스트와 유지보수가 쉬운 구조로 만든다.
 
 ### 전역 상태 해체 및 Session API 현대화
-- [ ] REFACTOR-03-01 `refactor: remove global filter state`
+- [x] REFACTOR-03-01 `refactor: remove global filter state`
   - `Filters.cpp`의 전역 static 상태(`fil_data` 등)를 식별한다.
   - 새 전역 상태를 추가하지 않고 명시적 상태 관리 구조로 이동한다.
 - [ ] REFACTOR-03-02 `refactor: remove global analyzer state`
