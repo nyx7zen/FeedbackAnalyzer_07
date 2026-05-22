@@ -35,7 +35,7 @@
 - [x] SPEC-02-02 `docs: analyze global state risks`
   - 전역 static 변수 사용 지점을 조사한다.
   - 테스트 격리 실패 위험성을 분석해 `docs/analysis.md`에 기록한다.
-- [ ] SPEC-02-03 `docs: analyze main coupling`
+- [x] SPEC-02-03 `docs: analyze main coupling`
   - `main.cpp`와 핵심 도메인 로직 간 결합도를 진단한다.
   - 라우팅/UI 렌더링과 분석 로직이 섞인 영역을 식별한다.
 - [ ] SPEC-02-04 `docs: prioritize refactoring targets`
