@@ -1,0 +1,16 @@
+interface:
+  display_name: "Project Status"
+  short_description: "Show branch, TODO, and verification status."
+  default_prompt: |
+    Use /status to show current Feedback Analyzer progress.
+
+    Workflow:
+    1. Read .agents/skills/status/STATUS_SNAPSHOT.md (baseline state)
+    2. Run: git status --short --branch
+    3. Compare delta with snapshot
+    4. Show: branch tree, working tree, phase, TODO items, next actions
+    5. Update STATUS_SNAPSHOT.md after response
+
+    See .agents/skills/status/SKILL.md for complete details.
+policy:
+  allow_implicit_invocation: true

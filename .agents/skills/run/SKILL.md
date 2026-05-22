@@ -46,7 +46,17 @@ FEATURE-02-02 항목을 진행해 주세요
     - Example: `[ ] RED-01-01 ...` becomes `[x] RED-01-01 ...`
     - This ensures the status skill can accurately count completed items.
 13. Update `SESSION_NOTES.md` for meaningful code, document, config, or structure changes.
-14. Final response must summarize changed files, verification, and any remaining risk.
+14. **Generate execution report automatically:** After completing the TODO item, create a corresponding report file in `reports/{phase}/` folder following the naming rule `{todo_id_lower}_{slug_lower}-report.md`. The report must summarize the goal, changes, decisions, verification, and next steps in markdown format.
+15. **Stage and commit automatically (with user approval):**
+    - Show changed files list and commit message (format: `[{TODO_ID}] {type}: {description}`)
+    - Request user confirmation: "Proceed with commit?"
+    - If approved, run: `git add <changed_files> && git commit -m "[{TODO_ID}] {type}: {description}"`
+    - Update STATUS_SNAPSHOT.md after commit
+16. **Push to remote automatically (with user approval):**
+    - Request user confirmation: "Push to origin {current_branch}?"
+    - If approved, run: `git push origin {current_branch}`
+    - Verify push success
+17. Final response must summarize changed files, verification, commit hash, and push status.
 
 ## Guardrails
 
