@@ -140,7 +140,7 @@
 - [x] REFACTOR-02-03 `refactor: reuse containsAny in filters`
   - `src/Filters.cpp`의 문자열 검색 중복 로직을 찾는다.
   - 해당 로직을 공용 유틸리티 호출로 통합한다.
-- [ ] REFACTOR-02-04 `refactor: split long text analyzer routines`
+- [x] REFACTOR-02-04 `refactor: split long text analyzer routines`
   - 20줄을 크게 넘는 분석 함수를 식별한다.
   - 서브루틴으로 추출해 단일 책임 원칙(SRP)을 강화한다.
 - [ ] REFACTOR-02-05 `refactor: split long filter routines`

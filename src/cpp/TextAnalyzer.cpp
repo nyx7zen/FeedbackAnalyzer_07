@@ -11,6 +11,24 @@ int calculateSentimentScore(const std::string& text) {
         TextUtils::countKeywordOccurrences(text, Constants::SENTIMENT_KEYWORDS[Constants::kSentimentNegative]);
     return positiveCount - negativeCount;
 }
+
+bool doesFeedbackMatchCategory(const std::string& text, const std::string& category) {
+    const auto categoryIt = Constants::CATEGORY_KEYWORDS.find(category);
+    if (categoryIt == Constants::CATEGORY_KEYWORDS.end()) {
+        return false;
+    }
+
+    const auto mainIt = categoryIt->second.find("main");
+    return mainIt != categoryIt->second.end() && TextUtils::containsAny(text, mainIt->second);
+}
+
+std::map<std::string, int> initializeCategoryResults() {
+    std::map<std::string, int> results;
+    for (const auto& [category, _] : Constants::CATEGORY_KEYWORDS) {
+        results[category] = 0;
+    }
+    return results;
+}
 }
 
 std::map<std::string, int> TextAnalyzer::analyzeSentiment(const std::vector<Feedback>& feedbacks) const {
@@ -28,16 +46,11 @@ std::map<std::string, int> TextAnalyzer::analyzeSentiment(const std::vector<Feed
 }
 
 std::map<std::string, int> TextAnalyzer::analyzeKeywords(const std::vector<Feedback>& feedbacks) const {
-    std::map<std::string, int> results;
-
-    for (const auto& [category, _] : Constants::CATEGORY_KEYWORDS) {
-        results[category] = 0;
-    }
+    auto results = initializeCategoryResults();
 
     for (const auto& feedback : feedbacks) {
-        for (const auto& [category, keywordGroups] : Constants::CATEGORY_KEYWORDS) {
-            const auto mainIt = keywordGroups.find("main");
-            if (mainIt != keywordGroups.end() && TextUtils::containsAny(feedback.getText(), mainIt->second)) {
+        for (const auto& [category, _] : Constants::CATEGORY_KEYWORDS) {
+            if (doesFeedbackMatchCategory(feedback.getText(), category)) {
                 ++results[category];
             }
         }
