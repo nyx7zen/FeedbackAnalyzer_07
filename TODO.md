@@ -29,7 +29,7 @@
   - 기존 문서와 TODO 항목이 충돌하지 않도록 기준을 맞춘다.
 
 ### 프로젝트 구조 및 문제점 진단
-- [ ] SPEC-02-01 `docs: add architecture analysis`
+- [x] SPEC-02-01 `docs: add architecture analysis`
   - `docs/analysis.md`를 작성한다.
   - 현재 구조의 주요 리팩토링 위험과 개선 방향을 요약한다.
 - [ ] SPEC-02-02 `docs: analyze global state risks`
