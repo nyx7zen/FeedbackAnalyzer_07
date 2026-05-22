@@ -188,7 +188,7 @@
   - 경계값과 동률 점수 처리 기준을 검증한다.
 
 ### RAII 기반 CSV 영구 저장
-- [ ] FEATURE-02-01 `test: add csv persistence tests`
+- [x] FEATURE-02-01 `test: add csv persistence tests`
   - CSV 저장 파일 생성 테스트를 작성한다.
   - 기본 행 출력과 저장 결과를 검증한다.
 - [ ] FEATURE-02-02 `feat: persist feedback with ofstream`
