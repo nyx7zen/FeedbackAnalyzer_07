@@ -180,7 +180,7 @@
 - [x] FEATURE-01-03 `feat: calculate relative sentiment score`
   - `Score_sentiment = Count_positive - Count_negative` 수식을 적용한다.
   - 상대적 감성 평가 반환 로직을 구현한다.
-- [ ] FEATURE-01-04 `feat: classify sentiment from weighted score`
+- [x] FEATURE-01-04 `feat: classify sentiment from weighted score`
   - 계산된 점수에 따라 긍정/부정/중립 결과를 반환한다.
   - 점수 기준값은 상수화된 값을 사용한다.
 - [ ] FEATURE-01-05 `test: add mixed sentiment scoring regression`

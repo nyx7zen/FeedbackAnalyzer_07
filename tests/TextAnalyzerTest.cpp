@@ -929,6 +929,110 @@ int main() {
         }
     }
 
+    // Test 35: Classify sentiment with positive threshold boundary (FEATURE-01-04)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_classify_as_positive_at_threshold" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Score exactly at positive threshold (1)
+            std::string text = u8"좋아요 별로";  // 1 positive - 1 negative = 0, but let's use score >= 1
+            // Actually, let's use 2 positive - 1 negative = 1 to hit the threshold
+            std::string text1 = u8"좋아요 만족 별로";  // 2 positive - 1 negative = 1
+            std::string result = fixture.analyzer.detectSentiment(text1);
+            if (result == Constants::kSentimentPositive) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '긍정' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 36: Classify sentiment with negative threshold boundary (FEATURE-01-04)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_classify_as_negative_at_threshold" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Score exactly at negative threshold (-1)
+            std::string text = u8"좋아요 별로 실망";  // 1 positive - 2 negative = -1
+            std::string result = fixture.analyzer.detectSentiment(text);
+            if (result == Constants::kSentimentNegative) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '부정' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 37: Sentiment analysis with weighted classification (FEATURE-01-04)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_analyze_sentiments_using_weighted_classification" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::vector<Feedback> feedbacks;
+            feedbacks.emplace_back(u8"좋아요 만족 감사");           // score=3 -> 긍정
+            feedbacks.emplace_back(u8"별로 실망");                 // score=-2 -> 부정
+            feedbacks.emplace_back(u8"좋아요 별로");              // score=0 -> 중립
+            feedbacks.emplace_back(u8"좋아요 만족 별로 실망");     // score=0 -> 중립
+
+            auto result = fixture.analyzer.analyzeSentiment(feedbacks);
+            // Expected: 긍정=1, 부정=1, 중립=2
+            if (result["긍정"] == 1 && result["부정"] == 1 && result["중립"] == 2) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected 긍정=1, 부정=1, 중립=2 but got 긍정=" << result["긍정"]
+                          << ", 부정=" << result["부정"] << ", 중립=" << result["중립"] << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 38: Weighted sentiment classification with extreme scores (FEATURE-01-04)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_correctly_classify_extreme_sentiment_scores" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string positiveExtreme = u8"좋아요 만족 감사 친절 추천";  // 5 positive - 0 negative = 5
+            std::string negativeExtreme = u8"별로 실망 불만 불편 최악";    // 0 positive - 5 negative = -5
+
+            std::string positiveResult = fixture.analyzer.detectSentiment(positiveExtreme);
+            std::string negativeResult = fixture.analyzer.detectSentiment(negativeExtreme);
+
+            if (positiveResult == Constants::kSentimentPositive &&
+                negativeResult == Constants::kSentimentNegative) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Extreme scores not classified correctly" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;

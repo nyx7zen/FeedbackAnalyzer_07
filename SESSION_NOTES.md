@@ -21,6 +21,42 @@
 
 ## Session Log
 
+### 2026-05-22 19:15 - FEATURE-01-04 가중치 기반 감성 분류 검증 완료
+- Goal: 계산된 점수에 따라 긍정/부정/중립 감성 분류 검증 및 강화
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`에 4개 테스트 추가 (Tests 35-38)
+  - 기존 detectSentiment() 메서드로 점수 기반 분류 이미 구현됨 확인
+  - analyzeSentiment()이 가중치 기반 분류 결과를 반영함 확인
+- Key Findings:
+  - 현재 구현이 완벽하게 가중치 기반 분류를 수행 중
+  - kPositiveThreshold(1)과 kNegativeThreshold(-1) 사용
+  - 점수=0인 경우 정확하게 중립으로 분류
+- Classification Logic:
+  - Score >= 1: Constants::kSentimentPositive ("긍정")
+  - Score <= -1: Constants::kSentimentNegative ("부정")
+  - -1 < Score < 1: Constants::kSentimentNeutral ("중립")
+- Implementation Details:
+  - detectSentiment(): 텍스트를 감성 라벨로 변환 (점수 기반)
+  - analyzeSentiment(): 피드백 목록을 감성별로 집계 (가중치 반영)
+  - 모든 기준값이 Constants 클래스에서 관리됨
+- Test Coverage:
+  - Test 35: 임계값 경계 테스트 (score=1)
+  - Test 36: 임계값 경계 테스트 (score=-1)
+  - Test 37: 다중 피드백 가중치 분류 (4개 피드백, 결과: 긍정=1, 부정=1, 중립=2)
+  - Test 38: 극단적 점수 분류 (score=5, score=-5)
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 38/38 passed (Tests 35-38 신규 포함) ✓
+  - FEATURE-01-01 회귀 테스트: 모두 통과 ✓
+  - FEATURE-01-02 회귀 테스트: 모두 통과 ✓
+  - FEATURE-01-03 회귀 테스트: 모두 통과 ✓
+  - 경계값 처리: 정상 ✓
+  - 다중 피드백 집계: 정상 ✓
+- Outputs:
+  - `tests/TextAnalyzerTest.cpp`: 4개 테스트 추가
+  - `reports/phase-4_feature/feature-01-04_classify_sentiment_from_weighted_score-report.md`: 실행 보고서
+- Next: FEATURE-01-05 (mixed sentiment scoring regression tests)
+
 ### 2026-05-22 19:00 - FEATURE-01-03 상대 감성 점수 계산 공개 API 완료
 - Goal: 상대 감성 점수 (긍정 개수 - 부정 개수) 계산 기능 구현
 - Changes:

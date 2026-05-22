@@ -1,9 +1,9 @@
 # STATUS SNAPSHOT
-- UpdatedAt: 2026-05-22 19:00
+- UpdatedAt: 2026-05-22 19:15
 - Branch: feature
 - Phase: Phase-4: FEATURE
-- Status: REFACTOR Phase 완료, FEATURE Phase 진행 중 (3/13 완료)
-- LastVerification: FEATURE-01-03 완료, 모든 테스트 통과 (34/34)
+- Status: REFACTOR Phase 완료, FEATURE Phase 진행 중 (4/13 완료)
+- LastVerification: FEATURE-01-04 완료, 모든 테스트 통과 (38/38)
 
 ## Branch Progress Tree
 ```
@@ -79,8 +79,8 @@ main
   - REFACTOR-03-06: add refactoring report ✅
 
 ### ⏳ Phase-4: FEATURE (진행 중)
-- 완료: 3/13 항목
-- FEATURE-01: 가중치 기반 감성 스코어링 (3/5)
+- 완료: 4/13 항목
+- FEATURE-01: 가중치 기반 감성 스코어링 (4/5)
   - FEATURE-01-01: 가중치 감성 스코어링 테스트 추가 ✅ 완료
     - 6개 새로운 테스트 추가 (Tests 19-24)
     - 긍정/부정 키워드 우세, 균형, 반복, 극단적 비율 시나리오 포함
@@ -95,16 +95,22 @@ main
     - 수식: Score = Count_positive - Count_negative
     - 6개 새로운 테스트 추가 (Tests 29-34)
     - 모든 테스트 통과: 34/34 ✅
+  - FEATURE-01-04: 가중치 기반 감성 분류 검증 ✅ 완료
+    - detectSentiment() 점수 기반 분류 검증
+    - analyzeSentiment() 가중치 반영 확인
+    - 4개 새로운 테스트 추가 (Tests 35-38)
+    - 경계값, 다중 피드백, 극단적 점수 테스트 포함
+    - 모든 테스트 통과: 38/38 ✅
 
 ### ⏳ Phase-5: FINAL (예정)
 - 완료: 0/8 항목
 
 ## Test Results
 
-### Current Test Summary (FEATURE-01-03 완료 후)
+### Current Test Summary (FEATURE-01-04 완료 후)
 ```
-Total Tests: 34
-Passed: 34 ✅
+Total Tests: 38
+Passed: 38 ✅
 Failed: 0
 Success Rate: 100%
 ```
@@ -147,6 +153,11 @@ Success Rate: 100%
   - 빈 입력 점수 (0-0=0)
   - 긍정만 (3-0=3)
   - 부정만 (0-3=-3)
+- 가중치 기반 감성 분류 테스트: 4개 ✅ (FEATURE-01-04)
+  - 임계값 경계 테스트 (score=1 → 긍정)
+  - 임계값 경계 테스트 (score=-1 → 부정)
+  - 다중 피드백 가중치 분류 (긍정=1, 부정=1, 중립=2)
+  - 극단적 점수 분류 (score=5/-5)
 
 ## Recent Git Log
 ```
@@ -169,18 +180,25 @@ b856475 [RED-01-02] test: add text analyzer fixture
   - FEATURE-01-01: 가중치 감성 스코어링 테스트 ✅
   - FEATURE-01-02: 공개 API (getPositiveKeywordCount, getNegativeKeywordCount) ✅
   - FEATURE-01-03: 상대 감성 점수 계산 API (getSentimentScore) ✅
-- 가중치 기반 감성 분석의 3계층 구조:
+  - FEATURE-01-04: 가중치 기반 감성 분류 검증 ✅
+- 가중치 기반 감성 분석의 완전한 4계층 구조:
   - 계층 1: 키워드 카운트 (getPositiveKeywordCount, getNegativeKeywordCount)
   - 계층 2: 상대 점수 계산 (getSentimentScore, 수식: score = positive - negative)
-  - 계층 3: 감성 분류 (detectSentiment, 임계값 기반 분류)
-- 점수 계산의 의미:
-  - Score > 0: 긍정 경향 (getPositiveKeywordCount > getNegativeKeywordCount)
-  - Score = 0: 중립 (getPositiveKeywordCount = getNegativeKeywordCount)
-  - Score < 0: 부정 경향 (getPositiveKeywordCount < getNegativeKeywordCount)
+  - 계층 3: 감성 분류 (detectSentiment, 임계값 기반)
+  - 계층 4: 피드백 집계 (analyzeSentiment, 감성별 개수)
+- 분류 기준 (상수값 기반):
+  - Score >= 1: Constants::kSentimentPositive ("긍정")
+  - Score <= -1: Constants::kSentimentNegative ("부정")
+  - -1 < Score < 1: Constants::kSentimentNeutral ("중립")
 - 책임 분리 (SRP):
   - 카운트: 키워드 빈도 수집만 담당
   - 점수: 상대 값 계산만 담당
   - 분류: 점수 기반 감성 판정만 담당
-- 모든 테스트 통과: 34/34 tests passed, 100% success rate ✅
+  - 집계: 감성별 통계 생성만 담당
+- 검증된 기능:
+  - 경계값 처리: 정상 (score=1, -1)
+  - 다중 피드백 집계: 정상 (가중치 반영)
+  - 극단적 점수: 정상 (score=±5)
+- 모든 테스트 통과: 38/38 tests passed, 100% success rate ✅
 - Session 상태 관리: 저장소 맵 기반 다중 세션 격리 완벽 구현
-- 다음 단계: FEATURE-01-04 (classify sentiment from weighted score)
+- 다음 단계: FEATURE-01-05 (mixed sentiment scoring regression)
