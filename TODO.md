@@ -18,27 +18,27 @@
 ## Phase-0: SPEC
 
 ### 환경 및 지침 설정
-- [ ] SPEC-01-01 `docs: define B_07 branch workflow`
+- [x] SPEC-01-01 `docs: define B_07 branch workflow`
   - `B_07` 통합 브랜치를 기준으로 실습 브랜치 전략을 정리한다.
   - `spec -> red -> green -> refactor -> feature -> final` 단계 흐름과 병합 순서를 문서화한다.
-- [ ] SPEC-01-02 `docs: document build and test commands`
+- [x] SPEC-01-02 `docs: document build and test commands`
   - MinGW/CMake 기본 빌드 명령을 정리한다.
   - 테스트 실행 기준으로 `ctest --output-on-failure` 사용 방식을 기록한다.
-- [ ] SPEC-01-03 `docs: align project instructions`
+- [x] SPEC-01-03 `docs: align project instructions`
   - `AGENTS.md`, `refs/legacy/guide.md`, `refs/legacy/GEMINI.md`의 작업 지침을 확인한다.
   - 기존 문서와 TODO 항목이 충돌하지 않도록 기준을 맞춘다.
 
 ### 프로젝트 구조 및 문제점 진단
-- [ ] SPEC-02-01 `docs: add architecture analysis`
+- [x] SPEC-02-01 `docs: add architecture analysis`
   - `docs/analysis.md`를 작성한다.
   - 현재 구조의 주요 리팩토링 위험과 개선 방향을 요약한다.
-- [ ] SPEC-02-02 `docs: analyze global state risks`
+- [x] SPEC-02-02 `docs: analyze global state risks`
   - 전역 static 변수 사용 지점을 조사한다.
   - 테스트 격리 실패 위험성을 분석해 `docs/analysis.md`에 기록한다.
-- [ ] SPEC-02-03 `docs: analyze main coupling`
+- [x] SPEC-02-03 `docs: analyze main coupling`
   - `main.cpp`와 핵심 도메인 로직 간 결합도를 진단한다.
   - 라우팅/UI 렌더링과 분석 로직이 섞인 영역을 식별한다.
-- [ ] SPEC-02-04 `docs: prioritize refactoring targets`
+- [x] SPEC-02-04 `docs: prioritize refactoring targets`
   - 네이밍 스멜과 중복 코드 집중 영역을 도출한다.
   - 상태 관리 문제를 포함해 개선 우선순위를 기록한다.
 
