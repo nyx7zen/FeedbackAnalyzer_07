@@ -48,9 +48,9 @@ int main() {
         }
     }
 
-    // Test 2: Analyzer should handle empty feedback vector
+    // Test 2: Analyzer should return zero sentiment counts for empty input
     {
-        std::cout << "[TEST] TextAnalyzerTest::should_detect_sentiment_with_empty_vector" << std::endl;
+        std::cout << "[TEST] TextAnalyzerTest::should_return_zero_counts_for_all_sentiments_when_input_is_empty" << std::endl;
         TextAnalyzerFixture fixture;
         fixture.SetUp();
         try {

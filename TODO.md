@@ -54,7 +54,7 @@
 - [x] RED-01-03 `test: reset constants and session per test`
   - `Constants` 초기화 경로를 테스트 준비 단계에 반영한다.
   - `Session` 상태 격리 또는 Reset 로직을 테스트별로 적용한다.
-- [ ] RED-01-04 `test: enforce descriptive test names`
+- [x] RED-01-04 `test: enforce descriptive test names`
   - 테스트 이름은 `should_[result]_when_[condition]` 형식을 따른다.
   - 새 테스트가 동일한 네이밍 규칙을 지키도록 정리한다.
 

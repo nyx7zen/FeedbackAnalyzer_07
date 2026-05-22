@@ -21,6 +21,23 @@
 
 ## Session Log
 
+### 2026-05-22 14:45 - RED-01-04 테스트 명명 규칙 정착
+- Goal: RED 단계의 모든 테스트가 `should_[result]_when_[condition]` 형식을 따르도록 정리하고, 새 테스트 추가 시 가이드 제공
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: 테스트 이름 개선
+    - `should_detect_sentiment_with_empty_vector` → `should_return_zero_counts_for_all_sentiments_when_input_is_empty`
+    - 이유: 반환값(zero counts for all sentiments)과 조건(empty input)을 명확히 표현
+  - 파일 상단에 테스트 네이밍 규칙 주석 추가
+  - `TODO.md`: RED-01-04 체크박스 완료 표시
+- Decisions:
+  - 첫 번째 테스트 `should_compile_fixture_when_created`는 이미 규칙 준수
+  - 두 번째 테스트는 결과(zero_counts_for_all_sentiments)를 더 명시적으로 표현하도록 개선
+  - fixture 스켈레톤과 가이드 주석으로 후속 RED-02 테스트 작성 시 규칙 준수 유도
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 실행 성공: `ctest --test-dir build --output-on-failure` (모든 테스트 통과) ✓
+- Next: RED-02-01 (test: add empty input boundary test) - 경계값 테스트 시작
+
 ### 2026-05-22 14:40 - RED-01-03 Constants/Session 상태 초기화 완성
 - Goal: 각 테스트가 독립적인 상태에서 실행되도록 SetUp/TearDown에 Constants 초기화 및 Session 초기화 로직 반영
 - Changes:
