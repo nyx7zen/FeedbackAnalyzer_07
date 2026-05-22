@@ -215,30 +215,30 @@
 ## Phase-5: FINAL
 
 ### 최종 산출물 및 종합 리포트 작성
-- [ ] FINAL-01-01 `docs: add final report outline`
+- [x] FINAL-01-01 `docs: add final report outline`
   - `docs/final.md`를 작성한다.
   - 최종 리포트 목차와 작성 기준을 만든다.
-- [ ] FINAL-01-02 `docs: record loc comparison`
+- [x] FINAL-01-02 `docs: record loc comparison`
   - 리팩토링 전후 총 소스 코드 라인 수(LOC)를 확인한다.
   - LOC 증감 비율을 `docs/final.md`에 명시한다.
-- [ ] FINAL-01-03 `docs: record test coverage summary`
+- [x] FINAL-01-03 `docs: record test coverage summary`
   - GTest 단위 테스트 타깃의 최종 커버리지 정보를 정리한다.
   - 테스트 범위와 결과를 비교표로 작성한다.
-- [ ] FINAL-01-04 `docs: record complexity reduction summary`
+- [x] FINAL-01-04 `docs: record complexity reduction summary`
   - 복잡도 감소율 또는 함수 분해 결과를 요약한다.
   - 리팩토링 전후 구조 개선 효과를 기록한다.
-- [ ] FINAL-01-05 `docs: add ai collaboration retrospective`
+- [x] FINAL-01-05 `docs: add ai collaboration retrospective`
   - AI 협업 의사결정에 대한 기술 회고를 작성한다.
   - 도움이 된 지점, 한계, 다음 개선 방향을 수록한다.
 
 ### 최종 검수
-- [ ] FINAL-02-01 `docs: verify required markdown outputs`
+- [x] FINAL-02-01 `docs: verify required markdown outputs`
   - `docs/analysis.md`, `docs/bug_fix.md`, `docs/refactoring.md`, `docs/feature.md`, `docs/final.md` 생성 여부를 확인한다.
   - 5종 마크다운 파일의 내용 충돌 여부를 검수한다.
-- [ ] FINAL-02-02 `test: run final regression suite`
+- [x] FINAL-02-02 `test: run final regression suite`
   - 최종 `cmake --build build`를 실행한다.
   - 가능하면 `ctest --output-on-failure`까지 확인한다.
-- [ ] FINAL-02-03 `docs: update session notes for final handoff`
+- [x] FINAL-02-03 `docs: update session notes for final handoff`
   - 최종 변경 요약을 `SESSION_NOTES.md`에 기록한다.
   - 검증 결과와 다음 작업자를 위한 인수인계 내용을 남긴다.
 
