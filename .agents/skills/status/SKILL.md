@@ -1,13 +1,17 @@
 ---
 name: status
-description: Use when the user invokes $status or asks to show current Feedback Analyzer branch, phase, TODO progress, changed files, verification state, or next recommended TODO item. Reads git status plus AGENTS.md, TODO.md, and SESSION_NOTES.md to summarize project progress without making changes.
+description: Use when the user invokes /status or asks to show current Feedback Analyzer branch, phase, TODO progress, changed files, verification state, or next recommended TODO item. Two modes: quick snapshot-based status ("상태"), or refreshed current status with full inspection ("상태갱신" or phase-specified). Reads git status plus AGENTS.md, TODO.md, and SESSION_NOTES.md to summarize project progress without making changes.
 metadata:
-  short-description: Show project progress status
+  short-description: Show project progress status (quick or refreshed)
 ---
 
 # FeedbackAnalyzer_07 - Status Skill 지침
 
-이 스킬은 사용자가 `$status`를 호출하거나 "상태", "현재 진행 현황"을 요청할 때 프로젝트 진행 상태를 일관된 형식으로 보여주기 위한 용도다.
+이 스킬은 사용자가 `/status`를 호출하거나 "상태", "상태갱신", "현재 진행 현황"을 요청할 때 프로젝트 진행 상태를 일관된 형식으로 보여주기 위한 용도다.
+
+두 가지 모드를 지원한다:
+- 빠른 상태: "상태" (스냅샷 참조, 갱신 안 함)
+- 정확한 상태: "상태갱신" 또는 phase 지정 (전체 점검 후 갱신)
 
 ## 프로젝트 범위
 
@@ -19,26 +23,47 @@ metadata:
 
 ## 호출 예시
 
+빠른 상태 확인 (스냅샷 기반)
 ```text
-$status
-$status final
-$status FINAL-02
-$status FINAL-02-02
-현재 진행 현황을 보여주세요
-현재 상태를 보여주세요.
+/status
 상태
+현재 상태를 보여주세요.
+```
+
+정확한 최신 상태 (전체 점검 후 갱신)
+```text
+상태갱신
+갱신
+상태 새로고침
+현재 진행 현황을 보여주세요
+/status final
+/status FINAL-02
+/status FINAL-02-02
+브랜치
+할일
 ```
 
 ---
 
 ## 상태 수집 절차
 
-1. 먼저 `.agents/skills/status/STATUS_SNAPSHOT.md`가 있으면 직전 상태 기준으로 사용한다.
-2. 현재 `git status --short --branch` 결과와 스냅샷을 비교해 변경점(delta)만 요약한다.
-3. 사용자가 phase/prefix를 지정한 경우에만 `TODO.md`를 부분 조회해 필요한 항목만 확인한다.
-4. `SESSION_NOTES.md`에서 최신 검증 상태 1개만 확인한다.
-5. 응답 후 최신 상태를 `STATUS_SNAPSHOT.md`에 갱신한다.
-6. 원칙적으로 네트워크/원격 조회 없이 로컬 정보만 사용한다.
+### 모드 1: 빠른 상태 확인 ("상태" 호출)
+
+1. `.agents/skills/status/STATUS_SNAPSHOT.md`를 읽는다.
+2. 직전 상태를 그대로 표시한다.
+3. 갱신하지 않는다 (빠른 응답).
+
+### 모드 2: 정확한 최신 상태 ("상태갱신" 또는 phase 지정)
+
+1. `git status --short --branch` 실행한다.
+2. `TODO.md`를 부분 또는 전체 조회한다.
+3. `.agents/skills/status/STATUS_SNAPSHOT.md`와 비교해 변경점(delta)를 파악한다.
+4. 사용자가 phase/prefix를 지정한 경우 해당 범위만 상세 조회한다.
+5. `SESSION_NOTES.md`에서 최신 검증 상태 1개를 확인한다.
+6. 최신 상태를 출력하고 `STATUS_SNAPSHOT.md`에 갱신한다.
+
+공통 사항
+- 원칙적으로 네트워크/원격 조회 없이 로컬 정보만 사용한다.
 
 ---
 

@@ -21,6 +21,41 @@
 
 ## Session Log
 
+### 2026-05-22 13:50 - 상태 호출 명령어 분리 표현
+- Goal: 자연어 호출 명령어를 따로 따로 나열하되, "갱신"이 "상태갱신"의 축약형임을 명시한다.
+- Changes: .agents/skills/status/SKILL.md의 호출 예시에 "상태갱신"과 "갱신"을 별도 라인으로 표기했다. .claude/skills/status/SKILL.md의 Refreshed Mode에서 "갱신"의 설명에 "shorthand for 상태갱신"을 명시했다.
+- Decisions: 사용자가 "상태갱신" 또는 "갱신" 둘 중 어느 것을 입력해도 같은 동작을 수행하며, 호출 예시에서는 각각 따로 나열해 두 형태가 모두 가능함을 명확히 한다.
+- Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 다음 커밋에 포함.
+
+### 2026-05-22 13:25 - 상태 스킬 성능 최적화 (빠른 모드 vs 정확한 모드)
+- Goal: `상태` 호출은 스냅샷만 참조해 빠른 응답을 제공하고, `상태갱신`은 전체 점검 후 스냅샷을 갱신하는 두 가지 모드를 구분한다.
+- Changes: .agents/skills/status/SKILL.md의 호출 예시와 상태 수집 절차를 두 가지 모드로 구분했다. description에 모드 설명을 추가했고, .claude/skills/status/SKILL.md의 Quick Reference를 "빠른 모드"와 "정확한 모드"로 구분했다.
+- Decisions: "상태" 호출은 스냅샷 기반으로 갱신하지 않아 빠르고, "상태갱신"이나 phase 지정 호출은 git status 실행 후 갱신한다. 자동 갱신 대상: "상태갱신", "/status phase", "현재 진행 현황을 보여주세요", "브랜치", "할일" 등.
+- Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 실제로 /status 호출 시 두 가지 모드가 정상 동작하는지 검증한다.
+
+### 2026-05-22 13:10 - 스킬 호출 문법 표준화 (/run, /status)
+- Goal: Claude Code 표준 스킬 호출 문법은 슬래시(`/`)이므로 모든 문서의 호출 예시를 `$run/$status`에서 `/run/status`로 통일한다.
+- Changes: AGENTS.md, .agents/skills/run/SKILL.md, .agents/skills/status/SKILL.md, .claude/skills/run/SKILL.md, .claude/skills/status/SKILL.md, .claude/skills/*/agents/openai.yaml의 호출 예시와 default_prompt를 `/run`, `/status`로 일괄 변경했다. CLAUDE.md의 skill 소개 섹션도 동일하게 수정했다.
+- Decisions: Claude Code 표준 스킬 호출 문법은 `/skill_name` 형식이므로, 프로젝트 스킬도 이를 따른다. 비명시적 호출(예: `상태`, `1번 실행`)은 그대로 유지.
+- Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 이제 사용자는 `/run SPEC-01-01`, `/status` 같은 Claude Code 표준 문법으로 스킬을 호출할 수 있다.
+
+### 2026-05-22 12:50 - openai.yaml 워크플로우 상세화
+- Goal: Claude Code가 .claude/skills/ 스킬을 로드할 때 실제 워크플로우를 명확히 인식하도록 default_prompt에 상세 워크플로우를 추가한다.
+- Changes: .claude/skills/run/agents/openai.yaml과 .claude/skills/status/agents/openai.yaml의 default_prompt를 단순 링크에서 실제 워크플로우 요약으로 변경했다. $run은 TODO 항목 실행 절차(AGENTS.md → TODO.md → prompts/ 매핑 → 검증 → 갱신), $status는 상태 수집 절차(스냅샷 → git status → delta 비교 → 출력 → 갱신)를 명시했다.
+- Decisions: openai.yaml의 default_prompt에 워크플로우를 넣어 Claude Code agent가 스킬 로드 시 바로 동작 방식을 이해하도록 함. 상세 내용은 여전히 .agents/skills/ 문서에만 유지.
+- Verification: 문서/설정 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 실제로 $status, $run 호출 시 .agents/skills/의 워크플로우를 따르는지 동작 검증한다.
+
+### 2026-05-22 12:15 - Claude Code 표준 위치로 스킬 마이그레이션 (얕은 래퍼)
+- Goal: AGENTS.md와 .agents/skills/의 내용을 Claude Code 표준 위치(CLAUDE.md, .claude/skills/)에서 참조하는 얕은 래퍼 구조로 생성한다.
+- Changes: CLAUDE.md를 루트에 생성 (프로젝트 메타정보 + AGENTS.md 링크). .claude/skills/run/과 .claude/skills/status/에 각각 SKILL.md와 agents/openai.yaml을 생성 (원본 .agents/skills/ 참조).
+- Decisions: 실제 내용은 AGENTS.md와 .agents/skills/에만 유지하고, CLAUDE.md/.claude/skills/는 단순 링크로만 구성해 중복 제거. 각 skill의 상세 정의와 워크플로는 원본 .agents/ 위치의 문서에서만 관리한다.
+- Verification: 문서/파일 생성만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: Claude Code가 .claude/skills/ 스킬을 인식하고 실행하는지 검증한다.
+
 ### 2026-05-22 11:40 - 평가 산출물 폴더/네이밍 규칙 반영
 - Goal: 프로젝트 전역 지침에 `docs/prompts/reports` 중요도와 네이밍 규칙을 명시해 실행/평가 기준을 고정한다.
 - Changes: `AGENTS.md` Documentation Outputs 섹션에 평가 근거 폴더 역할과 네이밍 규칙(`-prompt.md`, `-report.md`, `phase-{n}_{phase}-document.md`)을 추가했다. `README.md` 프로젝트 구조와 결과물 네이밍 규칙 섹션도 갱신했다.

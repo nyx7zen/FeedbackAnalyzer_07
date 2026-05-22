@@ -16,8 +16,8 @@ This skill is for the Feedback Analyzer project workflow in `C:\DEV\week2_day4\F
 Expected request examples:
 
 ```text
-$run FINAL-01-01
-$run FINAL-02-02
+/run FINAL-01-01
+/run FINAL-02-02
 FINAL-01-03 항목을 진행해 주세요
 FINAL-02-03 진행
 진행 FINAL-01-05

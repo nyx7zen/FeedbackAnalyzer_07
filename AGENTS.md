@@ -14,11 +14,11 @@
 ## Branch And Phase Strategy
 - 실습 통합 브랜치는 `B_07`을 사용한다.
 - 단계별 작업 브랜치는 `spec`, `red`, `green`, `refactor`, `feature`, `final`를 사용한다.
-- 프로젝트 전용 Codex skill은 `.agents/skills/` 아래에서 관리한다.
-  - `$run`: 특정 TODO 항목 실행용 skill.
-    - 호출 예시: `$run RED-02-04`, `$run REFACTOR-03-03`, `FEATURE-02-02 항목을 진행해 주세요`, `FEATURE-02-02 진행`, `진행 FEATURE-02-02`, `1번 실행`
-  - `$status`: 브랜치, Phase, TODO 진행 현황 확인용 skill.
-    - 호출 예시: `$status`, `$status red`, `$status REFACTOR-03`, `현재 진행 현황을 보여주세요`, `현재 상태를 보여주세요.`, `상태`, `브랜치`, `할일`, `상태갱신`
+- 프로젝트 전용 Claude Code skill은 `.agents/skills/` 아래에서 관리한다.
+  - `/run`: 특정 TODO 항목 실행용 skill.
+    - 호출 예시: `/run RED-02-04`, `/run REFACTOR-03-03`, `FEATURE-02-02 항목을 진행해 주세요`, `FEATURE-02-02 진행`, `진행 FEATURE-02-02`, `1번 실행`
+  - `/status`: 브랜치, Phase, TODO 진행 현황 확인용 skill.
+    - 호출 예시: `/status`, `/status red`, `/status REFACTOR-03`, `현재 진행 현황을 보여주세요`, `현재 상태를 보여주세요.`, `상태`, `브랜치`, `할일`, `상태갱신`
 - `TODO.md`의 브랜치 섹션명은 Phase 기준으로 해석한다.
   - `Phase-0: SPEC`
   - `Phase-1: RED`
