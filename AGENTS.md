@@ -44,7 +44,12 @@
 - 전역 상태와 중복 로직은 새 기능 추가보다 먼저 정리 대상에 포함한다.
 - 의미 있는 코드 변경, 문서 생성, 인코딩 변경, 설정 변경이 발생하면 루트의 `SESSION_NOTES.md`에 세션 로그를 함께 갱신한다.
 - 문서 변경만 수행한 경우 빌드/테스트를 실행하지 않았음을 명시한다.
-- **각 TODO 항목 완료 후, 해당 프롬프트 파일에 대응하는 실행 보고서를 `reports/` 폴더에 자동으로 생성한다.** 보고서 파일명은 프롬프트 파일명과 동일하되 접미사만 `-prompt.md`에서 `-report.md`로 변경한다. 예: `spec-01-02_document_build_and_test_commands-prompt.md` → `spec-01-02_document_build_and_test_commands-report.md`. 보고서에는 실행 날짜, 작업 항목, 목표, 수행 작업, 생성된 산출물, 검증 결과, 다음 단계 등을 포함한다.
+- **각 TODO 항목 완료 후, 다음 작업을 순차적으로 수행한다:**
+  1. 해당 프롬프트 파일에 대응하는 실행 보고서를 `reports/` 폴더에 생성한다. 보고서 파일명은 프롬프트 파일명과 동일하되 접미사만 `-prompt.md`에서 `-report.md`로 변경한다. 예: `spec-01-02_document_build_and_test_commands-prompt.md` → `spec-01-02_document_build_and_test_commands-report.md`. 보고서에는 실행 날짜, 작업 항목, 목표, 수행 작업, 생성된 산출물, 검증 결과, 다음 단계 등을 포함한다.
+  2. TODO.md 체크박스를 업데이트한다.
+  3. SESSION_NOTES.md에 세션 로그를 추가한다.
+  4. STATUS_SNAPSHOT.md를 갱신하여 최신 진행 상황을 반영한다.
+  5. **모든 작업 완료 후** 변경된 파일 목록을 보여주고 사용자 승인을 받은 후 커밋/푸시를 수행한다.
 - **각 단계의 마지막 TODO 항목 완료 후, 사용자에게 `docs/` 폴더에 Phase 레벨 최종 보고서 생성 여부를 확인 요청한다.** 생성 시 파일명은 `docs/phase-{number}_{phase_name}-summary.md` 형식을 사용한다. 예: `docs/phase-0_spec-summary.md`, `docs/phase-1_red-summary.md`. 최종 보고서에는 단계 목표, 완료 항목 요약, 핵심 발견사항, 다음 단계, 참고 자료 등을 포함한다.
 - **각 TODO 항목 완료 후 자동으로 커밋 및 푸시를 수행한다. 각 단계에서 사용자의 명시적 승인을 받은 후 진행한다:**
   - 커밋 단계: 변경 파일 목록과 커밋 메시지(`[{TODO_ID}] {type}: {description}`)를 표시하고 사용자 확인 요청
@@ -95,15 +100,21 @@
 - 원격 저장소에 직접 병합하는 흐름보다 PR 기반 협업을 전제로 변경 내역을 설명 가능하게 유지한다.
 - 각 단계별 브랜치(`spec`, `red`, `green`, `refactor`, `feature`, `final`)의 변경 사항을 B_07으로 PR을 생성한다.
 - PR 검토 후 B_07에 병합하고, 최종적으로 B_07에서 main으로 병합한다.
-- **자동 커밋/푸시 워크플로우:**
-  - 각 TODO 항목(`/run` 스킬) 완료 후 자동으로 다음을 수행한다:
-    1. 변경된 파일 목록 및 커밋 메시지 사전 안내
-    2. 사용자 승인 후 커밋 실행
-    3. 커밋 해시 및 메시지 확인
-    4. 사용자 승인 후 origin 푸시 실행
-    5. 푸시 성공 확인
-  - 커밋 메시지는 `[{TODO_ID}] {type}: {description}` 형식을 자동으로 생성한다.
-  - 푸시 후 STATUS_SNAPSHOT.md를 갱신하여 다음 세션이 최신 상태를 인식하도록 한다.
+- **커밋/푸시 워크플로우 (모든 작업 완료 후 한 번에 수행):**
+  - 각 TODO 항목(`/run` 스킬) 실행 시:
+    1. 코드/문서 변경 완료
+    2. 빌드/테스트 검증 완료
+    3. 실행 보고서 생성 (`reports/` 폴더에 자동 생성)
+    4. TODO.md 체크박스 업데이트
+    5. SESSION_NOTES.md 세션 로그 추가
+    6. STATUS_SNAPSHOT.md 갱신
+    7. **모든 작업 완료 후** 변경된 파일 목록 및 커밋 메시지를 표시하고 사용자 승인 요청
+  - 사용자 승인 후 다음을 순차 실행:
+    1. `git add <changed_files> && git commit -m "[{TODO_ID}] {type}: {description}"`
+    2. `git push origin {current_branch}`
+    3. 푸시 성공 확인
+  - 커밋 메시지는 `[{TODO_ID}] {type}: {description}` 형식을 사용한다.
+  - 한 번의 커밋으로 모든 변경사항(코드, 문서, 보고서, 스냅샷)을 함께 관리한다.
 
 ## Documentation Outputs
 - `Cursor AI_퀴즈 - 문제.docx`는 과제물 제출 결과 파일이므로 반드시 루트 폴더에 유지한다.
