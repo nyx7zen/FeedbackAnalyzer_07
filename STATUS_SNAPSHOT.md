@@ -1,6 +1,6 @@
 # STATUS_SNAPSHOT.md
 
-## Project Status as of 2026-05-22 17:25
+## Project Status as of 2026-05-22 17:40
 
 ### Current Phase
 - **Active Phase**: Phase-3: REFACTOR
@@ -39,7 +39,7 @@
 - [x] GREEN-02-02: Bug verification logs
 - [x] GREEN-02-03: Green regression suite verification
 
-#### Phase-3: REFACTOR (In Progress: 11/16)
+#### Phase-3: REFACTOR (In Progress: 12/16)
 
 **Section 1: Naming & Constants (7/7)**
 - [x] REFACTOR-01-01: Rename `sent` to `analyzeSentiment`
@@ -57,11 +57,11 @@
 - [x] REFACTOR-02-04: Split long TextAnalyzer routines
 - [x] REFACTOR-02-05: Split long Filters routines
 
-**Section 3: Global State Removal (3/6)**
+**Section 3: Global State Removal (4/6)**
 - [x] REFACTOR-03-01: Remove global filter state
 - [x] REFACTOR-03-02: Remove global analyzer state
 - [x] REFACTOR-03-03: Implement session storage map
-- [ ] REFACTOR-03-04: Add feedback session clear API
+- [x] REFACTOR-03-04: Add feedback session clear API
 - [ ] REFACTOR-03-05: Add session lifecycle regression tests
 - [ ] REFACTOR-03-06: Add refactoring report
 
@@ -75,10 +75,10 @@
 ### Key Metrics
 
 **Code Quality**
-- Total Lines of Code (LOC): ~2600
-- Test Coverage: Session & TextAnalyzer 100% (10/10 tests)
+- Total Lines of Code (LOC): ~2800
+- Test Coverage: Session & TextAnalyzer 100% (13/13 tests)
 - Build Status: Success ✓
-- Test Status: 10/10 passed (100%) ✓
+- Test Status: 13/13 passed (100%) ✓
 
 **Refactoring Progress**
 - Global state variables removed: 1 (`fil_data`)
@@ -94,26 +94,25 @@
 
 ### Recent Changes Summary
 
-**Latest Session (2026-05-22 17:25)**
-1. Added `AnalysisResults` struct to Session.h (sentimentCounts, keywordCounts)
-2. Extended `SessionState` with `analysisResults` member
-3. Implemented `Session::setAnalysisResults()` method
-4. Implemented `Session::getAnalysisResults()` method
-5. Added Test 10: Session analysis results storage verification
-6. All tests passing: 10/10 ✓
+**Latest Session (2026-05-22 17:40)**
+1. Added `clearFilterState()` method - selective filter state initialization
+2. Added `clearAnalysisResults()` method - selective analysis results initialization
+3. Added `clearFeedbacks()` method - selective feedbacks initialization
+4. Added Tests 11-13: Verify all clear methods work correctly
+5. All tests passing: 13/13 ✓
 
 ### Files Modified in Current Session
-1. `src/cpp/Session.h` - Added AnalysisResults struct and new API methods
-2. `src/cpp/Session.cpp` - Implemented setAnalysisResults() and getAnalysisResults()
-3. `tests/TextAnalyzerTest.cpp` - Added Test 10 for Session storage verification
-4. `reports/phase-3_refactor/refactor-03-03_implement_session_storage_map-report.md` - Execution report
-5. `TODO.md` - Checked off REFACTOR-03-03
+1. `src/cpp/Session.h` - Added three selective clear methods
+2. `src/cpp/Session.cpp` - Implemented three clear methods
+3. `tests/TextAnalyzerTest.cpp` - Added Tests 11-13 for clear API verification
+4. `reports/phase-3_refactor/refactor-03-04_add_feedback_session_clear_api-report.md` - Execution report
+5. `TODO.md` - Checked off REFACTOR-03-04
 6. `SESSION_NOTES.md` - Added session log entry
 
 ### Build & Test Status
 ```
 Build: SUCCESS ✓
-Tests: 10/10 PASSED (100%) ✓
+Tests: 13/13 PASSED (100%) ✓
 - should_compile_fixture_when_created: PASSED ✓
 - should_return_zero_counts_for_all_sentiments_when_input_is_empty: PASSED ✓
 - should_return_neutral_when_input_is_empty_string: PASSED ✓
@@ -123,22 +122,25 @@ Tests: 10/10 PASSED (100%) ✓
 - should_handle_multiple_keywords_in_feedback: PASSED ✓
 - should_return_neutral_when_positive_and_negative_are_balanced: PASSED ✓
 - should_maintain_session_isolation_between_tests: PASSED ✓
-- should_store_and_retrieve_analysis_results_in_session: PASSED ✓ (신규)
+- should_store_and_retrieve_analysis_results_in_session: PASSED ✓
+- should_clear_filter_state_when_clearFilterState_called: PASSED ✓ (신규)
+- should_clear_analysis_results_when_clearAnalysisResults_called: PASSED ✓ (신규)
+- should_clear_feedbacks_when_clearFeedbacks_called: PASSED ✓ (신규)
 ```
 
 ### Next Priority Actions
 
-1. **REFACTOR-03-04**: Add session clear API
-   - Extend Session::clear() to support selective clearing
-   - Provide lifecycle management for analysis results
+1. **REFACTOR-03-05**: Session lifecycle regression tests
+   - Verify session state isolation with all clear methods
+   - Test set -> get -> clear -> get scenarios
    
-2. **REFACTOR-03-05**: Session lifecycle regression tests
-   - Verify session state isolation with analysis results
-   - Ensure cleanup paths work correctly
+2. **REFACTOR-03-06**: Add refactoring report
+   - Document global state removal journey
+   - Summary of Session API evolution and lifecycle management
    
-3. **REFACTOR-03-06**: Add refactoring report
-   - Document naming changes and architectural improvements
-   - Summary of Session API evolution
+3. **FEATURE Phase**: Begin feature implementation
+   - FEATURE-01: Weighted sentiment scoring
+   - FEATURE-02: CSV persistence with RAII
 
 ### Known Issues / Blockers
 - None currently
@@ -150,7 +152,8 @@ Tests: 10/10 PASSED (100%) ✓
 
 ### Session Continuity Notes
 - All Phase-3 refactoring Section 1 & 2 complete
-- Global state removal progressing (REFACTOR-03-01/02/03 complete)
-- Session storage map now fully implemented with AnalysisResults support
-- Session can now store and retrieve sentiment/keyword analysis results
-- Ready to proceed with REFACTOR-03-04 (session lifecycle API)
+- Global state removal complete (REFACTOR-03-01/02/03/04 complete)
+- Session storage map fully implemented with AnalysisResults support
+- Session lifecycle API complete (clear, clearFilterState, clearAnalysisResults, clearFeedbacks)
+- Session is now fully featured state management system with explicit lifecycle control
+- Ready to proceed with REFACTOR-03-05 (lifecycle regression tests)

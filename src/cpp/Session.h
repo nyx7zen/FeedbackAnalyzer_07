@@ -93,6 +93,24 @@ public:
      */
     static AnalysisResults getAnalysisResults(const std::string& sessionId = "default");
 
+    /**
+     * @brief 필터 상태를 초기화합니다.
+     * @param sessionId 대상 세션 ID
+     */
+    static void clearFilterState(const std::string& sessionId = "default");
+
+    /**
+     * @brief 분석 결과를 초기화합니다.
+     * @param sessionId 대상 세션 ID
+     */
+    static void clearAnalysisResults(const std::string& sessionId = "default");
+
+    /**
+     * @brief 피드백 목록을 초기화합니다.
+     * @param sessionId 대상 세션 ID
+     */
+    static void clearFeedbacks(const std::string& sessionId = "default");
+
 private:
     struct SessionState {
         std::vector<Feedback> currentFeedbacks;

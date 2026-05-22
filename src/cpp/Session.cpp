@@ -48,3 +48,16 @@ void Session::setAnalysisResults(
 Session::AnalysisResults Session::getAnalysisResults(const std::string& sessionId) {
     return state(sessionId).analysisResults;
 }
+
+void Session::clearFilterState(const std::string& sessionId) {
+    state(sessionId).filterState = FilterState{};
+}
+
+void Session::clearAnalysisResults(const std::string& sessionId) {
+    state(sessionId).analysisResults = AnalysisResults{};
+}
+
+void Session::clearFeedbacks(const std::string& sessionId) {
+    state(sessionId).currentFeedbacks.clear();
+    state(sessionId).filteredFeedbacks.clear();
+}

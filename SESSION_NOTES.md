@@ -21,6 +21,27 @@
 
 ## Session Log
 
+### 2026-05-22 17:35 - REFACTOR-03-04 세션 생명주기 API 확장 완료
+- Goal: Session의 명시적인 생명주기 제어를 위한 부분 초기화 API 추가
+- Changes:
+  - `Session::clearFilterState()` 메서드 추가 - 필터 상태만 초기화
+  - `Session::clearAnalysisResults()` 메서드 추가 - 분석 결과만 초기화
+  - `Session::clearFeedbacks()` 메서드 추가 - 피드백 목록 초기화 (currentFeedbacks, filteredFeedbacks)
+  - 기존 `Session::clear()` - 전체 세션 상태 초기화
+- Implementation Details:
+  - FilterState를 empty로 리셋 (sentiment="", keyword="")
+  - AnalysisResults를 empty로 리셋 (empty maps)
+  - Feedback vectors를 clear() 호출로 비움
+  - sessionId 기반 선택적 초기화 지원
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 13/13 passed (Tests 11-13 신규 포함) ✓
+  - clearFilterState() 동작: 정상 ✓
+  - clearAnalysisResults() 동작: 정상 ✓
+  - clearFeedbacks() 동작: 정상 ✓
+  - 기존 기능 회귀: 없음 ✓
+- Next: REFACTOR-03-05 (add session lifecycle regression tests)
+
 ### 2026-05-22 17:20 - REFACTOR-03-03 세션 저장소 맵 구현 완료
 - Goal: Session을 실제 조회 가능한 상태 저장소로 개편하여 분석 결과 저장/조회 기능 추가
 - Changes:
