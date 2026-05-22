@@ -41,6 +41,7 @@ if(GTest_FOUND)
 
     add_executable(feedback_analyzer_test
         tests/SmokeTest.cpp
+        tests/TextAnalyzerTest.cpp
     )
 
     target_link_libraries(feedback_analyzer_test PRIVATE feedback_analyzer_lib GTest::gtest GTest::gtest_main)
@@ -54,6 +55,7 @@ else()
     # Create a simple test target that links the library
     add_executable(feedback_analyzer_test
         tests/SmokeTest.cpp
+        tests/TextAnalyzerTest.cpp
     )
 
     target_link_libraries(feedback_analyzer_test PRIVATE feedback_analyzer_lib)

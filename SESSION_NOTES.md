@@ -21,6 +21,23 @@
 
 ## Session Log
 
+### 2026-05-22 14:35 - RED-01-02 TextAnalyzer GTest Fixture 작성 완료
+- Goal: `TextAnalyzer` 도메인 로직을 독립적으로 검증하기 위한 GTest fixture를 설계하고, `tests/TextAnalyzerTest.cpp` 파일 작성 및 `SetUp`/`TearDown` 기본 구조 완성
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: TextAnalyzerFixture 클래스 및 두 개의 기초 테스트 추가 (should_compile_fixture_when_created, should_detect_sentiment_with_empty_vector)
+  - `tests/SmokeTest.cpp`: 기존 main() 제거 (TextAnalyzerTest.cpp와 중복 정의 방지)
+  - `CMakeLists.txt`: 테스트 타깃에 TextAnalyzerTest.cpp 추가 (GTest_FOUND 및 fallback 모두 적용)
+  - `TODO.md`: RED-01-02 체크박스 완료 표시
+- Decisions:
+  - GTest 미설치 상황에서 최소 테스트 프레임워크 사용 (main() 기반 테스트)
+  - 향후 GTest 설치 시 `#include <gtest/gtest.h>`로 쉽게 마이그레이션 가능하도록 설계
+  - fixture 형식: `should_[result]_when_[condition]` 명명 규칙 준수
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 실행 성공: `ctest --test-dir build --output-on-failure` (2/2 tests passed) ✓
+  - TextAnalyzer::analyzeSentiment() 동작 확인: 빈 벡터 입력 시 모든 감정 카운트를 0으로 초기화하는 맵 반환
+- Next: RED-01-03 (Constants/Session 상태 초기화) 진행
+
 ### 2026-05-22 16:25 - SPEC-01-03 프로젝트 지침 정합성 검토 완료
 - Goal: AGENTS.md, TODO.md와 refs/legacy/ 레거시 문서 간 작업 기준 충돌을 찾아 정렬하고, 현재 운영 기준을 명확히 한다.
 - Changes:

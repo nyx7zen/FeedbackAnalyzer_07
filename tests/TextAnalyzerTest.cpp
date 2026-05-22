@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+
+#include "Feedback.h"
+#include "TextAnalyzer.h"
+
+// TextAnalyzerTest Fixture implementation
+// This will be migrated to Google Test once GTest is installed
+// Format follows the testing convention: should_[result]_when_[condition]
+
+class TextAnalyzerFixture {
+public:
+    TextAnalyzer analyzer;
+
+    void SetUp() {
+        // Initialize TextAnalyzer for each test
+        // Additional state reset logic will be added in RED-01-03
+    }
+
+    void TearDown() {
+        // Cleanup after each test
+        // Session and Constants reset logic will be added in RED-01-03
+    }
+};
+
+int main() {
+    int passed = 0;
+    int failed = 0;
+
+    // Test 1: Fixture should compile and instantiate
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_compile_fixture_when_created" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            fixture.TearDown();
+            std::cout << "[PASS]" << std::endl;
+            passed++;
+        } catch (...) {
+            std::cout << "[FAIL]" << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 2: Analyzer should handle empty feedback vector
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_detect_sentiment_with_empty_vector" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::vector<Feedback> feedbacks;
+            auto result = fixture.analyzer.analyzeSentiment(feedbacks);
+            // Empty input should return map with all sentiment keys initialized to 0
+            if (result.size() == 3 &&
+                result["긍정"] == 0 && result["부정"] == 0 && result["중립"] == 0) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected map with 3 keys all set to 0" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Summary
+    std::cout << "\n========================================" << std::endl;
+    std::cout << "Total: " << (passed + failed) << " tests" << std::endl;
+    std::cout << "Passed: " << passed << std::endl;
+    std::cout << "Failed: " << failed << std::endl;
+
+    return (failed == 0) ? 0 : 1;
+}

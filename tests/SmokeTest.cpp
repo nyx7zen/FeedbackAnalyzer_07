@@ -1,10 +1,2 @@
-#include <iostream>
-
-// Minimal test framework when GTest is not available
-// Replace this when Google Test is installed
-
-int main() {
-    std::cout << "[TEST] SmokeTest: should_pass_when_nothing" << std::endl;
-    std::cout << "[PASS]" << std::endl;
-    return 0;
-}
+// SmokeTest - now integrated with TextAnalyzerTest.cpp
+// See TextAnalyzerTest.cpp for the complete test suite
