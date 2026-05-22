@@ -68,13 +68,13 @@
 - [x] RED-02-03 `test: add mixed sentiment input test`
   - 긍정/부정 혼재 문장 시나리오를 작성한다.
   - 감성 판정 기준이 드러나도록 실패 테스트를 만든다.
-- [ ] RED-02-04 `test: add neutral filter test`
+- [x] RED-02-04 `test: add neutral filter test`
   - `중립` 필터 판정 결함을 드러내는 테스트를 작성한다.
   - 논리 연산자 및 분기 조건 오류를 검증 대상으로 둔다.
 - [x] RED-02-05 `test: add filter combination tests`
   - 필터 조합 시나리오를 경계값 중심으로 작성한다.
   - 긍정/부정/중립 필터 조합 결과를 검증한다.
-- [ ] RED-02-06 `test: add session isolation test`
+- [x] RED-02-06 `test: add session isolation test`
   - 테스트 간 공유 상태가 남지 않아야 함을 검증한다.
   - 상태 초기화 시나리오를 실패 테스트로 고정한다.
 

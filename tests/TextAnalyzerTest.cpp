@@ -194,6 +194,64 @@ int main() {
         }
     }
 
+    // Test 8: Neutral filter test - detect neutral sentiment correctly (RED-02-04)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_neutral_when_positive_and_negative_are_balanced" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string balancedText = "좋아요 별로";  // 1 positive, 1 negative -> balanced -> neutral
+            std::string result = fixture.analyzer.detectSentiment(balancedText);
+            if (result == "중립") {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '중립' for balanced sentiment but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 9: Session isolation test (RED-02-06)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_maintain_session_isolation_between_tests" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            // Test 1: Add feedback to default session
+            std::vector<Feedback> feedbacks1;
+            feedbacks1.emplace_back("좋아요");
+            fixture.analyzer.analyzeSentiment(feedbacks1);
+
+            // Simulate new test instance
+            fixture.TearDown();
+
+            // Test 2: Create new fixture, check session is clean
+            TextAnalyzerFixture fixture2;
+            fixture2.SetUp();
+            std::vector<Feedback> feedbacks2;
+            auto result = fixture2.analyzer.analyzeSentiment(feedbacks2);
+
+            // After isolation, empty vector should return all zeros
+            bool isClean = (result["긍정"] == 0 && result["부정"] == 0 && result["중립"] == 0);
+            if (isClean) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Session not properly isolated" << std::endl;
+                failed++;
+            }
+            fixture2.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;
