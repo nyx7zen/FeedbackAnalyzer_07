@@ -90,7 +90,7 @@
 - [x] GREEN-01-03 `fix: add runtime log level control`
   - `src/Logger.cpp`에 warning/error/info 로그 레벨 제어 기능을 구현한다.
   - 불필요한 로그 노출을 차단할 수 있도록 한다.
-- [ ] GREEN-01-04 `fix: reset shared state in tests`
+- [x] GREEN-01-04 `fix: reset shared state in tests`
   - RED 단계에서 작성한 상태 격리 테스트가 통과하도록 초기화 경로를 보강한다.
   - 테스트 간 전역 또는 세션 상태가 누수되지 않게 한다.
 
