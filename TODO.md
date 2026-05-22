@@ -59,7 +59,7 @@
   - 새 테스트가 동일한 네이밍 규칙을 지키도록 정리한다.
 
 ### RED 실패 테스트 작성
-- [ ] RED-02-01 `test: add empty input boundary test`
+- [x] RED-02-01 `test: add empty input boundary test`
   - 빈 문자열 입력의 기대 동작을 정의한다.
   - 현재 구현에서 실패하는 경계값 테스트로 작성한다.
 - [ ] RED-02-02 `test: add special character input test`

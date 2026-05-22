@@ -21,6 +21,23 @@
 
 ## Session Log
 
+### 2026-05-22 14:50 - RED-02-01 빈 입력 경계값 테스트 추가
+- Goal: 빈 문자열/빈 벡터 입력의 기대 동작을 정의하고, 경계값 테스트 작성
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: 두 개의 빈 입력 경계값 테스트 추가
+    - `should_return_neutral_when_input_is_empty_string`: 빈 문자열 입력 시 neutral 반환 확인
+    - `should_return_zero_keyword_counts_when_input_is_empty`: 빈 피드백 벡터 시 모든 카테고리 카운트 0 확인
+  - `TODO.md`: RED-02-01 체크박스 완료 표시
+- Decisions:
+  - 빈 문자열은 score=0이므로 neutral 반환 (>= 1도 아니고 <= -1도 아님)
+  - 빈 벡터는 모든 카테고리가 0으로 초기화되어 반환됨
+  - 현재 구현에서 모두 정상 동작 (RED 실패 아님, 하지만 명시적으로 기대 동작 정의)
+- Verification:
+  - 빌드 성공 ✓
+  - ctest 실행 성공 (4/4 tests passed) ✓
+  - 모든 테스트 통과 (경계값 처리 정상)
+- Next: RED-02-02 (test: add special character input test)
+
 ### 2026-05-22 14:45 - RED-01-04 테스트 명명 규칙 정착
 - Goal: RED 단계의 모든 테스트가 `should_[result]_when_[condition]` 형식을 따르도록 정리하고, 새 테스트 추가 시 가이드 제공
 - Changes:

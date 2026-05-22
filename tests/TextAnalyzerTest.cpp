@@ -72,6 +72,59 @@ int main() {
         }
     }
 
+    // Test 3: Empty string should be detected as neutral without exception
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_neutral_when_input_is_empty_string" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string emptyText = "";
+            std::string result = fixture.analyzer.detectSentiment(emptyText);
+            // Empty string should return neutral (no positive/negative keywords)
+            if (result == "중립") {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected '중립' but got '" << result << "'" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 4: Empty feedback vector should return empty keyword counts
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_zero_keyword_counts_when_input_is_empty" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::vector<Feedback> feedbacks;
+            auto result = fixture.analyzer.analyzeKeywords(feedbacks);
+            // Check if all category counts are 0
+            bool allZero = true;
+            for (const auto& [category, count] : result) {
+                if (count != 0) {
+                    allZero = false;
+                    break;
+                }
+            }
+            if (allZero && !result.empty()) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected all keyword counts to be 0 with empty input" << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;
