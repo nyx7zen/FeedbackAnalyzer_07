@@ -21,6 +21,41 @@
 
 ## Session Log
 
+### 2026-05-22 16:15 - 프롬프트 실행 후 커밋/푸시 자동화 지침 추가
+- Goal: 각 TODO 항목 완료 후 자동으로 커밋 및 푸시가 수행되도록 지침을 명시하되, 각 단계에서 사용자의 명시적 승인을 받도록 한다.
+- Changes:
+  - `.agents/skills/run/SKILL.md`의 Workflow에 커밋(Step 13) 및 푸시(Step 14) 단계 추가, 사용자 확인 프로세스 명시
+  - `AGENTS.md`의 Workflow 섹션에 자동 커밋/푸시 지침 추가
+  - `AGENTS.md`의 Git And Collaboration > 협업 흐름에 상세한 자동 워크플로우 추가 (승인 단계, 상태 갱신)
+  - `.claude/skills/run/SKILL.md`의 Workflow에 Step 8(커밋), Step 9(푸시) 추가
+- Decisions:
+  - 커밋 메시지 형식: `[{TODO_ID}] {type}: {description}` (AGENTS.md 규칙 준수)
+  - 각 단계(커밋, 푸시)에서 변경 파일/명령을 사전 표시하고 사용자 확인 요청
+  - 커밋/푸시 완료 후 STATUS_SNAPSHOT.md를 갱신해 다음 세션이 최신 상태를 반영하도록 함
+- Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 지침이 실제로 적용되는지 다음 TODO 항목 실행 시 검증한다.
+
+### 2026-05-22 16:10 - 프롬프트 실행 후 자동 보고서 생성 지침 추가
+- Goal: 각 TODO 항목 완료 후 자동으로 해당 프롬프트에 대응하는 실행 보고서가 생성되도록 지침을 명시한다.
+- Changes:
+  - `.agents/skills/run/SKILL.md`의 Workflow에 보고서 자동 생성 단계(Step 12) 추가
+  - `AGENTS.md`의 Workflow 섹션에 보고서 자동 생성에 대한 명시적 지침 추가
+  - `AGENTS.md`의 Documentation Outputs 섹션에 보고서 생성 규칙 상세화 (실행 날짜, 목표, 수행 작업, 산출물, 검증, 다음 단계, 요약)
+  - `.claude/skills/run/SKILL.md`의 Workflow에 보고서 생성 항목 추가 (Step 7)
+- Decisions:
+  - 보고서 생성은 모든 `/run` 실행 후 자동으로 수행되어야 한다.
+  - 파일명 규칙: 프롬프트와 동일하되 `-prompt.md` → `-report.md` 변경
+  - 보고서에는 목표, 변경사항, 산출물, 검증, 다음 단계를 필수로 포함한다.
+- Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 지침이 정확히 적용되었는지 다음 TODO 항목 실행 시 검증한다.
+
+### 2026-05-22 16:00 - SPEC-01-02 빌드/테스트 명령 문서화
+- Goal: MinGW/CMake 기본 빌드 명령과 ctest를 활용한 테스트 실행 방식을 문서로 정리한다.
+- Changes: `docs/build-and-test.md` 파일을 생성했고 빌드 환경 요구사항, CMake 초기/증분/clean 빌드 명령, 테스트 프레임워크 설정, ctest 명령 옵션, 개발 사이클 워크플로우, 자주 사용하는 명령 요약표, 문제 해결 가이드를 포함했다. `TODO.md`의 SPEC-01-02 항목을 완료 상태로 체크했다.
+- Decisions: Windows MinGW 환경과 CMake 3.14+, Google Test를 기본 전제로 하며, `-G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/mingw64/bin/g++.exe` 플래그를 필수로 명시했다. ctest 실행 시 `--output-on-failure` 옵션을 기본으로 권장했다.
+- Verification: 문서 생성 및 TODO 체크박스 업데이트만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: SPEC-01-03 (프로젝트 지침 정렬)로 진행.
+
 ### 2026-05-22 15:30 - PR/커밋 메시지 규칙 정규화 및 AGENTS.md 반영
 - Goal: B_07 브랜치 통합을 위한 PR과 커밋 메시지 형식을 표준화하고 지침에 반영한다.
 - Changes:
