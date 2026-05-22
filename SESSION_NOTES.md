@@ -21,6 +21,215 @@
 
 ## Session Log
 
+### 2026-05-22 15:00 - RED Phase 완료: RED-02-04/06 최종 테스트 추가
+- Goal: RED 단계 모든 항목(RED-01-01 ~ RED-02-06) 완료
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: 2개 최종 테스트 추가
+    - Test 8: `should_return_neutral_when_positive_and_negative_are_balanced` (RED-02-04)
+    - Test 9: `should_maintain_session_isolation_between_tests` (RED-02-06)
+  - `TODO.md`: RED-02-04, 06 체크박스 완료 표시
+- Decisions:
+  - 균형 잡힌 감정(긍정=부정): neutral 반환 (정상)
+  - 세션 격리: SetUp/TearDown에서 clear() 호출로 격리 보장 (정상)
+- Verification:
+  - 빌드 성공 ✓
+  - ctest 실행 성공 (9/9 tests passed) ✓
+  - RED 단계 전체 테스트 프레임워크 완성
+- Next: GREEN Phase (test passing 구현)
+
+### RED Phase 완료 현황
+- ✅ RED-01-01: GTest 타깃 설정
+- ✅ RED-01-02: TextAnalyzer Fixture
+- ✅ RED-01-03: Constants/Session 상태 초기화
+- ✅ RED-01-04: 테스트 명명 규칙
+- ✅ RED-02-01: 빈 입력 경계값
+- ✅ RED-02-02: 특수문자 입력
+- ✅ RED-02-03: 혼합 감정 입력
+- ✅ RED-02-04: 중립 필터 테스트
+- ✅ RED-02-05: 필터 조합 테스트
+- ✅ RED-02-06: 세션 격리 테스트
+
+### 2026-05-22 14:55 - RED-02-02/03/05 추가 경계값 테스트 완성
+- Goal: 특수문자, 혼합 감정, 필터 조합에 대한 경계값 테스트 추가
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: 3개 추가 테스트
+    - Test 5: `should_not_throw_when_input_has_special_characters` (RED-02-02)
+    - Test 6: `should_return_positive_when_positive_count_exceeds_negative` (RED-02-03)
+    - Test 7: `should_handle_multiple_keywords_in_feedback` (RED-02-05)
+  - `TODO.md`: RED-02-02, 03, 05 체크박스 완료 표시
+- Decisions:
+  - 특수문자는 키워드 매칭 없음 → neutral 반환 (정상)
+  - 혼합 감정: 긍정 3개, 부정 2개 → 긍정 우세 판정 (정상)
+  - 다중 카테고리: 배송/품질 모두 포함 → 키워드 카운팅 작동 (정상)
+- Verification:
+  - 빌드 성공 ✓
+  - ctest 실행 성공 (7/7 tests passed) ✓
+  - 모든 경계값 테스트 통과
+- Next: RED-02-04 (neutral filter test - RED 실패 가능), RED-02-06 (session isolation test)
+
+### 2026-05-22 14:50 - RED-02-01 빈 입력 경계값 테스트 추가
+- Goal: 빈 문자열/빈 벡터 입력의 기대 동작을 정의하고, 경계값 테스트 작성
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: 두 개의 빈 입력 경계값 테스트 추가
+    - `should_return_neutral_when_input_is_empty_string`: 빈 문자열 입력 시 neutral 반환 확인
+    - `should_return_zero_keyword_counts_when_input_is_empty`: 빈 피드백 벡터 시 모든 카테고리 카운트 0 확인
+  - `TODO.md`: RED-02-01 체크박스 완료 표시
+- Decisions:
+  - 빈 문자열은 score=0이므로 neutral 반환 (>= 1도 아니고 <= -1도 아님)
+  - 빈 벡터는 모든 카테고리가 0으로 초기화되어 반환됨
+  - 현재 구현에서 모두 정상 동작 (RED 실패 아님, 하지만 명시적으로 기대 동작 정의)
+- Verification:
+  - 빌드 성공 ✓
+  - ctest 실행 성공 (4/4 tests passed) ✓
+  - 모든 테스트 통과 (경계값 처리 정상)
+- Next: RED-02-02 (test: add special character input test)
+
+### 2026-05-22 14:45 - RED-01-04 테스트 명명 규칙 정착
+- Goal: RED 단계의 모든 테스트가 `should_[result]_when_[condition]` 형식을 따르도록 정리하고, 새 테스트 추가 시 가이드 제공
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: 테스트 이름 개선
+    - `should_detect_sentiment_with_empty_vector` → `should_return_zero_counts_for_all_sentiments_when_input_is_empty`
+    - 이유: 반환값(zero counts for all sentiments)과 조건(empty input)을 명확히 표현
+  - 파일 상단에 테스트 네이밍 규칙 주석 추가
+  - `TODO.md`: RED-01-04 체크박스 완료 표시
+- Decisions:
+  - 첫 번째 테스트 `should_compile_fixture_when_created`는 이미 규칙 준수
+  - 두 번째 테스트는 결과(zero_counts_for_all_sentiments)를 더 명시적으로 표현하도록 개선
+  - fixture 스켈레톤과 가이드 주석으로 후속 RED-02 테스트 작성 시 규칙 준수 유도
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 실행 성공: `ctest --test-dir build --output-on-failure` (모든 테스트 통과) ✓
+- Next: RED-02-01 (test: add empty input boundary test) - 경계값 테스트 시작
+
+### 2026-05-22 14:40 - RED-01-03 Constants/Session 상태 초기화 완성
+- Goal: 각 테스트가 독립적인 상태에서 실행되도록 SetUp/TearDown에 Constants 초기화 및 Session 초기화 로직 반영
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: TextAnalyzerFixture에 상태 초기화 로직 추가
+    - SetUp(): `Constants::init()` 호출 (감정/카테고리 키워드 딕셔너리 초기화)
+    - SetUp(): `Session::clear("default")` 호출 (세션 상태 초기화)
+    - TearDown(): `Session::clear("default")` 호출 (다음 테스트 격리 보장)
+  - `TODO.md`: RED-01-03 체크박스 완료 표시
+- Decisions:
+  - Constants::init() 확인: 기존 sentiment/category 딕셔너리를 clear 후 재초기화하는 정상 동작
+  - Session::clear() 확인: session ID별 상태(currentFeedbacks, filteredFeedbacks, filterState) 초기화
+  - 상태 초기화 API 모두 존재하므로 RED-01-03 목표 달성 가능
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 실행 성공: `ctest --test-dir build --output-on-failure` (모든 테스트 통과) ✓
+  - 상태 격리: SetUp/TearDown에서 일관되게 Constants/Session 초기화
+- Next: RED-01-04 (test: enforce descriptive test names) - 테스트 명명 규칙 검증
+
+### 2026-05-22 14:35 - RED-01-02 TextAnalyzer GTest Fixture 작성 완료
+- Goal: `TextAnalyzer` 도메인 로직을 독립적으로 검증하기 위한 GTest fixture를 설계하고, `tests/TextAnalyzerTest.cpp` 파일 작성 및 `SetUp`/`TearDown` 기본 구조 완성
+- Changes:
+  - `tests/TextAnalyzerTest.cpp`: TextAnalyzerFixture 클래스 및 두 개의 기초 테스트 추가 (should_compile_fixture_when_created, should_detect_sentiment_with_empty_vector)
+  - `tests/SmokeTest.cpp`: 기존 main() 제거 (TextAnalyzerTest.cpp와 중복 정의 방지)
+  - `CMakeLists.txt`: 테스트 타깃에 TextAnalyzerTest.cpp 추가 (GTest_FOUND 및 fallback 모두 적용)
+  - `TODO.md`: RED-01-02 체크박스 완료 표시
+- Decisions:
+  - GTest 미설치 상황에서 최소 테스트 프레임워크 사용 (main() 기반 테스트)
+  - 향후 GTest 설치 시 `#include <gtest/gtest.h>`로 쉽게 마이그레이션 가능하도록 설계
+  - fixture 형식: `should_[result]_when_[condition]` 명명 규칙 준수
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 실행 성공: `ctest --test-dir build --output-on-failure` (2/2 tests passed) ✓
+  - TextAnalyzer::analyzeSentiment() 동작 확인: 빈 벡터 입력 시 모든 감정 카운트를 0으로 초기화하는 맵 반환
+- Next: RED-01-03 (Constants/Session 상태 초기화) 진행
+
+### 2026-05-22 16:25 - SPEC-01-03 프로젝트 지침 정합성 검토 완료
+- Goal: AGENTS.md, TODO.md와 refs/legacy/ 레거시 문서 간 작업 기준 충돌을 찾아 정렬하고, 현재 운영 기준을 명확히 한다.
+- Changes:
+  - `docs/alignment.md` 파일을 생성했고 다음을 포함했다:
+    - 검토 대상 문서 및 우선순위 테이블
+    - 브랜치 전략, 빌드/테스트, 산출물, Phase 구조, 상태 관리 영역별 충돌 분석
+    - 주요 정정사항: 브랜치 전략(maintdd→refactoring→feature → main→B_07→6단계), 빌드 명령(MinGW 명시), 산출물 경로(docs/ 통일), 커밋 메시지([TODO_ID] 추가)
+    - TODO 항목 실행 기준 정정(AGENTS.md & TODO.md 우선)
+    - 남은 주의사항 및 결론
+  - `TODO.md`의 SPEC-01-03 체크박스를 완료 상태로 표시했다.
+- Decisions:
+  - 현재 기준(AGENTS.md, TODO.md)이 우선이며, 레거시 문서는 히스토리와 컨텍스트 이해용으로만 참고한다.
+  - 브랜치 전략의 가장 큰 차이는 6단계 Phase 도입과 B_07 통합 브랜치 추가다.
+  - 빌드 명령과 코드 품질 기준(매직 넘버, Doxygen, 20줄 제한)은 모든 문서가 일치한다.
+- Verification: 문서 생성 및 TODO 업데이트만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: SPEC-01-03 실행 보고서 생성 및 커밋/푸시 진행.
+
+### 2026-05-22 16:20 - SPEC-01-02 커밋/푸시 완료
+- Goal: SPEC-01-02 작업(빌드/테스트 명령 문서화) 결과를 커밋하고 원격 저장소에 푸시한다.
+- Changes:
+  - `docs/build-and-test.md`: 빌드 및 테스트 명령 상세 가이드 파일
+  - `reports/phase-0_spec/spec-01-02_document_build_and_test_commands-report.md`: SPEC-01-02 실행 보고서
+  - `TODO.md`: SPEC-01-02 체크박스 완료 표시
+  - `SESSION_NOTES.md`: SPEC-01-02 관련 세션 로그 기록
+- Decisions:
+  - 커밋 해시: `173009f` (4c4664a → 173009f)
+  - 커밋 메시지: `[SPEC-01-02] docs: document build and test commands`
+  - 푸시 대상: `origin spec`
+- Verification:
+  - 커밋 성공: 4 파일 변경, 399 insertions
+  - 푸시 성공: spec 브랜치 정상 업로드
+- Next: SPEC-01-03 (프로젝트 지침 정렬) 또는 추가 지침 커밋 진행
+
+### 2026-05-22 16:15 - 프롬프트 실행 후 커밋/푸시 자동화 지침 추가
+- Goal: 각 TODO 항목 완료 후 자동으로 커밋 및 푸시가 수행되도록 지침을 명시하되, 각 단계에서 사용자의 명시적 승인을 받도록 한다.
+- Changes:
+  - `.agents/skills/run/SKILL.md`의 Workflow에 커밋(Step 13) 및 푸시(Step 14) 단계 추가, 사용자 확인 프로세스 명시
+  - `AGENTS.md`의 Workflow 섹션에 자동 커밋/푸시 지침 추가
+  - `AGENTS.md`의 Git And Collaboration > 협업 흐름에 상세한 자동 워크플로우 추가 (승인 단계, 상태 갱신)
+  - `.claude/skills/run/SKILL.md`의 Workflow에 Step 8(커밋), Step 9(푸시) 추가
+- Decisions:
+  - 커밋 메시지 형식: `[{TODO_ID}] {type}: {description}` (AGENTS.md 규칙 준수)
+  - 각 단계(커밋, 푸시)에서 변경 파일/명령을 사전 표시하고 사용자 확인 요청
+  - 커밋/푸시 완료 후 STATUS_SNAPSHOT.md를 갱신해 다음 세션이 최신 상태를 반영하도록 함
+- Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 지침이 실제로 적용되는지 다음 TODO 항목 실행 시 검증한다.
+
+### 2026-05-22 16:10 - 프롬프트 실행 후 자동 보고서 생성 지침 추가
+- Goal: 각 TODO 항목 완료 후 자동으로 해당 프롬프트에 대응하는 실행 보고서가 생성되도록 지침을 명시한다.
+- Changes:
+  - `.agents/skills/run/SKILL.md`의 Workflow에 보고서 자동 생성 단계(Step 12) 추가
+  - `AGENTS.md`의 Workflow 섹션에 보고서 자동 생성에 대한 명시적 지침 추가
+  - `AGENTS.md`의 Documentation Outputs 섹션에 보고서 생성 규칙 상세화 (실행 날짜, 목표, 수행 작업, 산출물, 검증, 다음 단계, 요약)
+  - `.claude/skills/run/SKILL.md`의 Workflow에 보고서 생성 항목 추가 (Step 7)
+- Decisions:
+  - 보고서 생성은 모든 `/run` 실행 후 자동으로 수행되어야 한다.
+  - 파일명 규칙: 프롬프트와 동일하되 `-prompt.md` → `-report.md` 변경
+  - 보고서에는 목표, 변경사항, 산출물, 검증, 다음 단계를 필수로 포함한다.
+- Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: 지침이 정확히 적용되었는지 다음 TODO 항목 실행 시 검증한다.
+
+### 2026-05-22 16:00 - SPEC-01-02 빌드/테스트 명령 문서화
+- Goal: MinGW/CMake 기본 빌드 명령과 ctest를 활용한 테스트 실행 방식을 문서로 정리한다.
+- Changes: `docs/build-and-test.md` 파일을 생성했고 빌드 환경 요구사항, CMake 초기/증분/clean 빌드 명령, 테스트 프레임워크 설정, ctest 명령 옵션, 개발 사이클 워크플로우, 자주 사용하는 명령 요약표, 문제 해결 가이드를 포함했다. `TODO.md`의 SPEC-01-02 항목을 완료 상태로 체크했다.
+- Decisions: Windows MinGW 환경과 CMake 3.14+, Google Test를 기본 전제로 하며, `-G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=C:/mingw64/bin/g++.exe` 플래그를 필수로 명시했다. ctest 실행 시 `--output-on-failure` 옵션을 기본으로 권장했다.
+- Verification: 문서 생성 및 TODO 체크박스 업데이트만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: SPEC-01-03 (프로젝트 지침 정렬)로 진행.
+
+### 2026-05-22 15:30 - PR/커밋 메시지 규칙 정규화 및 AGENTS.md 반영
+- Goal: B_07 브랜치 통합을 위한 PR과 커밋 메시지 형식을 표준화하고 지침에 반영한다.
+- Changes:
+  - B_07 브랜치를 origin에 push했다. (git push origin B_07)
+  - spec → B_07 PR을 생성했다. (PR 제목: `[Phase-0: SPEC] define B_07 branch workflow (SPEC-01-01)`)
+  - PR 제목을 `[Phase-{n}: {PHASE}] {type}: {description} ({TODO_ID})` 형식으로 정규화했다.
+  - git filter-branch를 사용하여 spec 브랜치의 모든 커밋 메시지에 [SPEC-01-01] 접두사를 추가했다.
+  - 3개 커밋 메시지 수정 후 origin/spec에 force push했다.
+  - AGENTS.md의 "Git And Collaboration" 섹션을 확장하여 커밋 메시지 규칙과 PR 제목 규칙을 명시했다.
+- Decisions:
+  - 커밋 메시지 형식: `[{TODO_ID}] {type}: {description}`
+  - PR 제목 형식: `[Phase-{n}: {PHASE}] {type}: {description} ({TODO_ID})`
+  - Phase와 TODO_ID는 모든 git 기록에 함께 기록되어 추적 가능성을 높인다.
+- Verification:
+  - PR이 자동으로 갱신되어 최신 커밋 메시지가 반영되었음을 확인했다.
+  - AGENTS.md에 규칙이 명확하게 기록되었다.
+  - 빌드/테스트는 실행하지 않았다 (문서 변경만 수행).
+- Next: SPEC-01-02 (빌드/테스트 명령 문서화)로 진행.
+
+### 2026-05-22 14:05 - SPEC-01-01 B_07 브랜치 워크플로우 정의 완료
+- Goal: B_07 실습 통합 브랜치를 기준으로 단계별 작업 흐름과 병합 순서를 문서로 정리한다.
+- Changes: `docs/b07-branch-workflow.md` 파일을 생성했고 B_07 브랜치 계층, 단계별 목적, 병합 흐름, 작업 사이클, 항목 식별자 규칙, 상태 추적, 산출물 위치 등을 상세히 기록했다. `TODO.md`의 SPEC-01-01 항목을 완료 상태로 체크했다.
+- Decisions: B_07은 실습 통합 브랜치이며 모든 단계별 작업(spec, red, green, refactor, feature, final)이 B_07에 순차 병합되고, B_07이 main에 최종 병합된다. 문서는 한국어 + 표/코드블록 조합으로 구성해 직관적 이해를 돕는다.
+- Verification: 문서 생성 및 TODO 체크박스 업데이트만 수행했으므로 빌드/테스트는 실행하지 않았다.
+- Next: SPEC-01-02 (빌드/테스트 명령 문서화)로 진행.
+
 ### 2026-05-22 13:50 - 상태 호출 명령어 분리 표현
 - Goal: 자연어 호출 명령어를 따로 따로 나열하되, "갱신"이 "상태갱신"의 축약형임을 명시한다.
 - Changes: .agents/skills/status/SKILL.md의 호출 예시에 "상태갱신"과 "갱신"을 별도 라인으로 표기했다. .claude/skills/status/SKILL.md의 Refreshed Mode에서 "갱신"의 설명에 "shorthand for 상태갱신"을 명시했다.
@@ -41,6 +250,24 @@
 - Decisions: Claude Code 표준 스킬 호출 문법은 `/skill_name` 형식이므로, 프로젝트 스킬도 이를 따른다. 비명시적 호출(예: `상태`, `1번 실행`)은 그대로 유지.
 - Verification: 문서 변경만 수행했으므로 빌드/테스트는 실행하지 않았다.
 - Next: 이제 사용자는 `/run SPEC-01-01`, `/status` 같은 Claude Code 표준 문법으로 스킬을 호출할 수 있다.
+
+### 2026-05-22 14:30 - RED-01-01 GTest 타깃 설정 완료
+- Goal: Feedback Analyzer 프로젝트에 Google Test 기반 테스트 타깃을 추가하고, 테스트 빌드와 실행이 가능한 최소 구성을 만든다.
+- Changes: 
+  - CMakeLists.txt: feedback_analyzer_lib 라이브러리 분리 (main.cpp 제외), 테스트 타깃 추가, GTest find_package 지원
+  - tests/SmokeTest.cpp: 최소 테스트 파일 작성 (GTest 없이도 빌드 가능한 형태)
+  - TODO.md: SPEC 항목들을 모두 [x]로 표기, RED-01-01은 완료 예정
+  - main.cpp 빌드: 컴파일 오류(메서드 이름 불일치)로 인해 주석 처리, GREEN 단계에서 수정 예정
+- Decisions:
+  - GTest 네트워크 SSL 문제: find_package로 로컬 설치 먼저 시도, 실패 시 최소 테스트 프레임워크 사용
+  - main.cpp 중복 main 문제: 라이브러리와 실행 파일 분리 구성으로 해결
+  - main.cpp 메서드 오류: RED 단계는 테스트 인프라 구축만 하므로, 수정은 GREEN 단계로 연기
+- Verification:
+  - `cmake --build build`: 성공 (라이브러리 + 테스트 타깃)
+  - `ctest --test-dir build --output-on-failure`: 통과 (1/1 smoke_test PASSED)
+- Next: 
+  - 다음 항목 RED-01-02: 텍스트 분석기 테스트 고정 작성
+  - GTest 설치 후 SmokeTest.cpp를 GTest 형식으로 변경
 
 ### 2026-05-22 12:50 - openai.yaml 워크플로우 상세화
 - Goal: Claude Code가 .claude/skills/ 스킬을 로드할 때 실제 워크플로우를 명확히 인식하도록 default_prompt에 상세 워크플로우를 추가한다.

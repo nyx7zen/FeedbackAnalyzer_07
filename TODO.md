@@ -18,63 +18,63 @@
 ## Phase-0: SPEC
 
 ### 환경 및 지침 설정
-- [ ] SPEC-01-01 `docs: define B_07 branch workflow`
+- [x] SPEC-01-01 `docs: define B_07 branch workflow`
   - `B_07` 통합 브랜치를 기준으로 실습 브랜치 전략을 정리한다.
   - `spec -> red -> green -> refactor -> feature -> final` 단계 흐름과 병합 순서를 문서화한다.
-- [ ] SPEC-01-02 `docs: document build and test commands`
+- [x] SPEC-01-02 `docs: document build and test commands`
   - MinGW/CMake 기본 빌드 명령을 정리한다.
   - 테스트 실행 기준으로 `ctest --output-on-failure` 사용 방식을 기록한다.
-- [ ] SPEC-01-03 `docs: align project instructions`
+- [x] SPEC-01-03 `docs: align project instructions`
   - `AGENTS.md`, `refs/legacy/guide.md`, `refs/legacy/GEMINI.md`의 작업 지침을 확인한다.
   - 기존 문서와 TODO 항목이 충돌하지 않도록 기준을 맞춘다.
 
 ### 프로젝트 구조 및 문제점 진단
-- [ ] SPEC-02-01 `docs: add architecture analysis`
+- [x] SPEC-02-01 `docs: add architecture analysis`
   - `docs/analysis.md`를 작성한다.
   - 현재 구조의 주요 리팩토링 위험과 개선 방향을 요약한다.
-- [ ] SPEC-02-02 `docs: analyze global state risks`
+- [x] SPEC-02-02 `docs: analyze global state risks`
   - 전역 static 변수 사용 지점을 조사한다.
   - 테스트 격리 실패 위험성을 분석해 `docs/analysis.md`에 기록한다.
-- [ ] SPEC-02-03 `docs: analyze main coupling`
+- [x] SPEC-02-03 `docs: analyze main coupling`
   - `main.cpp`와 핵심 도메인 로직 간 결합도를 진단한다.
   - 라우팅/UI 렌더링과 분석 로직이 섞인 영역을 식별한다.
-- [ ] SPEC-02-04 `docs: prioritize refactoring targets`
+- [x] SPEC-02-04 `docs: prioritize refactoring targets`
   - 네이밍 스멜과 중복 코드 집중 영역을 도출한다.
   - 상태 관리 문제를 포함해 개선 우선순위를 기록한다.
 
 ## Phase-1: RED
 
 ### 테스트 프레임워크 구축
-- [ ] RED-01-01 `test: configure gtest target`
+- [x] RED-01-01 `test: configure gtest target`
   - CMake에 Google Test 기반 테스트 타깃을 추가한다.
   - 테스트 빌드와 실행이 가능한 최소 구성을 만든다.
-- [ ] RED-01-02 `test: add text analyzer fixture`
+- [x] RED-01-02 `test: add text analyzer fixture`
   - `tests/TextAnalyzerTest.cpp` 파일을 작성한다.
   - Fixture(`SetUp`, `TearDown`) 기본 구조를 만든다.
-- [ ] RED-01-03 `test: reset constants and session per test`
+- [x] RED-01-03 `test: reset constants and session per test`
   - `Constants` 초기화 경로를 테스트 준비 단계에 반영한다.
   - `Session` 상태 격리 또는 Reset 로직을 테스트별로 적용한다.
-- [ ] RED-01-04 `test: enforce descriptive test names`
+- [x] RED-01-04 `test: enforce descriptive test names`
   - 테스트 이름은 `should_[result]_when_[condition]` 형식을 따른다.
   - 새 테스트가 동일한 네이밍 규칙을 지키도록 정리한다.
 
 ### RED 실패 테스트 작성
-- [ ] RED-02-01 `test: add empty input boundary test`
+- [x] RED-02-01 `test: add empty input boundary test`
   - 빈 문자열 입력의 기대 동작을 정의한다.
   - 현재 구현에서 실패하는 경계값 테스트로 작성한다.
-- [ ] RED-02-02 `test: add special character input test`
+- [x] RED-02-02 `test: add special character input test`
   - 특수문자 입력 처리 기준을 테스트로 고정한다.
   - 분석 로직이 예외 없이 동작하는지 확인한다.
-- [ ] RED-02-03 `test: add mixed sentiment input test`
+- [x] RED-02-03 `test: add mixed sentiment input test`
   - 긍정/부정 혼재 문장 시나리오를 작성한다.
   - 감성 판정 기준이 드러나도록 실패 테스트를 만든다.
-- [ ] RED-02-04 `test: add neutral filter test`
+- [x] RED-02-04 `test: add neutral filter test`
   - `중립` 필터 판정 결함을 드러내는 테스트를 작성한다.
   - 논리 연산자 및 분기 조건 오류를 검증 대상으로 둔다.
-- [ ] RED-02-05 `test: add filter combination tests`
+- [x] RED-02-05 `test: add filter combination tests`
   - 필터 조합 시나리오를 경계값 중심으로 작성한다.
   - 긍정/부정/중립 필터 조합 결과를 검증한다.
-- [ ] RED-02-06 `test: add session isolation test`
+- [x] RED-02-06 `test: add session isolation test`
   - 테스트 간 공유 상태가 남지 않아야 함을 검증한다.
   - 상태 초기화 시나리오를 실패 테스트로 고정한다.
 

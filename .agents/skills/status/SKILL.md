@@ -57,6 +57,8 @@ metadata:
 
 1. `git status --short --branch` 실행한다.
 2. `TODO.md`를 부분 또는 전체 조회한다.
+   - **각 Phase의 체크박스 상태를 기준으로 완료 개수를 계산한다.**
+   - `[x]` 체크박스를 가진 항목만 완료로 카운트한다.
 3. `.agents/skills/status/STATUS_SNAPSHOT.md`와 비교해 변경점(delta)를 파악한다.
 4. 사용자가 phase/prefix를 지정한 경우 해당 범위만 상세 조회한다.
 5. `SESSION_NOTES.md`에서 최신 검증 상태 1개를 확인한다.
@@ -85,15 +87,22 @@ TODO 항목이 많으면 전체를 나열하지 말고 요청된 Phase/접두사
 브랜치 진행 현황은 아래와 같은 코드 블록 형태를 우선 사용한다.
 
 ```text
-main ──●
-       └── B_07 ──●
-                  ├── spec        ──● 🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
-                  ├── red             🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
-                  ├── green           🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
-                  ├── refactor        🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
-                  ├── feature         🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
-                  └── final           🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
+main
+ └── B_07
+      ├── spec (✅ SPEC Phase 완료)
+      ├── red (📍 RED Phase 진행 중 / 🔴 시작 준비)
+      ├── green (⏳ GREEN Phase 예정)
+      ├── refactor (⏳ REFACTOR Phase 예정)
+      ├── feature (⏳ FEATURE Phase 예정)
+      └── final (⏳ FINAL Phase 예정)
 ```
+
+상태 기호:
+- ✅ Phase 완료 (모든 TODO 항목 완료 및 B_07으로 머지됨)
+- 📍 현재 작업 중인 브랜치
+- 🔴 시작 준비 (브랜치 생성됨, 작업 시작 전)
+- 🟡 작업 진행 중 (일부 TODO 항목 완료)
+- ⏳ 예정 (아직 생성되지 않음)
 
 진행할 항목은 아래 테이블 형식을 우선 사용한다.
 

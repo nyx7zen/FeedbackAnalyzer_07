@@ -44,6 +44,12 @@
 - 전역 상태와 중복 로직은 새 기능 추가보다 먼저 정리 대상에 포함한다.
 - 의미 있는 코드 변경, 문서 생성, 인코딩 변경, 설정 변경이 발생하면 루트의 `SESSION_NOTES.md`에 세션 로그를 함께 갱신한다.
 - 문서 변경만 수행한 경우 빌드/테스트를 실행하지 않았음을 명시한다.
+- **각 TODO 항목 완료 후, 해당 프롬프트 파일에 대응하는 실행 보고서를 `reports/` 폴더에 자동으로 생성한다.** 보고서 파일명은 프롬프트 파일명과 동일하되 접미사만 `-prompt.md`에서 `-report.md`로 변경한다. 예: `spec-01-02_document_build_and_test_commands-prompt.md` → `spec-01-02_document_build_and_test_commands-report.md`. 보고서에는 실행 날짜, 작업 항목, 목표, 수행 작업, 생성된 산출물, 검증 결과, 다음 단계 등을 포함한다.
+- **각 단계의 마지막 TODO 항목 완료 후, 사용자에게 `docs/` 폴더에 Phase 레벨 최종 보고서 생성 여부를 확인 요청한다.** 생성 시 파일명은 `docs/phase-{number}_{phase_name}-summary.md` 형식을 사용한다. 예: `docs/phase-0_spec-summary.md`, `docs/phase-1_red-summary.md`. 최종 보고서에는 단계 목표, 완료 항목 요약, 핵심 발견사항, 다음 단계, 참고 자료 등을 포함한다.
+- **각 TODO 항목 완료 후 자동으로 커밋 및 푸시를 수행한다. 각 단계에서 사용자의 명시적 승인을 받은 후 진행한다:**
+  - 커밋 단계: 변경 파일 목록과 커밋 메시지(`[{TODO_ID}] {type}: {description}`)를 표시하고 사용자 확인 요청
+  - 푸시 단계: 현재 브랜치를 origin으로 푸시하기 전 사용자 확인 요청
+  - 커밋/푸시 후 STATUS_SNAPSHOT.md를 갱신하여 최신 상태를 유지한다.
 
 ## Code Quality Rules
 - 하드코딩된 감성 문자열, 임계값, 매직 넘버는 `const` 또는 `static constexpr` 상수로 추출한다.
@@ -64,9 +70,40 @@
 - 테스트는 서로 독립적이어야 하며, `SetUp`/`TearDown` 또는 동등한 초기화 절차로 공유 상태를 리셋한다.
 
 ## Git And Collaboration
+
+### 커밋 메시지 규칙
 - 커밋 메시지는 Conventional Commits를 사용한다.
 - 권장 접두사는 `feat`, `fix`, `refactor`, `test`, `docs`, `chore`이다.
+- 각 커밋에는 해당 TODO 항목 식별자를 접두사로 붙인다.
+  - 형식: `[{TODO_ID}] {type}: {description}`
+  - 예: `[SPEC-01-01] docs: define B_07 branch workflow`
+  - 예: `[RED-02-04] test: add empty input boundary test`
+  - 예: `[REFACTOR-03-02] refactor: rename kw to analyzeKeywords`
+
+### PR 제목 및 설명
+- PR 제목에는 Phase 정보와 TODO 식별자를 포함한다.
+  - 형식: `[Phase-{n}: {PHASE}] {type}: {description} ({TODO_ID})`
+  - 예: `[Phase-0: SPEC] docs: define B_07 branch workflow (SPEC-01-01)`
+  - 예: `[Phase-2: GREEN] fix: correct neutral filter condition (GREEN-01-01)`
+- PR 본문에는 다음 항목을 포함한다:
+  - 요약 (Summary): 변경 내용의 목적과 범위
+  - 변경사항 (Changes): 수정된 파일 또는 추가된 기능
+  - 검증 (Verification): 빌드/테스트 여부 및 결과
+  - 다음 단계 (Next Steps): 후속 TODO 항목
+
+### 협업 흐름
 - 원격 저장소에 직접 병합하는 흐름보다 PR 기반 협업을 전제로 변경 내역을 설명 가능하게 유지한다.
+- 각 단계별 브랜치(`spec`, `red`, `green`, `refactor`, `feature`, `final`)의 변경 사항을 B_07으로 PR을 생성한다.
+- PR 검토 후 B_07에 병합하고, 최종적으로 B_07에서 main으로 병합한다.
+- **자동 커밋/푸시 워크플로우:**
+  - 각 TODO 항목(`/run` 스킬) 완료 후 자동으로 다음을 수행한다:
+    1. 변경된 파일 목록 및 커밋 메시지 사전 안내
+    2. 사용자 승인 후 커밋 실행
+    3. 커밋 해시 및 메시지 확인
+    4. 사용자 승인 후 origin 푸시 실행
+    5. 푸시 성공 확인
+  - 커밋 메시지는 `[{TODO_ID}] {type}: {description}` 형식을 자동으로 생성한다.
+  - 푸시 후 STATUS_SNAPSHOT.md를 갱신하여 다음 세션이 최신 상태를 인식하도록 한다.
 
 ## Documentation Outputs
 - `Cursor AI_퀴즈 - 문제.docx`는 과제물 제출 결과 파일이므로 반드시 루트 폴더에 유지한다.
@@ -78,7 +115,15 @@
   - `refs/legacy/`: 현재 운영 기준에서는 밀려난 이전 지침, 도구별 지침, 변경 전 기준본을 보관한다.
 - `docs`, `prompts`, `reports` 폴더는 평가 근거가 되는 핵심 결과물 영역으로 취급한다.
 - `prompts/`는 단계별 실행용 상세 프롬프트 정의를 저장한다.
-- `reports/`는 단계별 프롬프트 실행 결과 요약을 저장한다. 결과 파일명은 대응 프롬프트 파일명과 같은 본문 이름을 사용하고 접미사만 `-report.md`로 작성한다.
+- `reports/`는 단계별 프롬프트 실행 결과 요약을 저장한다. **각 TODO 항목(`/run` 스킬 호출)이 완료되면 대응하는 실행 보고서를 자동으로 생성한다.** 결과 파일명은 대응 프롬프트 파일명과 같은 본문 이름을 사용하고 접미사만 `-report.md`로 작성한다. 예: `prompts/phase-0_spec/spec-01-02_document_build_and_test_commands-prompt.md` → `reports/phase-0_spec/spec-01-02_document_build_and_test_commands-report.md`.
+  - **보고서 생성 규칙:**
+    - 실행 날짜 및 작업 항목 ID
+    - 목표 (Goal): 해당 TODO 항목의 목표
+    - 수행 작업 (Changes): 생성된 문서, 수정된 코드, 추가된 테스트 등
+    - 생성된 산출물 (Outputs): 파일 목록 및 설명
+    - 검증 결과 (Verification): 빌드/테스트 실행 여부, 결과 요약
+    - 다음 단계 (Next Steps): 추천 TODO 항목 및 실행 명령
+    - 요약 (Summary): 작업 완료 여부 및 핵심 결과
 - `docs/`는 phase 종료 시점 문서를 저장한다. phase 문서 파일명은 `phase-{n}_{phase}-document.md` 형식을 사용하며 번호는 0 기반(`phase-0`~`phase-5`)으로 관리한다.
 - `prompts/` 파일명 규칙은 `{todo_id_lower}_{slug_lower}-prompt.md`를 사용한다.
 - 분석/리팩토링/기능 추가 작업이 크다면 `docs/` 문서(`docs/analysis.md`, `docs/bug_fix.md`, `docs/refactoring.md`, `docs/feature.md`, `docs/final.md`)와의 정합성을 확인한다. 이 5종 문서는 TODO 요구 산출물로 유지한다.
