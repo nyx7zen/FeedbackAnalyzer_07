@@ -52,19 +52,9 @@ feedback_analyzer_cpp/
 │   ├── Constants.h/cpp     # 상수 정의
 │   └── FileHandler.h       # 파일 처리
 ├── CMakeLists.txt          # CMake 빌드 설정
-├── prompts/                # 단계별 실행 프롬프트 결과물
-├── reports/                # 프롬프트 실행 결과 요약 결과물
-├── docs/                   # phase 종료 문서 및 단계 산출물
-├── refs/
-│   └── project_purpose.md  # 프로젝트 목적 문서
+├── project_purpose.md      # 프로젝트 목적 문서
 └── README.md               # 프로젝트 설명
 ```
-
-## 결과물 네이밍 규칙
-
-- `prompts/`: `{todo_id_lower}_{slug_lower}-prompt.md`
-- `reports/`: `{todo_id_lower}_{slug_lower}-report.md`
-- `docs/`: `phase-{n}_{phase}-document.md` (`n`은 0 기반)
 
 ## 사용 방법
 

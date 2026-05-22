@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(python -c ' *)",
-      "PowerShell(python --version)",
-      "PowerShell(& \"C:\\\\WinPython\\\\WPy64-312101\\\\python\\\\python.exe\" \"c:\\\\DEV\\\\week2_day4\\\\FeedbackAnalyzer_07\\\\_parse_docx.py\")"
-    ]
-  }
-}

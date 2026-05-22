@@ -1,0 +1,120 @@
+
+## Unit Converter (C++)
+![unit-converter](./unit-converter.jpg)
+### Overview
+- 사용자가 입력한 길이(`단위:값`)를 기반으로, 해당 값을 다른 모든 단위로 변환해 출력하는 프로그램.
+- 새로운 단위를 추가할 때 기존 코드의 변경이 최소화되도록 설계한다.
+- 각 단위 변환 로직은 테스트 코드로 검증한다.
+
+### 빌드 및 실행
+```bash
+g++ -o UnitConverter UnitConverter.cpp
+./UnitConverter
+```
+
+### 기본 요구사항
+1. 사용자 입력 예시:
+   ```
+   meter:2.5
+   ```
+   → 출력:
+   ```
+   2.5 meter = 8.2 feet
+   2.5 meter = 2.7 yard
+   ...
+   ```
+
+2. 현재 지원 단위:
+   - meter
+   - feet
+   - yard
+
+3. 새로운 단위가 추가될 때도 기존 코드의 변경이 최소화되도록 할 것.
+
+4. 각 단위 간 변환이 정확히 계산되도록 테스트 코드를 작성할 것.
+
+### 비즈니스 로직
+- `1 meter = 3.28084 feet`
+- `1 meter = 1.09361 yard`
+- feet/yard 간의 비율은 meter 기반으로 계산.
+
+### 품질 요구사항
+- OCP를 만족하는 설계
+- SRP를 만족하는 클래스 구성
+- 입력 값 검증 (음수, 잘못된 형식, 없는 단위)
+
+### 추가 요구사항
+- **설정 외부화**
+   - 변환 비율을 외부 설정 파일(JSON/YAML)에서 로드
+- **동적으로 단위와 비율을 등록할 수 있도록 한다**
+   - 사용자 입력으로 `1 cubit = 0.4572 meter`를 등록하고 사용 가능
+- **출력 포맷 선택 기능** 
+   - JSON / CSV / 표 형태 출력
+
+
+## RED 단계 To-Do 리스트
+> 이 체크리스트는 test_plan.md 기반으로 생성되었습니다.
+> 각 항목은 RED(실패 테스트 작성) 완료 시 체크합니다.
+
+### Track A — UI / Boundary 테스트
+- [ ] TC-A-01: 정상 입력 "meter:2.5" → 변환 결과 반환 (Happy Path)
+- [ ] TC-A-02: ":" 없는 입력 → std::invalid_argument 발생
+- [ ] TC-A-03: 음수 입력 "meter:-1.0" → std::invalid_argument 발생
+- [ ] TC-A-04: 없는 단위 "parsec:1.0" → std::invalid_argument 발생
+- [ ] TC-A-05: 소수점 파싱 실패 "meter:abc" → std::invalid_argument 발생
+- [ ] TC-A-06: 출력 포맷에 원 입력 단위·값 보존 ("2.5 meter = ...")
+- [ ] TC-A-07: value=0 경계값 처리 확인
+
+### Track B — Domain / Logic 테스트
+- [ ] TC-B-01: convert("meter", 2.5, "feet") == 8.20210 (오차 1e-5)
+- [ ] TC-B-02: convert("meter", 1.0, "yard") == 1.09361 (오차 1e-5)
+- [ ] TC-B-03: convert("feet", 1.0, "meter") == 0.30480 (역변환)
+- [ ] TC-B-04: convertAll("meter", 1.0) → 모든 등록 단위 변환 반환
+- [ ] TC-B-05: registerUnit("cubit", 0.4572) 후 변환 가능
+- [ ] TC-B-06: loadConfig(유효한 경로) → 비율 정상 로드
+- [ ] TC-B-07: loadConfig(없는 경로) → 기본값(3.28084/1.09361) 유지
+
+### 커버리지 목표
+- [ ] Domain Logic: 95%+ (gcov / lcov)
+- [ ] Boundary Layer: 85%+
+- [ ] 전체 TOTAL: 90%+
+
+### 결함 목록 연결
+- [ ] defect_list.md 생성 및 발견 결함 기록
+- [ ] 모든 결함 수정 후 회귀 테스트 통과 확인
+
+## Golden Master 회귀 안전장치
+> Refactoring 시작 전 구축. GREEN 완료 후 즉시 적용.
+
+### 기준 파일 생성
+- [ ] GM-01: golden_master_expected.txt 생성 (meter:2.5 기준 출력)
+- [ ] GM-02: feet:1.0 / yard:1.0 / meter:0.0 시나리오 추가
+- [ ] GM-03: git add tests/golden_master_expected.txt (버전 관리 포함)
+
+### 테스트 코드
+- [ ] GM-04: test_golden_master.cpp + golden_master_expected.txt 작성
+- [ ] GM-05: approve 패턴 적용 (파일 없으면 생성, 있으면 비교)
+- [ ] GM-06: CMake: add_test(NAME GoldenMaster COMMAND UnitConverter_test) → PASS 확인
+
+### CI 연동
+- [ ] GM-07: .github/workflows/golden_master.yml 작성
+- [ ] GM-08: PR 머지 차단 (required status check) 설정
+- [ ] GM-09: Refactoring 후 Golden Master 재실행 → PASS 확인
+
+## 생성형AI를 활용한 Activities (6 시간)
+
+1. 문제 코드 및 기본 요구사항 분석 (0.5시간)
+   - 기본 코드구조, 로직 이해
+2. 기본 요구사항 및 품질 요구사항 구현 (2시간)
+   - OCP를 만족하는 인터페이스 구현 
+   - SRP를 만족하도록 클래스 구현 
+   - 입력값 검증을 위한 구현
+3. TC 구현 (0.5시간)
+   - 단위변환 기능 검증 및 입력 값 검증 TC 작성 
+4. 추가 요구사항 구현 (2시간)
+   - 3개 요구사항 구현 및 TC 작성 
+5. 회고 및 발표 (1시간)
+   - 실습 목표와 달성도
+   - AI를 어떻게 활용했나? 도움이 된 순간과 한계는?
+   - TC를 추가해보면서 개선에 미친 영향, TC 작성 팁
+   - 클린코드와 리팩토링에서 느낀 장점과 어려운점

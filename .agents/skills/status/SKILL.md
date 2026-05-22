@@ -1,0 +1,131 @@
+---
+name: status
+description: Use when the user invokes $status or asks to show current Feedback Analyzer branch, phase, TODO progress, changed files, verification state, or next recommended TODO item. Reads git status plus AGENTS.md, TODO.md, and SESSION_NOTES.md to summarize project progress without making changes.
+metadata:
+  short-description: Show project progress status
+---
+
+# FeedbackAnalyzer_07 - Status Skill 지침
+
+이 스킬은 사용자가 `$status`를 호출하거나 "상태", "현재 진행 현황"을 요청할 때 프로젝트 진행 상태를 일관된 형식으로 보여주기 위한 용도다.
+
+## 프로젝트 범위
+
+- 저장소: `C:\DEV\week2_day4\FeedbackAnalyzer_07`
+- 기준 문서: `AGENTS.md`, `TODO.md`, `SESSION_NOTES.md`
+- 목적: 현재 브랜치/Phase/TODO/검증 상태를 짧고 실행 가능한 형태로 보고한다.
+
+---
+
+## 호출 예시
+
+```text
+$status
+$status final
+$status FINAL-02
+$status FINAL-02-02
+현재 진행 현황을 보여주세요
+현재 상태를 보여주세요.
+상태
+```
+
+---
+
+## 상태 수집 절차
+
+1. 먼저 `.agents/skills/status/STATUS_SNAPSHOT.md`가 있으면 직전 상태 기준으로 사용한다.
+2. 현재 `git status --short --branch` 결과와 스냅샷을 비교해 변경점(delta)만 요약한다.
+3. 사용자가 phase/prefix를 지정한 경우에만 `TODO.md`를 부분 조회해 필요한 항목만 확인한다.
+4. `SESSION_NOTES.md`에서 최신 검증 상태 1개만 확인한다.
+5. 응답 후 최신 상태를 `STATUS_SNAPSHOT.md`에 갱신한다.
+6. 원칙적으로 네트워크/원격 조회 없이 로컬 정보만 사용한다.
+
+---
+
+## 상태 출력 형식 (권장 순서)
+
+상태 요청 시 아래 항목을 가능한 한 이 순서대로 제시한다.
+
+1. 브랜치 진행 현황 (트리 블록)
+2. Working tree changes
+3. Current phase or requested phase
+4. Completed TODO items
+5. Pending TODO items
+6. 진행할 항목 (번호 테이블)
+7. Last known verification status
+8. Notes or risks
+
+TODO 항목이 많으면 전체를 나열하지 말고 요청된 Phase/접두사 주변 항목만 압축해 보여준다.
+
+브랜치 진행 현황은 아래와 같은 코드 블록 형태를 우선 사용한다.
+
+```text
+main ──●
+       └── B_07 ──●
+                  ├── spec        ──● 🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
+                  ├── red             🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
+                  ├── green           🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
+                  ├── refactor        🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
+                  ├── feature         🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
+                  └── final           🔄 작업 중 / ✅ 머지 완료 / ❌ 미생성
+```
+
+진행할 항목은 아래 테이블 형식을 우선 사용한다.
+
+| 순서 | 작업 | 방법 |
+|------|------|------|
+| 1 | 작업명 | Codex 실행 / GitHub 웹 직접 |
+| 2 | 작업명 | Codex 실행 / GitHub 웹 직접 |
+
+---
+
+## Phase 해석 규칙
+
+- `TODO.md`의 Phase 섹션명을 기준으로 현재 단계를 해석한다.
+  - `Phase-0: SPEC`
+  - `Phase-1: RED`
+  - `Phase-2: GREEN`
+  - `Phase-3: REFACTOR`
+  - `Phase-4: FEATURE`
+  - `Phase-5: FINAL`
+- 항목 식별자(`RED-02-04` 등)가 요청되면 해당 접두사 범위를 우선 요약한다.
+
+---
+
+## Guardrails
+
+- This is a read-only skill by default.
+- Do not mark checkboxes, move files, or run destructive commands.
+- Prefer `rg` and `git status --short` for quick inspection.
+- If build/test status is unknown, say so instead of guessing.
+- 상태 확인을 위해 GitHub 접속/원격 API 조회를 기본 동작으로 사용하지 않는다.
+
+---
+
+## Output Pattern
+
+답변은 짧고 실행 가능하게 유지한다. 진행률 과장이나 추측은 금지하고, 불명확한 항목은 "확인 필요"로 표시한다.
+
+---
+
+## Snapshot Format
+
+스냅샷 파일: `.agents/skills/status/STATUS_SNAPSHOT.md`
+
+권장 템플릿:
+
+```md
+# STATUS SNAPSHOT
+- UpdatedAt: YYYY-MM-DD HH:MM
+- Branch: main
+- Phase: Phase-0: SPEC
+- LastVerification: 문서 변경만 수행, 빌드/테스트 미실행
+
+## WorkingTree
+- M AGENTS.md
+- ?? .agents/
+
+## NextItems
+1. SPEC-01-01
+2. SPEC-01-02
+```
