@@ -38,7 +38,7 @@
 - [x] SPEC-02-03 `docs: analyze main coupling`
   - `main.cpp`와 핵심 도메인 로직 간 결합도를 진단한다.
   - 라우팅/UI 렌더링과 분석 로직이 섞인 영역을 식별한다.
-- [ ] SPEC-02-04 `docs: prioritize refactoring targets`
+- [x] SPEC-02-04 `docs: prioritize refactoring targets`
   - 네이밍 스멜과 중복 코드 집중 영역을 도출한다.
   - 상태 관리 문제를 포함해 개선 우선순위를 기록한다.
 
