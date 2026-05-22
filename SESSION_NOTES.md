@@ -21,6 +21,20 @@
 
 ## Session Log
 
+### 2026-05-22 16:10 - REFACTOR-01-05 감성 점수 상수 검증 완료
+- Goal: 감성 점수 관련 매직 넘버(`0.0f`, `1.0f`, `-1.0f` 등)를 식별하고 상수로 정리
+- Status: 이미 완료됨 (추가 작업 불필요)
+- Analysis:
+  - Constants.h에 `kPositiveThreshold = 1`, `kNegativeThreshold = -1` 이미 정의
+  - TextAnalyzer.cpp: 점수 비교에서 모두 Constants 상수 사용 (52줄, 55줄)
+  - Filters.cpp: 상수 참조 사용
+  - 전체 코드에 점수 관련 매직 넘버 없음
+- Verification:
+  - 빌드: 변경 없음 (기존 상태 유지)
+  - 테스트: 변경 없음 (기존 상태 유지)
+  - 코드 동작: 100% 일치
+- Next: REFACTOR-01-06 (clean duplicated sentiment keywords)
+
 ### 2026-05-22 16:00 - REFACTOR-01-04 감성 라벨 문자열 상수 추출 완료
 - Goal: `"긍정"`, `"부정"`, `"중립"` 하드코딩 문자열을 식별하고, 감성 라벨 문자열을 상수로 추출
 - Changes:

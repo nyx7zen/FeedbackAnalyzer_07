@@ -120,7 +120,7 @@
 - [x] REFACTOR-01-04 `refactor: extract sentiment labels`
   - `"긍정"`, `"부정"`, `"중립"` 하드코딩 문자열을 식별한다.
   - 감성 라벨 문자열을 `const` 또는 `static constexpr` 상수로 추출한다.
-- [ ] REFACTOR-01-05 `refactor: extract score constants`
+- [x] REFACTOR-01-05 `refactor: extract score constants`
   - `0.0f`, `1.0f` 등 감성 점수 관련 매직 넘버를 식별한다.
   - 점수 기준값을 `static constexpr` 상수로 정리한다.
 - [ ] REFACTOR-01-06 `refactor: clean duplicated sentiment keywords`

@@ -1,9 +1,9 @@
 # STATUS SNAPSHOT
-- UpdatedAt: 2026-05-22 16:05
+- UpdatedAt: 2026-05-22 16:15
 - Branch: refactor
 - Phase: Phase-3: REFACTOR
-- Status: GREEN Phase 완료, REFACTOR Phase 진행 중 (4/19 완료)
-- LastVerification: REFACTOR-01-04 완료, 빌드/테스트 통과
+- Status: GREEN Phase 완료, REFACTOR Phase 진행 중 (5/19 완료)
+- LastVerification: REFACTOR-01-05 완료, 검증 완료
 
 ## Branch Progress Tree
 ```
@@ -49,12 +49,13 @@ main
 - 목표: RED 단계 모든 테스트 통과를 위한 기능 구현
 
 ### ⏳ Phase-3: REFACTOR (진행 중)
-- 완료: 4/19 항목
-- REFACTOR-01: 명명 규칙 개선 (4/7)
+- 완료: 5/19 항목
+- REFACTOR-01: 명명 규칙 개선 및 상수화 (5/7)
   - REFACTOR-01-01: sent() → analyzeSentiment() ✅
   - REFACTOR-01-02: kw() → analyzeKeywords() ✅
   - REFACTOR-01-03: fil() → applyFilter() ✅
   - REFACTOR-01-04: extract sentiment labels ✅
+  - REFACTOR-01-05: extract score constants ✅
 
 ### ⏳ Phase-4: FEATURE (예정)
 - 완료: 0/13 항목
