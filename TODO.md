@@ -24,7 +24,7 @@
 - [x] SPEC-01-02 `docs: document build and test commands`
   - MinGW/CMake 기본 빌드 명령을 정리한다.
   - 테스트 실행 기준으로 `ctest --output-on-failure` 사용 방식을 기록한다.
-- [ ] SPEC-01-03 `docs: align project instructions`
+- [x] SPEC-01-03 `docs: align project instructions`
   - `AGENTS.md`, `refs/legacy/guide.md`, `refs/legacy/GEMINI.md`의 작업 지침을 확인한다.
   - 기존 문서와 TODO 항목이 충돌하지 않도록 기준을 맞춘다.
 
