@@ -117,7 +117,7 @@
 - [x] REFACTOR-01-03 `refactor: rename fil to applyFilter`
   - `fil()` 선언부와 호출부를 찾는다.
   - 의미가 분명한 `applyFilter()` 이름으로 변경한다.
-- [ ] REFACTOR-01-04 `refactor: extract sentiment labels`
+- [x] REFACTOR-01-04 `refactor: extract sentiment labels`
   - `"긍정"`, `"부정"`, `"중립"` 하드코딩 문자열을 식별한다.
   - 감성 라벨 문자열을 `const` 또는 `static constexpr` 상수로 추출한다.
 - [ ] REFACTOR-01-05 `refactor: extract score constants`

@@ -21,6 +21,25 @@
 
 ## Session Log
 
+### 2026-05-22 16:00 - REFACTOR-01-04 감성 라벨 문자열 상수 추출 완료
+- Goal: `"긍정"`, `"부정"`, `"중립"` 하드코딩 문자열을 식별하고, 감성 라벨 문자열을 상수로 추출
+- Changes:
+  - `src/cpp/Constants.h`: 감성 라벨 상수 확인 (이미 정의됨)
+    - `kSentimentPositive = "긍정"`
+    - `kSentimentNeutral = "중립"`
+    - `kSentimentNegative = "부정"`
+    - `kFilterAll = "전체"`
+  - `src/cpp/main.cpp`: HTML select 옵션 160-162줄, 159줄 변경
+    - 하드코딩 문자열 → Constants 상수 참조로 변경
+- Decisions:
+  - Constants.h에 감성 라벨 상수가 이미 정의되어 있음
+  - main.cpp의 HTML 렌더링에서만 상수 참조로 변경 필요
+  - "전체" 필터도 Constants::kFilterAll로 통일
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 통과: `ctest` (1/1 smoke_test PASSED) ✓
+- Next: REFACTOR-01-05 (extract score constants)
+
 ### 2026-05-22 15:40 - REFACTOR-01-03 fil() to applyFilter() 함수명 변경 완료
 - Goal: `fil()` 함수명을 `applyFilter()`로 변경해 필터 적용 책임을 명확히 한다.
 - Changes:

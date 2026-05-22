@@ -156,10 +156,10 @@ static std::string renderPage(const std::string& success,
             <div class="form-group">
                 <label for="sentiment">)" << u8"감정 필터:" << R"(</label>
                 <select id="sentiment" name="sentiment">
-                    <option value=")" << u8"전체" << R"(">)" << u8"전체" << R"(</option>
-                    <option value=")" << u8"긍정" << R"(">)" << u8"긍정" << R"(</option>
-                    <option value=")" << u8"중립" << R"(">)" << u8"중립" << R"(</option>
-                    <option value=")" << u8"부정" << R"(">)" << u8"부정" << R"(</option>
+                    <option value=")" << Constants::kFilterAll << R"(">)" << Constants::kFilterAll << R"(</option>
+                    <option value=")" << Constants::kSentimentPositive << R"(">)" << Constants::kSentimentPositive << R"(</option>
+                    <option value=")" << Constants::kSentimentNeutral << R"(">)" << Constants::kSentimentNeutral << R"(</option>
+                    <option value=")" << Constants::kSentimentNegative << R"(">)" << Constants::kSentimentNegative << R"(</option>
                 </select>
             </div>
             <div class="form-group">
