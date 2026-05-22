@@ -35,13 +35,15 @@ FEATURE-02-02 항목을 진행해 주세요
 3. If `INDEX.md` cannot be read or mapping is missing, read `.agents/skills/status/STATUS_SNAPSHOT.md` and map `N` to `NextItems` entry.
 4. Locate the resolved identifier in `TODO.md`.
 5. Treat the checkbox line as the intended commit message and the nested bullets as the exact task scope.
-6. Inspect relevant source, tests, and docs before editing.
-7. Keep changes limited to the requested item unless a direct prerequisite is required.
-8. Apply code or document changes following existing repository style.
-9. Run relevant build/tests when the task changes code or tests. If only documents changed, state that build/tests were not run.
-10. Update the requested checkbox in `TODO.md` only when the item is genuinely complete.
-11. Update `SESSION_NOTES.md` for meaningful code, document, config, or structure changes.
-12. Final response must summarize changed files, verification, and any remaining risk.
+6. Read the corresponding prompt document from `prompts/` directory (e.g., `prompts/RED-01-01.md`).
+7. Execute the prompt and perform all required tasks.
+8. Inspect relevant source, tests, and docs before editing.
+9. Keep changes limited to the requested item unless a direct prerequisite is required.
+10. Apply code or document changes following existing repository style.
+11. Run relevant build/tests when the task changes code or tests. If only documents changed, state that build/tests were not run.
+12. **Automatically update the requested checkbox in `TODO.md` from `[ ]` to `[x]` when the item work is complete** (commit message from prompt is used for git commit).
+13. Update `SESSION_NOTES.md` for meaningful code, document, config, or structure changes.
+14. Final response must summarize changed files, verification, and any remaining risk.
 
 ## Guardrails
 
