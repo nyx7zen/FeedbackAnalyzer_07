@@ -45,6 +45,7 @@
 - 의미 있는 코드 변경, 문서 생성, 인코딩 변경, 설정 변경이 발생하면 루트의 `SESSION_NOTES.md`에 세션 로그를 함께 갱신한다.
 - 문서 변경만 수행한 경우 빌드/테스트를 실행하지 않았음을 명시한다.
 - **각 TODO 항목 완료 후, 해당 프롬프트 파일에 대응하는 실행 보고서를 `reports/` 폴더에 자동으로 생성한다.** 보고서 파일명은 프롬프트 파일명과 동일하되 접미사만 `-prompt.md`에서 `-report.md`로 변경한다. 예: `spec-01-02_document_build_and_test_commands-prompt.md` → `spec-01-02_document_build_and_test_commands-report.md`. 보고서에는 실행 날짜, 작업 항목, 목표, 수행 작업, 생성된 산출물, 검증 결과, 다음 단계 등을 포함한다.
+- **각 단계의 마지막 TODO 항목 완료 후, 사용자에게 `docs/` 폴더에 Phase 레벨 최종 보고서 생성 여부를 확인 요청한다.** 생성 시 파일명은 `docs/phase-{number}_{phase_name}-summary.md` 형식을 사용한다. 예: `docs/phase-0_spec-summary.md`, `docs/phase-1_red-summary.md`. 최종 보고서에는 단계 목표, 완료 항목 요약, 핵심 발견사항, 다음 단계, 참고 자료 등을 포함한다.
 - **각 TODO 항목 완료 후 자동으로 커밋 및 푸시를 수행한다. 각 단계에서 사용자의 명시적 승인을 받은 후 진행한다:**
   - 커밋 단계: 변경 파일 목록과 커밋 메시지(`[{TODO_ID}] {type}: {description}`)를 표시하고 사용자 확인 요청
   - 푸시 단계: 현재 브랜치를 origin으로 푸시하기 전 사용자 확인 요청
