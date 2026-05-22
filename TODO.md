@@ -32,7 +32,7 @@
 - [x] SPEC-02-01 `docs: add architecture analysis`
   - `docs/analysis.md`를 작성한다.
   - 현재 구조의 주요 리팩토링 위험과 개선 방향을 요약한다.
-- [ ] SPEC-02-02 `docs: analyze global state risks`
+- [x] SPEC-02-02 `docs: analyze global state risks`
   - 전역 static 변수 사용 지점을 조사한다.
   - 테스트 격리 실패 위험성을 분석해 `docs/analysis.md`에 기록한다.
 - [ ] SPEC-02-03 `docs: analyze main coupling`
