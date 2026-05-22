@@ -64,9 +64,31 @@
 - 테스트는 서로 독립적이어야 하며, `SetUp`/`TearDown` 또는 동등한 초기화 절차로 공유 상태를 리셋한다.
 
 ## Git And Collaboration
+
+### 커밋 메시지 규칙
 - 커밋 메시지는 Conventional Commits를 사용한다.
 - 권장 접두사는 `feat`, `fix`, `refactor`, `test`, `docs`, `chore`이다.
+- 각 커밋에는 해당 TODO 항목 식별자를 접두사로 붙인다.
+  - 형식: `[{TODO_ID}] {type}: {description}`
+  - 예: `[SPEC-01-01] docs: define B_07 branch workflow`
+  - 예: `[RED-02-04] test: add empty input boundary test`
+  - 예: `[REFACTOR-03-02] refactor: rename kw to analyzeKeywords`
+
+### PR 제목 및 설명
+- PR 제목에는 Phase 정보와 TODO 식별자를 포함한다.
+  - 형식: `[Phase-{n}: {PHASE}] {type}: {description} ({TODO_ID})`
+  - 예: `[Phase-0: SPEC] docs: define B_07 branch workflow (SPEC-01-01)`
+  - 예: `[Phase-2: GREEN] fix: correct neutral filter condition (GREEN-01-01)`
+- PR 본문에는 다음 항목을 포함한다:
+  - 요약 (Summary): 변경 내용의 목적과 범위
+  - 변경사항 (Changes): 수정된 파일 또는 추가된 기능
+  - 검증 (Verification): 빌드/테스트 여부 및 결과
+  - 다음 단계 (Next Steps): 후속 TODO 항목
+
+### 협업 흐름
 - 원격 저장소에 직접 병합하는 흐름보다 PR 기반 협업을 전제로 변경 내역을 설명 가능하게 유지한다.
+- 각 단계별 브랜치(`spec`, `red`, `green`, `refactor`, `feature`, `final`)의 변경 사항을 B_07으로 PR을 생성한다.
+- PR 검토 후 B_07에 병합하고, 최종적으로 B_07에서 main으로 병합한다.
 
 ## Documentation Outputs
 - `Cursor AI_퀴즈 - 문제.docx`는 과제물 제출 결과 파일이므로 반드시 루트 폴더에 유지한다.

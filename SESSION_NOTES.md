@@ -21,6 +21,25 @@
 
 ## Session Log
 
+### 2026-05-22 15:30 - PR/커밋 메시지 규칙 정규화 및 AGENTS.md 반영
+- Goal: B_07 브랜치 통합을 위한 PR과 커밋 메시지 형식을 표준화하고 지침에 반영한다.
+- Changes:
+  - B_07 브랜치를 origin에 push했다. (git push origin B_07)
+  - spec → B_07 PR을 생성했다. (PR 제목: `[Phase-0: SPEC] define B_07 branch workflow (SPEC-01-01)`)
+  - PR 제목을 `[Phase-{n}: {PHASE}] {type}: {description} ({TODO_ID})` 형식으로 정규화했다.
+  - git filter-branch를 사용하여 spec 브랜치의 모든 커밋 메시지에 [SPEC-01-01] 접두사를 추가했다.
+  - 3개 커밋 메시지 수정 후 origin/spec에 force push했다.
+  - AGENTS.md의 "Git And Collaboration" 섹션을 확장하여 커밋 메시지 규칙과 PR 제목 규칙을 명시했다.
+- Decisions:
+  - 커밋 메시지 형식: `[{TODO_ID}] {type}: {description}`
+  - PR 제목 형식: `[Phase-{n}: {PHASE}] {type}: {description} ({TODO_ID})`
+  - Phase와 TODO_ID는 모든 git 기록에 함께 기록되어 추적 가능성을 높인다.
+- Verification:
+  - PR이 자동으로 갱신되어 최신 커밋 메시지가 반영되었음을 확인했다.
+  - AGENTS.md에 규칙이 명확하게 기록되었다.
+  - 빌드/테스트는 실행하지 않았다 (문서 변경만 수행).
+- Next: SPEC-01-02 (빌드/테스트 명령 문서화)로 진행.
+
 ### 2026-05-22 14:05 - SPEC-01-01 B_07 브랜치 워크플로우 정의 완료
 - Goal: B_07 실습 통합 브랜치를 기준으로 단계별 작업 흐름과 병합 순서를 문서로 정리한다.
 - Changes: `docs/b07-branch-workflow.md` 파일을 생성했고 B_07 브랜치 계층, 단계별 목적, 병합 흐름, 작업 사이클, 항목 식별자 규칙, 상태 추적, 산출물 위치 등을 상세히 기록했다. `TODO.md`의 SPEC-01-01 항목을 완료 상태로 체크했다.
