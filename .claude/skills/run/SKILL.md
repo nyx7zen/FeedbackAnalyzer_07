@@ -20,5 +20,8 @@ For the complete skill definition, workflow, guardrails, and output patterns, se
 4. Apply changes per TODO scope
 5. Run build/tests if code changes
 6. Update TODO checkbox and SESSION_NOTES.md
+7. **Generate execution report:** Create `reports/{phase_folder}/{todo_id_lower}_{slug_lower}-report.md` documenting goal, changes, verification, and next steps
+8. **Stage & commit (with user approval):** Show files and commit message `[{TODO_ID}] {type}: {description}`, request confirmation
+9. **Push to origin (with user approval):** Show push command and request confirmation
 
 See [.agents/skills/run/SKILL.md](../../.agents/skills/run/SKILL.md) for full details.

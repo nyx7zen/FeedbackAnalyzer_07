@@ -21,6 +21,22 @@
 
 ## Session Log
 
+### 2026-05-22 16:20 - SPEC-01-02 커밋/푸시 완료
+- Goal: SPEC-01-02 작업(빌드/테스트 명령 문서화) 결과를 커밋하고 원격 저장소에 푸시한다.
+- Changes:
+  - `docs/build-and-test.md`: 빌드 및 테스트 명령 상세 가이드 파일
+  - `reports/phase-0_spec/spec-01-02_document_build_and_test_commands-report.md`: SPEC-01-02 실행 보고서
+  - `TODO.md`: SPEC-01-02 체크박스 완료 표시
+  - `SESSION_NOTES.md`: SPEC-01-02 관련 세션 로그 기록
+- Decisions:
+  - 커밋 해시: `173009f` (4c4664a → 173009f)
+  - 커밋 메시지: `[SPEC-01-02] docs: document build and test commands`
+  - 푸시 대상: `origin spec`
+- Verification:
+  - 커밋 성공: 4 파일 변경, 399 insertions
+  - 푸시 성공: spec 브랜치 정상 업로드
+- Next: SPEC-01-03 (프로젝트 지침 정렬) 또는 추가 지침 커밋 진행
+
 ### 2026-05-22 16:15 - 프롬프트 실행 후 커밋/푸시 자동화 지침 추가
 - Goal: 각 TODO 항목 완료 후 자동으로 커밋 및 푸시가 수행되도록 지침을 명시하되, 각 단계에서 사용자의 명시적 승인을 받도록 한다.
 - Changes:
