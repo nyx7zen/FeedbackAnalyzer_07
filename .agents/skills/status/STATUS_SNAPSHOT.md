@@ -49,9 +49,10 @@ main
 - 목표: RED 단계 모든 테스트 통과를 위한 기능 구현
 
 ### ⏳ Phase-3: REFACTOR (진행 중)
-- 완료: 1/19 항목
-- REFACTOR-01: 명명 규칙 개선 (1/7)
+- 완료: 2/19 항목
+- REFACTOR-01: 명명 규칙 개선 (2/7)
   - REFACTOR-01-01: sent() → analyzeSentiment() ✅
+  - REFACTOR-01-02: kw() → analyzeKeywords() ✅
 
 ### ⏳ Phase-4: FEATURE (예정)
 - 완료: 0/13 항목
@@ -83,7 +84,9 @@ Success Rate: 100%
 
 ## Recent Git Log
 ```
+26a88ac [REFACTOR-01-02] refactor: rename kw to analyzeKeywords
 f0ea12f [REFACTOR-01-01] refactor: rename sent to analyzeSentiment
+173fc37 [REFACTOR-01-01] docs: update status snapshot
 ea99d41 [RED-02-04/06] test: add neutral filter and session isolation tests
 42a5fd7 [RED-02-02/03/05] test: add special character, mixed sentiment, and filter combination tests
 a694667 [RED-02-01] test: add empty input boundary test
