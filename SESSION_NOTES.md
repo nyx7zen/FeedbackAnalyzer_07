@@ -21,6 +21,23 @@
 
 ## Session Log
 
+### 2026-05-22 15:30 - REFACTOR-01-01 sent() to analyzeSentiment() 함수명 변경 완료
+- Goal: `sent()` 함수명을 `analyzeSentiment()`로 변경해 의미를 명확히 한다.
+- Changes:
+  - `src/cpp/main.cpp`: 2개 호출부 변경
+    - Line 274: `textAnalyzer.sent(feedbacks)` → `textAnalyzer.analyzeSentiment(feedbacks)`
+    - Line 333: `textAnalyzer.sent(filtered)` → `textAnalyzer.analyzeSentiment(filtered)`
+  - `TODO.md`: REFACTOR-01-01 체크박스 완료 표시
+- Decisions:
+  - 함수 선언/정의는 이미 `analyzeSentiment()`로 변경되어 있음 (TextAnalyzer.h/cpp)
+  - 호출부만 업데이트하면 됨
+  - 함수명 변경 외 동작 변경 없음
+- Verification:
+  - 빌드 성공: `cmake --build build` ✓
+  - 테스트 통과: `ctest --test-dir build --output-on-failure` (1/1 tests passed) ✓
+  - 함수 호출 일관성 확인 ✓
+- Next: REFACTOR-01-02 (rename kw to analyzeKeywords)
+
 ### 2026-05-22 15:05 - GREEN-01-01 중립 필터 조건 검증 완료
 - Goal: RED-02-04 중립 필터 테스트가 통과하도록 `src/Filters.cpp`의 중립 필터 판정 로직 검증 및 필요시 수정
 - Changes:

@@ -108,7 +108,7 @@
 ## Phase-3: REFACTOR
 
 ### 명명 규칙 개선 및 매직 넘버 상수화
-- [ ] REFACTOR-01-01 `refactor: rename sent to analyzeSentiment`
+- [x] REFACTOR-01-01 `refactor: rename sent to analyzeSentiment`
   - `sent()` 선언부와 호출부를 찾는다.
   - 의미가 분명한 `analyzeSentiment()` 이름으로 변경한다.
 - [ ] REFACTOR-01-02 `refactor: rename kw to analyzeKeywords`
