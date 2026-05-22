@@ -707,6 +707,96 @@ int main() {
         }
     }
 
+    // Test 25: Count positive keywords directly (FEATURE-01-02)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_count_all_positive_keywords_in_text" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = u8"좋아요 만족 감사 좋아요";  // 4 positive keyword occurrences
+            int count = fixture.analyzer.getPositiveKeywordCount(text);
+            if (count == 4) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected 4 but got " << count << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 26: Count negative keywords directly (FEATURE-01-02)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_count_all_negative_keywords_in_text" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = u8"별로 실망 불만 별로";  // 4 negative keyword occurrences
+            int count = fixture.analyzer.getNegativeKeywordCount(text);
+            if (count == 4) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected 4 but got " << count << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 27: Mixed text with both positive and negative keywords (FEATURE-01-02)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_count_positive_and_negative_keywords_separately" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = u8"좋아요 만족 별로 실망 좋아요";  // 3 positive, 2 negative
+            int positiveCount = fixture.analyzer.getPositiveKeywordCount(text);
+            int negativeCount = fixture.analyzer.getNegativeKeywordCount(text);
+            if (positiveCount == 3 && negativeCount == 2) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected positive=3, negative=2 but got positive=" << positiveCount << ", negative=" << negativeCount << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
+    // Test 28: Empty text returns zero counts (FEATURE-01-02)
+    {
+        std::cout << "[TEST] TextAnalyzerTest::should_return_zero_when_counting_keywords_in_empty_text" << std::endl;
+        TextAnalyzerFixture fixture;
+        fixture.SetUp();
+        try {
+            std::string text = "";
+            int positiveCount = fixture.analyzer.getPositiveKeywordCount(text);
+            int negativeCount = fixture.analyzer.getNegativeKeywordCount(text);
+            if (positiveCount == 0 && negativeCount == 0) {
+                std::cout << "[PASS]" << std::endl;
+                passed++;
+            } else {
+                std::cout << "[FAIL] - Expected 0, 0 but got " << positiveCount << ", " << negativeCount << std::endl;
+                failed++;
+            }
+            fixture.TearDown();
+        } catch (const std::exception& e) {
+            std::cout << "[FAIL] - Exception: " << e.what() << std::endl;
+            failed++;
+        }
+    }
+
     // Summary
     std::cout << "\n========================================" << std::endl;
     std::cout << "Total: " << (passed + failed) << " tests" << std::endl;

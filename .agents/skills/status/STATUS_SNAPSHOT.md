@@ -1,9 +1,9 @@
 # STATUS SNAPSHOT
-- UpdatedAt: 2026-05-22 18:30
+- UpdatedAt: 2026-05-22 18:45
 - Branch: feature
 - Phase: Phase-4: FEATURE
-- Status: REFACTOR Phase 완료, FEATURE Phase 진행 중 (1/13 완료)
-- LastVerification: FEATURE-01-01 완료, 모든 테스트 통과
+- Status: REFACTOR Phase 완료, FEATURE Phase 진행 중 (2/13 완료)
+- LastVerification: FEATURE-01-02 완료, 모든 테스트 통과 (28/28)
 
 ## Branch Progress Tree
 ```
@@ -79,22 +79,27 @@ main
   - REFACTOR-03-06: add refactoring report ✅
 
 ### ⏳ Phase-4: FEATURE (진행 중)
-- 완료: 1/13 항목
-- FEATURE-01: 가중치 기반 감성 스코어링 (1/5)
+- 완료: 2/13 항목
+- FEATURE-01: 가중치 기반 감성 스코어링 (2/5)
   - FEATURE-01-01: 가중치 감성 스코어링 테스트 추가 ✅ 완료
     - 6개 새로운 테스트 추가 (Tests 19-24)
     - 긍정/부정 키워드 우세, 균형, 반복, 극단적 비율 시나리오 포함
     - 모든 테스트 통과: 24/24 ✅
+  - FEATURE-01-02: 긍정/부정 키워드 카운트 공개 API ✅ 완료
+    - `getPositiveKeywordCount()` 메서드 추가
+    - `getNegativeKeywordCount()` 메서드 추가
+    - 4개 새로운 테스트 추가 (Tests 25-28)
+    - 모든 테스트 통과: 28/28 ✅
 
 ### ⏳ Phase-5: FINAL (예정)
 - 완료: 0/8 항목
 
 ## Test Results
 
-### Current Test Summary (FEATURE-01-01 완료 후)
+### Current Test Summary (FEATURE-01-02 완료 후)
 ```
-Total Tests: 24
-Passed: 24 ✅
+Total Tests: 28
+Passed: 28 ✅
 Failed: 0
 Success Rate: 100%
 ```
@@ -125,6 +130,11 @@ Success Rate: 100%
   - 반복 출현 (3x positive vs 1x negative)
   - 극단적 긍정 (5 vs 1)
   - 극단적 부정 (1 vs 5)
+- 공개 API 테스트: 4개 ✅ (FEATURE-01-02)
+  - 긍정 키워드 누적 카운트 (4개 확인)
+  - 부정 키워드 누적 카운트 (4개 확인)
+  - 긍정/부정 분리 카운트 (3 vs 2 확인)
+  - 빈 입력 처리 (0, 0 확인)
 
 ## Recent Git Log
 ```
@@ -143,11 +153,18 @@ b856475 [RED-01-02] test: add text analyzer fixture
 
 ## Notes
 - REFACTOR Phase 전체 완료: 명명 규칙 개선, 중복 제거, 상태 관리 현대화
+- FEATURE Phase 진행 상황:
+  - FEATURE-01-01: 가중치 감성 스코어링 테스트 ✅
+  - FEATURE-01-02: 공개 API (getPositiveKeywordCount, getNegativeKeywordCount) ✅
 - 현재 구현의 특징:
   - calculateSentimentScore()가 모든 키워드의 누적 카운트 지원 (첫 키워드 종료 아님)
+  - TextUtils::countKeywordOccurrences()가 반복 출현 포함 정확하게 카운트
   - 점수 = 긍정 개수 - 부정 개수 기반 감성 판정
   - 임계값: >= 1 (긍정), <= -1 (부정), 나머지 (중립)
-- FEATURE Phase 시작: 가중치 기반 감성 스코어링 테스트 완료
-- 모든 테스트 통과: 24/24 tests passed, 100% success rate ✅
+- 공개 API의 역할:
+  - getPositiveKeywordCount(): 긍정 키워드 총 개수 반환
+  - getNegativeKeywordCount(): 부정 키워드 총 개수 반환
+  - 후속 FEATURE-01-03에서 상대 점수 계산에 활용 가능
+- 모든 테스트 통과: 28/28 tests passed, 100% success rate ✅
 - Session 상태 관리: 저장소 맵 기반 다중 세션 격리 완벽 구현
-- 다음 단계: FEATURE-01-02 (count positive and negative keywords) 또는 추가 기능 구현
+- 다음 단계: FEATURE-01-03 (calculate relative sentiment score)

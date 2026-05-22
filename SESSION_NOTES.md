@@ -21,6 +21,37 @@
 
 ## Session Log
 
+### 2026-05-22 18:45 - FEATURE-01-02 긍정/부정 키워드 카운트 공개 API 완료
+- Goal: 긍정/부정 단어 빈도 누적 카운트 기능을 공개 API로 노출
+- Changes:
+  - `TextAnalyzer::getPositiveKeywordCount()` 메서드 추가
+  - `TextAnalyzer::getNegativeKeywordCount()` 메서드 추가
+  - 내부 헬퍼 함수 2개 추가 (getPositiveKeywordCountHelper, getNegativeKeywordCountHelper)
+  - `tests/TextAnalyzerTest.cpp`에 4개 테스트 추가 (Tests 25-28)
+- Key Findings:
+  - 기존 구현이 이미 첫 키워드 조기 종료 없이 전체 문장 순회
+  - `TextUtils::countKeywordOccurrences()`가 모든 키워드 누적 카운트 수행
+  - 반복 출현 키워드도 횟수만큼 정확하게 카운트
+- Implementation Details:
+  - 공개 메서드가 내부 헬퍼를 호출하는 구조
+  - Constants::SENTIMENT_KEYWORDS를 활용한 키워드 사전 사용
+  - 빈 문자열 처리: 0 반환
+  - 혼합 텍스트: 긍정/부정 분리 카운트
+- Verification:
+  - 빌드 성공 ✓
+  - 테스트 통과: 28/28 passed (Tests 25-28 신규 포함) ✓
+  - Test 25: 긍정 키워드 누적 (4개 확인) ✓
+  - Test 26: 부정 키워드 누적 (4개 확인) ✓
+  - Test 27: 긍정/부정 분리 (3 vs 2 확인) ✓
+  - Test 28: 빈 입력 처리 (0, 0 확인) ✓
+  - 기존 기능 회귀: 없음 (1-24번 테스트 모두 통과) ✓
+- Outputs:
+  - `src/cpp/TextAnalyzer.h`: 2개 공개 메서드 선언
+  - `src/cpp/TextAnalyzer.cpp`: 4개 함수 구현
+  - `tests/TextAnalyzerTest.cpp`: 4개 테스트 추가
+  - `reports/phase-4_feature/feature-01-02_count_positive_and_negative_keywords-report.md`: 실행 보고서
+- Next: FEATURE-01-03 (calculate relative sentiment score)
+
 ### 2026-05-22 18:30 - FEATURE-01-01 가중치 기반 감성 스코어링 테스트 추가 완료
 - Goal: 긍정/부정 단어 빈도 누적 기준 테스트를 작성하고 기존 첫 키워드 종료 로직의 한계 드러내기
 - Changes:

@@ -28,4 +28,18 @@ public:
      * @return 긍정, 중립, 부정 중 하나의 감성 라벨
      */
     std::string detectSentiment(const std::string& text) const;
+
+    /**
+     * @brief 텍스트에서 긍정 키워드의 누적 출현 횟수를 계산합니다.
+     * @param text 분석할 텍스트
+     * @return 긍정 키워드 총 출현 횟수
+     */
+    int getPositiveKeywordCount(const std::string& text) const;
+
+    /**
+     * @brief 텍스트에서 부정 키워드의 누적 출현 횟수를 계산합니다.
+     * @param text 분석할 텍스트
+     * @return 부정 키워드 총 출현 횟수
+     */
+    int getNegativeKeywordCount(const std::string& text) const;
 };

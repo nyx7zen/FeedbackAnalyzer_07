@@ -174,7 +174,7 @@
 - [x] FEATURE-01-01 `test: add weighted sentiment scoring tests`
   - 긍정/부정 단어 빈도 누적 기준 테스트를 작성한다.
   - 기존처럼 첫 키워드에서 종료되는 로직의 한계를 드러낸다.
-- [ ] FEATURE-01-02 `feat: count positive and negative keywords`
+- [x] FEATURE-01-02 `feat: count positive and negative keywords`
   - 단순히 첫 키워드에서 종료되는 로직을 폐기한다.
   - 문장 전체를 순회하며 긍정/부정 단어 빈도를 누적 카운트한다.
 - [ ] FEATURE-01-03 `feat: calculate relative sentiment score`
