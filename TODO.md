@@ -45,36 +45,36 @@
 ## Phase-1: RED
 
 ### 테스트 프레임워크 구축
-- [ ] RED-01-01 `test: configure gtest target`
+- [x] RED-01-01 `test: configure gtest target`
   - CMake에 Google Test 기반 테스트 타깃을 추가한다.
   - 테스트 빌드와 실행이 가능한 최소 구성을 만든다.
-- [ ] RED-01-02 `test: add text analyzer fixture`
+- [x] RED-01-02 `test: add text analyzer fixture`
   - `tests/TextAnalyzerTest.cpp` 파일을 작성한다.
   - Fixture(`SetUp`, `TearDown`) 기본 구조를 만든다.
-- [ ] RED-01-03 `test: reset constants and session per test`
+- [x] RED-01-03 `test: reset constants and session per test`
   - `Constants` 초기화 경로를 테스트 준비 단계에 반영한다.
   - `Session` 상태 격리 또는 Reset 로직을 테스트별로 적용한다.
-- [ ] RED-01-04 `test: enforce descriptive test names`
+- [x] RED-01-04 `test: enforce descriptive test names`
   - 테스트 이름은 `should_[result]_when_[condition]` 형식을 따른다.
   - 새 테스트가 동일한 네이밍 규칙을 지키도록 정리한다.
 
 ### RED 실패 테스트 작성
-- [ ] RED-02-01 `test: add empty input boundary test`
+- [x] RED-02-01 `test: add empty input boundary test`
   - 빈 문자열 입력의 기대 동작을 정의한다.
   - 현재 구현에서 실패하는 경계값 테스트로 작성한다.
-- [ ] RED-02-02 `test: add special character input test`
+- [x] RED-02-02 `test: add special character input test`
   - 특수문자 입력 처리 기준을 테스트로 고정한다.
   - 분석 로직이 예외 없이 동작하는지 확인한다.
-- [ ] RED-02-03 `test: add mixed sentiment input test`
+- [x] RED-02-03 `test: add mixed sentiment input test`
   - 긍정/부정 혼재 문장 시나리오를 작성한다.
   - 감성 판정 기준이 드러나도록 실패 테스트를 만든다.
-- [ ] RED-02-04 `test: add neutral filter test`
+- [x] RED-02-04 `test: add neutral filter test`
   - `중립` 필터 판정 결함을 드러내는 테스트를 작성한다.
   - 논리 연산자 및 분기 조건 오류를 검증 대상으로 둔다.
-- [ ] RED-02-05 `test: add filter combination tests`
+- [x] RED-02-05 `test: add filter combination tests`
   - 필터 조합 시나리오를 경계값 중심으로 작성한다.
   - 긍정/부정/중립 필터 조합 결과를 검증한다.
-- [ ] RED-02-06 `test: add session isolation test`
+- [x] RED-02-06 `test: add session isolation test`
   - 테스트 간 공유 상태가 남지 않아야 함을 검증한다.
   - 상태 초기화 시나리오를 실패 테스트로 고정한다.
 

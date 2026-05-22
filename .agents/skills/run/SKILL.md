@@ -35,23 +35,28 @@ FEATURE-02-02 항목을 진행해 주세요
 3. If `INDEX.md` cannot be read or mapping is missing, read `.agents/skills/status/STATUS_SNAPSHOT.md` and map `N` to `NextItems` entry.
 4. Locate the resolved identifier in `TODO.md`.
 5. Treat the checkbox line as the intended commit message and the nested bullets as the exact task scope.
-6. Inspect relevant source, tests, and docs before editing.
-7. Keep changes limited to the requested item unless a direct prerequisite is required.
-8. Apply code or document changes following existing repository style.
-9. Run relevant build/tests when the task changes code or tests. If only documents changed, state that build/tests were not run.
-10. Update the requested checkbox in `TODO.md` only when the item is genuinely complete.
-11. Update `SESSION_NOTES.md` for meaningful code, document, config, or structure changes.
-12. **Generate execution report automatically:** After completing the TODO item, create a corresponding report file in `reports/` folder following the naming rule `{todo_id_lower}_{slug_lower}-report.md`. The report must summarize the goal, changes, decisions, verification, and next steps in markdown format.
-13. **Stage and commit automatically (with user approval):**
+6. Read the corresponding prompt document from `prompts/` directory (e.g., `prompts/RED-01-01.md`).
+7. Execute the prompt and perform all required tasks.
+8. Inspect relevant source, tests, and docs before editing.
+9. Keep changes limited to the requested item unless a direct prerequisite is required.
+10. Apply code or document changes following existing repository style.
+11. Run relevant build/tests when the task changes code or tests. If only documents changed, state that build/tests were not run.
+12. **Automatically update the requested checkbox in `TODO.md` from `[ ]` to `[x]` when the item work is complete.**
+    - Use the commit message from the prompt document for git commit.
+    - Example: `[ ] RED-01-01 ...` becomes `[x] RED-01-01 ...`
+    - This ensures the status skill can accurately count completed items.
+13. Update `SESSION_NOTES.md` for meaningful code, document, config, or structure changes.
+14. **Generate execution report automatically:** After completing the TODO item, create a corresponding report file in `reports/{phase}/` folder following the naming rule `{todo_id_lower}_{slug_lower}-report.md`. The report must summarize the goal, changes, decisions, verification, and next steps in markdown format.
+15. **Stage and commit automatically (with user approval):**
     - Show changed files list and commit message (format: `[{TODO_ID}] {type}: {description}`)
     - Request user confirmation: "Proceed with commit?"
     - If approved, run: `git add <changed_files> && git commit -m "[{TODO_ID}] {type}: {description}"`
     - Update STATUS_SNAPSHOT.md after commit
-14. **Push to remote automatically (with user approval):**
+16. **Push to remote automatically (with user approval):**
     - Request user confirmation: "Push to origin {current_branch}?"
     - If approved, run: `git push origin {current_branch}`
     - Verify push success
-15. Final response must summarize changed files, verification, commit hash, and push status.
+17. Final response must summarize changed files, verification, commit hash, and push status.
 
 ## Guardrails
 
